@@ -1,0 +1,10 @@
+table {
+              width: 30%;
+                     border: 1px solid;
+       }
+ th,td {
+              border: 1px inset;
+       }
+th {
+    background-color: #c0c0b0;
+    }
