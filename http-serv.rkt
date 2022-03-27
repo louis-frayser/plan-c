@@ -2,7 +2,8 @@
 
 (require web-server/servlet
          web-server/servlet-env
-         "planc-2.rkt")
+         "plan-c.rkt")
+
 (define %cwd (current-directory))
   
 ;;; This is the server
