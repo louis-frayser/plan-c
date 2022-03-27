@@ -3,7 +3,6 @@
 (require xml (only-in srfi/19 string->date date->string)
          "plan-c-data.rkt")
  
-;*plan-c* ; Debug
 (define (report-plan-c)
   (report *plan-c*))
 

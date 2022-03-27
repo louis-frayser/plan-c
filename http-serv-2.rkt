@@ -11,7 +11,7 @@
    (report-plan-c)))
 
 ;;; Debug
-%cwd
+;;%cwd
 
 ;;; This kicks it off...
 (serve/servlet server-proc #:extra-files-paths
