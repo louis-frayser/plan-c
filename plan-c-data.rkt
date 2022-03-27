@@ -16,7 +16,7 @@
     (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:32)
                  (|Clean House|)(Laundry) (|Instrument Maint.|))
     (Media (News 0:00) (Social 1:05))
-    (PIM (Planning 1:10) (SysAdm 2:20))
+    (PIM (Planning 2:10) (SysAdm 4:20))
     ; 'Special Interest' will be taken from default categories
     ))
 (define *spc*  '| |)

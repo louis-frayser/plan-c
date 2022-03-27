@@ -6,16 +6,12 @@
 
 (define %cwd (current-directory))
   
-;;; This is the server
-(define (server-proc req)
+(define (start req)
   (response/xexpr
    (report-plan-c)))
 
-;;; Debug
-;;%cwd
-
 ;;; This kicks it off...
-(serve/servlet server-proc #:extra-files-paths
+(serve/servlet start #:extra-files-paths
                (list
                 %cwd
                 (build-path "/home/frayser/public_html/css")))
