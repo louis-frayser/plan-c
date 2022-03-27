@@ -13,7 +13,7 @@
                       (Trombone/Trumpet/Flugelhorn)
                       (Clarinet/Flute/Recorder)
                       (Voice/Percussion/Dance))
-    (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:10)
+    (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:32)
                  (|Clean House|)(Laundry) (|Instrument Maint.|))
     (Media (News 0:00) (Social 1:05))
     (PIM (Planning 1:10) (SysAdm 2:20))
