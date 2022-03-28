@@ -1,5 +1,5 @@
 #lang racket
-(provide *plan-c* *categories* *spc*)
+(provide *plan-c* *categories* *spc* plan-datestr plan-groups)
 
 (define *categories*
   '(Fitness |Music Practice| Maintenance Media PIM |Special Interest|))
@@ -8,7 +8,7 @@
   `(plan-c
     2022-03-27
     ;
-    (Fitness (Yoga 0:00)(Walking 0:00)(Pull-Ups 0:00)(Dance 0:00))
+    (Fitness (Yoga 0:00)(Walking 1:30)(Pull-Ups 0:00)(Dance 0:00))
     (|Music Practice| (Cello/Guitar/Piano)
                       (Trombone/Trumpet/Flugelhorn)
                       (Clarinet/Flute/Recorder)
@@ -21,3 +21,6 @@
     ))
 (define *spc*  '| |)
 *plan-c*
+
+(define (plan-datestr pc) (symbol->string (cadr pc)))
+(define plan-groups  cddr)
