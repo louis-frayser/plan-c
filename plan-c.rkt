@@ -11,8 +11,8 @@
 (define (report a-plan)
   (define (groups-html groups)
     (append '(table) 
-            (map (lambda (c)(row-html c groups)) *categories*)) )
-  (let* ((datestr (plan-datestr a-plan))
+            (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
+  (let* ((datestr (plan-date a-plan))
          (datestru (string->date datestr "~Y-~m-~d"))
          (date (date->string datestru "~A ~1")))       
     `(html
@@ -30,18 +30,18 @@
     (define (matching-group-html cat grps)
     (let* ( (match (dict-ref grps cat '())))
       (map (lambda(row)
-             (cons 'tr (map (lambda(e) `(td ,(symbol->string e))) row)))
+             (cons 'tr (map (lambda(e) `(td ,e)) row)))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
                 (map reverse match)))))
   ;;; Gets the sum of durations in a group
   (define (group-sum grpsym)
-    (let* ((groups (cddr *plan-c*))
+    (let* ((groups (plan-groups *plan-c*))
            (match (dict-ref groups category '()))
-           (tsyms (map (lambda(gel)(if (pair? gel)
-                                       (car gel) '0:00))
+           (tstrs (map (lambda(gel)(if (pair? gel)
+                                       (car gel) "0:00"))
                        (map cdr match)))
-           (tstrs(map symbol->string tsyms))
+           
            (splits (map (lambda(s)(string-split s ":")) tstrs))
            (nsplits (map (lambda(pr)(map string->number pr))
                          splits))
@@ -58,7 +58,7 @@
       timestr))
   (cons 'tbody (cons `(tr (th ,(group-sum category)) 
                           (th ((colspan "2"))
-                              ,(symbol->string category)))
+                              ,category))
                      (matching-group-html category groups))))
 ;...........................................................
      
