@@ -1,26 +1,26 @@
 #lang racket
-(provide *plan-c* *categories* *spc* plan-datestr plan-groups)
+(provide *plan-c* *categories* plan-datestr plan-groups)
 
 (define *categories*
   '(Fitness |Music Practice| Maintenance Media PIM |Special Interest|))
 
 (define *plan-c*
   `(plan-c
-    2022-03-27
+    2022-03-28
     ;
-    (Fitness (Yoga 0:00)(Walking 1:30)(Pull-Ups 0:00)(Dance 0:00))
+    (Fitness (Yoga 0:00)(Walking 0:00)(Pull-Ups 0:00)(Dance 0:00))
     (|Music Practice| (Cello/Guitar/Piano)
                       (Trombone/Trumpet/Flugelhorn)
                       (Clarinet/Flute/Recorder)
                       (Voice/Percussion/Dance))
-    (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:32)
+    (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:00)
                  (|Clean House|)(Laundry) (|Instrument Maint.|))
-    (Media (News 0:00) (Social 1:05))
-    (PIM (Planning 2:10) (SysAdm 4:20))
+    (Media (News 0:00) (Social 2:00))
+    (PIM (Planning 0:10) (SysAdm 0:20))
     ; 'Special Interest' will be taken from default categories
     ))
-(define *spc*  '| |)
 *plan-c*
 
+
 (define (plan-datestr pc) (symbol->string (cadr pc)))
-(define plan-groups  cddr)
+(define plan-groups  cddr); (plan-groups a-plan) => groups
