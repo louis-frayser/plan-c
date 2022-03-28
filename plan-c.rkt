@@ -2,7 +2,9 @@
 
 (provide report-plan-c)
 (require xml srfi/19 "plan-c-data.rkt")
- 
+
+(define *spc*  '| |)
+
 (define (report-plan-c)
   (report *plan-c*))
 
