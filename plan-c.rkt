@@ -1,10 +1,32 @@
 #lang racket
 
-(provide report-plan-c)
+(provide proccess-input-form report-plan-c set-on-change!)
 (require xml srfi/19 "plan-c-data.rkt")
+ 
+(define *spc*  'nbsp)
 
-(define *spc*  '| |)
+(define *on-change* "location.href='.'")
+(define (set-on-change! url-str) (set! *on-change* url-str))
 
+;;; ==============================================================
+;;;             INPUT FORM
+(define (proccess-input-form bindings)
+  (printf "process input: bindings: ~a\n" bindings))
+  
+(define (render-form)
+  `(form 
+    (label ((for "category"))"Category:")
+    (input ((type "text")(name "category" ) (width "14")))
+    (br)(br)
+    (label ((for "activity"))"Activity:")
+    (input ((type "text")(name "activity")(width "14")))
+    (br)(br)
+    (input ((type "submit")(class "taup")))
+
+    ))
+           
+;;; ===============================================================
+;;;              REPORT/DISPLAY
 (define (report-plan-c)
   (report *plan-c*))
 
@@ -19,15 +41,17 @@
       (head (title "Plan C")
             (link ((rel "stylesheet")(href "/styles.css")
                                      (type "text/css"))))
-      (body
+      (body ((class "container"))
        (h1 "Plan C")
        (h2  ,date)
-       ,(groups-html (plan-groups a-plan))))))
+     
+       ,(groups-html (plan-groups a-plan))
+       , (render-form)))))
 
 ;...............................................................
 ;; For each major category
 (define (row-html category groups)
-    (define (matching-group-html cat grps)
+  (define (matching-group-html cat grps)
     (let* ( (match (dict-ref grps cat '())))
       (map (lambda(row)
              (cons 'tr (map (lambda(e) `(td ,e)) row)))
@@ -63,6 +87,4 @@
 ;...........................................................
      
 (display-xml/content (xexpr->xml  (report *plan-c*) )); diagnostic
-
-
                               
