@@ -1,31 +1,39 @@
 #lang racket
 
-(provide proccess-input-form report-plan-c set-on-change!)
-(require xml srfi/19 "plan-c-data.rkt")
+(provide proccess-input-form report-plan-c)
+(require xml srfi/19 seq/iso
+         "plan-c-data.rkt" "lib/config.rkt"
+         "lib/generate-js.rkt")
  
 (define *spc*  'nbsp)
 
-(define *on-change* "location.href='.'")
-(define (set-on-change! url-str) (set! *on-change* url-str))
-
+(define (performed act) (string>? (car act) "0:00"))
 ;;; ==============================================================
 ;;;             INPUT FORM
 (define (proccess-input-form bindings)
   (printf "process input: bindings: ~a\n" bindings))
   
 (define (render-form)
+  (define (category-options)
+    (map (lambda(val) `(option ((value ,val)) val))
+         (config-schema-categories)))
+  (define (activity-options cat)
+    (map (lambda(val) `(option ((value ,val)) val))
+         (config-schema-subcategories cat)))
   `(form 
     (label ((for "category"))"Category:")
-    (input ((type "text")(name "category" ) (width "14")))
+    (select ((name "category" ) (width "14")))
     (br)(br)
     (label ((for "activity"))"Activity:")
-    (input ((type "text")(name "activity")(width "14")))
+    (select ((name "activity")(width "14")))
     (br)(br)
-    (input ((type "submit")(class "taup")))
+    (input ((type "submit")(class "metalic")(name "Change")))
 
     ))
-           
-;;; ===============================================================
+;;;  -------------------------------------------------------
+;;; Generate Javascript to "scripts/option-controls.js"
+(generate-js)
+;;; ========================================================
 ;;;              REPORT/DISPLAY
 (define (report-plan-c)
   (report *plan-c*))
@@ -40,16 +48,17 @@
     `(html
       (head (title "Plan C")
             (link ((rel "stylesheet")(href "/styles.css")
-                                     (type "text/css"))))
+                                     (type "text/css")))
+            (script ((src "scripts/option-controls.js"))))
       (body ((class "container"))
-       (h1 "Plan C")
-       (h2  ,date)
+            (h1 "Plan C")
+            (h2  ,date)
      
-       ,(groups-html (plan-groups a-plan))
-       , (render-form)))))
+            ,(groups-html (plan-groups a-plan))
+            , (render-form)))))
 
 ;...............................................................
-;; For each major category
+;; For each major category, show  performed actions
 (define (row-html category groups)
   (define (matching-group-html cat grps)
     (let* ( (match (dict-ref grps cat '())))
@@ -57,9 +66,9 @@
              (cons 'tr (map (lambda(e) `(td ,e)) row)))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
-                (map reverse match)))))
+                (filter performed (map reverse match))))))
   ;;; Gets the sum of durations in a group
-  (define (group-sum grpsym)
+  (define (group-sum)
     (let* ((groups (plan-groups *plan-c*))
            (match (dict-ref groups category '()))
            (tstrs (map (lambda(gel)(if (pair? gel)
@@ -80,7 +89,7 @@
                            #:align 'right #:pad-string "0"
                            (round (/ m 60))))))))
       timestr))
-  (cons 'tbody (cons `(tr (th ,(group-sum category)) 
+  (cons 'tbody (cons `(tr (th ,(group-sum)) 
                           (th ((colspan "2"))
                               ,category))
                      (matching-group-html category groups))))

@@ -17,7 +17,3 @@
 
 ;;; This starts servelet with param "start respons/xepr" (above) 
 (serve/servlet  start #:extra-files-paths (list %cwd ))
-
-(define (on-change)
-  (displayln "ON CHANGE")
-  (display-data))
