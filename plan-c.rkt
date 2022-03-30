@@ -3,7 +3,7 @@
 (provide proccess-input-form report-plan-c)
 (require web-server/templates)
 (require xml srfi/19 seq/iso
-         "plan-c-data.rkt" "lib/config.rkt"
+         "lib/plan-c-data.rkt" "lib/config.rkt"
          "lib/generate-js.rkt")
 
 (define *spc*  'nbsp)
@@ -39,7 +39,6 @@
             (h2  ,date)
             ,(groups-html (plan-groups a-plan))
             , (string->xexpr (include-template "files/input-form.html"))))))
-
 ;...............................................................
 ;; For each major category, show  performed actions
 (define (row-html category groups)
@@ -78,8 +77,6 @@
                               ,category))
                      (matching-group-html category groups))))
 ;...........................................................
-
-
-;;; Debug 
+;;; Debug / Info
 ;(report *plan-c*)
-(display-xml/content (xexpr->xml  (report *plan-c*) ))
+;;(display-xml/content (xexpr->xml  (report *plan-c*) ))

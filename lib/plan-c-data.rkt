@@ -9,11 +9,16 @@
 (struct plan (version date groups))
 
 (define *input-plan*
-  (with-input-from-file "db/manual-input.scm"
-    (lambda() (let ((val (read)))
-      (if (and (pair? val) (eq? (car val) 'plan))
-          (plan (cadr val) (caddr val) (cadddr val))
-          (error "Invalid user input: db/manual-input.scm!"))))))
+  (let ((path
+         (if (directory-exists? "db")
+             "db/manual-input.scm"  "../db/manual-input.scm")))
+    (with-input-from-file path
+      (lambda() 
+        (let ((val (read)))
+          (if (and (pair? val) (eq? (car val) 'plan))
+              (plan (cadr val) (caddr val) (cadddr val))
+              (error "Invalid user input:\
+ db/manual-input.scm!")))))))
     
   (define *plan-c*
     (plan "C" (symbol->string (plan-date *input-plan*))
