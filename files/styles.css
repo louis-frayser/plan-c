@@ -1,0 +1,42 @@
+body {
+    align: left;
+    background-color: #e7e0e0;
+}
+form {
+    margin-left: 31%;
+    width: 30%;
+    border: 1px solid;
+    background-color: #e7e0e0;
+    //margin: 20px;
+    padding: 10px;
+}
+button,input,label { background-color: #ffffee; width: 120px; }
+input[type="submit"] { display inline-block;
+		       background-color: #d0c0b0;
+		       margin-top:8px; margin-left: 6px;
+		       border:1px solid;}
+input { border: 1px inset; }
+label { border: 1px insert;  margin-top: 8px;
+	display: inline-block;margin-left:8px; }
+
+hr {
+    width: 30% !important;
+    text-align: left !important;
+}
+
+table {
+    width: 30%;       
+    border: 1px solid;
+    float: left;
+}
+
+th,td {
+    border: 1px inset;
+}
+th {
+    background-color: #ffffee;
+    /*/#c0c0b0; */
+}
+.tsum,.tentry { text-align: right;
+                width: 10%;
+	      }

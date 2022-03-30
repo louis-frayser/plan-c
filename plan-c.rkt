@@ -1,7 +1,7 @@
 #lang racket
 
 (provide proccess-input-form report-plan-c)
-
+(require web-server/templates)
 (require xml srfi/19 seq/iso
          "plan-c-data.rkt" "lib/config.rkt"
          "lib/generate-js.rkt")
@@ -15,22 +15,7 @@
   (printf "process input: bindings: ~a\n" bindings))
   
 (define (render-form)
-  (define (category-options)
-    (map (lambda(val) `(option ((value ,val)) val))
-         (config-schema-categories)))
-  (define (activity-options cat)
-    (map (lambda(val) `(option ((value ,val)) val))
-         (config-schema-subcategories cat)))
-  `(form 
-    (label ((for "category"))"Category:")
-    (select ((id "category" ) (width "14")))
-    (br)(br)
-    (label ((for "activity"))"Activity:")
-    (select ((id "activity")(width "14")))
-    (br)(br)
-    (input ((type "submit")(class "metalic")(id "change")(name "Change")))
-
-    ))
+  (string->xexpr (include-template "files/input-form.html")))
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
@@ -48,15 +33,14 @@
          (date (date->string datestru "~A ~1")))       
     `(html
       (head (title "Plan C")
-            (link ((rel "stylesheet")(href "/styles.css")
+            (link ((rel "stylesheet")(href "/files/styles.css")
                                      (type "text/css")))
             (script ((src "/scripts/plan.js")(type "module"))))
       (body ((class "container"))
             (h1 "Plan C")
             (h2  ,date)
-     
             ,(groups-html (plan-groups a-plan))
-            , (render-form)))))
+            , (string->xexpr (include-template "files/input-form.html"))))))
 
 ;...............................................................
 ;; For each major category, show  performed actions
@@ -65,7 +49,7 @@
     (let* ( (match (dict-ref grps cat '())))
       (map (lambda(row)  ; row is a triplet
              (cons 'tr `((td ,(car row)) (td ((class "tentry"))
-                    ,(cadr row)) (td ,(caddr row)))))
+                                             ,(cadr row)) (td ,(caddr row)))))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
                 (filter performed (map reverse match))))))
@@ -99,5 +83,5 @@
 
 
 ;;; Debug 
-;(display-xml/content (xexpr->xml  (report *plan-c*) ))
-(report *plan-c*)
+;(report *plan-c*)
+(display-xml/content (xexpr->xml  (report *plan-c*) ))
