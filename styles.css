@@ -22,10 +22,14 @@ table {
        border: 1px solid;
        float: left;
                }
+
 th,td {
        border: 1px inset;
                }
 th {
     background-color: #ffffee;
 /*/#c0c0b0; */
+}
+.tsum,.tentry { text-align: right;
+                      width: 10%;
 }
