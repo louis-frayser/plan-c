@@ -5,8 +5,7 @@ import { Categories, ActionsByCatIx } from "./options-array.js";
 var c = document.getElementById("category");
 var a = document.getElementById("activity");
 
-function populate(sel, items)
-{ console.log([sel,items]);
+function populate(sel, items){
     // empty then repopulate
     while (sel.firstChild){ sel.removeChild(sel.firstChild); }
     
