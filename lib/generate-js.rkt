@@ -18,10 +18,11 @@
      (js-list-ar (map js-list
                       (map (lambda(cat)
                              (config-schema-subcategories cat))
-                           cats))))))
+                           cats)))))
+  "") ; "" avoids <void> being output to file
 
 (options-array.js-str); <= TESTING
 
 (define (generate-js)
-(with-output-to-file "scripts/options-array.js"
-  (lambda()(writeln (options-array.js-str))) #:exists 'replace))
+  (with-output-to-file "scripts/options-array.js"
+    (lambda()(displayln (options-array.js-str))) #:exists 'replace))

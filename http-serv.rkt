@@ -5,6 +5,7 @@
          "plan-c.rkt")
 
 (define %cwd (current-directory))
+(define %files (build-path "/home/frayser/Desktop/Work/src/plan-c/files"))
 
 (define (display-data)
   (response/xexpr  #:preamble #"<!DOCTYPE html>\n"
@@ -16,4 +17,5 @@
     (display-data)))
 
 ;;; This starts servelet with param "start respons/xepr" (above) 
-(serve/servlet  start #:extra-files-paths (list %cwd ))
+(serve/servlet start; #:server-root-path %cwd
+               #:extra-files-paths (list %files %cwd ))
