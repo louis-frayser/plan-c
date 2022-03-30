@@ -13,9 +13,7 @@
 ;;;             INPUT FORM
 (define (proccess-input-form bindings)
   (printf "process input: bindings: ~a\n" bindings))
-  
-(define (render-form)
-  (string->xexpr (include-template "files/input-form.html")))
+
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
