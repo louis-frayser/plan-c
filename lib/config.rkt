@@ -1,11 +1,14 @@
 #lang racket
-(require yaml)
+(require yaml canonicalize-path )
 
 (provide config-schema-categories config-schema-subcategories)
 
 (define *config-schema
-  (with-input-from-file "config/schema.yaml"
-  (lambda() (read-yaml))))
+  (let* ((base "config/schema.yaml")
+         (base+ "../config/schema.yaml"))
+    (with-input-from-file
+        (if (file-exists? base ) base base+ )
+    (lambda() (read-yaml)))))
 
 (define (config-schema-categories) (hash-keys *config-schema))
 (define (config-schema-subcategories cat)
