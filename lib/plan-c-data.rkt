@@ -10,8 +10,8 @@
 
 (define *input-plan*
   (let ((path
-         (if (directory-exists? "db")
-             "db/manual-input.scm"  "../db/manual-input.scm")))
+         (if (directory-exists? "lib")
+             "lib/db/manual-input.scm"  "../lib/db/manual-input.scm")))
     (with-input-from-file path
       (lambda() 
         (let ((val (read)))
