@@ -19,8 +19,7 @@
      (js-list-ar (map js-list
                       (map (lambda(cat)
                              (config-schema-subcategories cat))
-                           cats)))))
-  ) 
+                           cats)))))) 
 
 (displayln (options-array.js-str)); <= TESTING
 
