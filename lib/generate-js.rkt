@@ -10,18 +10,19 @@
 (define (options-array.js-str)
   (let ((cats (config-schema-categories)))
     ;; Cats...
-    (printf "export const Categories = ~a;\n" (js-list cats))
-    (newline)
-    ;; Actions...
-    (displayln "export const ActionsByCatIx=") 
-    (displayln
+    (string-append 
+     (format "export const Categories = ~a;\n\n" (js-list cats))
+   
+     ;; Actions...
+     "export const ActionsByCatIx=" 
+    
      (js-list-ar (map js-list
                       (map (lambda(cat)
                              (config-schema-subcategories cat))
                            cats)))))
-  "") ; "" avoids <void> being output to file
+  ) 
 
-(options-array.js-str); <= TESTING
+(displayln (options-array.js-str)); <= TESTING
 
 (define (generate-js)
   (with-output-to-file "scripts/options-array.js"
