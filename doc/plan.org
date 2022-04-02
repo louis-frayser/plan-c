@@ -1,6 +1,6 @@
-# The Plan
+* The Plan
 
-## Current strategy
+** Current strategy
 
 1. Save formdata to disk after agregating changes.
 2. If saved data exists in a recent file, use it rather than the original
@@ -9,7 +9,7 @@
    stash the disk data to history; start with fresh values
    for today.
    
-## FIXME
+** FIXME
 2. Crash is ':' is missig from input timesring.
 3. Aparently display is alphabetical order, but form is canonical.
    Decide on with to use in both places.
@@ -17,6 +17,6 @@
    Upon adding times for the missing, they apear at top of form,
    no in alpahbetical order.
    
-   ### Fixed
-	   1. FIXED:  Adding 1hr of time to an existing crashes the response.
-	   #f instead of number: is the errr.
+   *** Fixed
+   1. Adding 1hr of time to an existing crashes the response.
+      #f instead of number was the errr.
