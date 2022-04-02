@@ -1,11 +1,11 @@
-(plan C 2022-03-28
+(plan C 2022-04-01
         ((Fitness (Yoga 0:00)(Walking 0:00)(Pull-Ups 0:00)(Dance 0:00))
           (|Music Practice| (Cello/Guitar/Piano)
                             (Trombone/Trumpet/Flugelhorn)
                             (Clarinet/Flute/Recorder)
                             (Voice/Percussion/Dance))
-          (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:00)
+          (Maintenance (SSS 0:00) (Kitchen:cook/clean 0:30)
                        (|Clean House|)(Laundry) (|Instrument Maint.|))
-          (Media (News 0:00) (Social 2:00))
-          (PIM (Planning 0:10) (SysAdm 15:30))
+          (Media (News 0:10) (Social 1:00))
+          (PIM (Planning 1:10) (SysAdm 12:30))
           (|Special Interest|) ))

@@ -1,32 +1,52 @@
 #lang racket
 
-(provide proccess-input-form report-plan-c)
-(require web-server/templates)
+(provide plan-c process-input-form plan-report (struct-out plan))
+(require web-server/templates web-server/http/bindings )
 (require xml srfi/19 seq/iso
          "lib/plan-c-data.rkt" "lib/config.rkt"
-         "lib/generate-js.rkt")
-
+         "lib/generate-js.rkt" "lib/lib.rkt")
 (define *spc*  'nbsp)
-
+(define plan-c (make-parameter (retrieve-plan-c)))
 (define (performed act) (and (> (length act) 1) (string>? (car act) "0:00")))
 ;;; ==============================================================
 ;;;             INPUT FORM
-(define (proccess-input-form bindings)
-  (printf "process input: bindings: ~a\n" bindings))
-
+(define (process-input-form bindings)
+  ;;; We are looking at a form that changes only one trie key (cat,act)
+  ;;; The pair is of numerical indices representing strings in config
+  ;;; config-schema-categories() and config-schema-subcategories()
+  ;;; After decoding  the numbers into to strings, the struct is
+  ;;; addressible for "update".
+  (printf "process-input-form: bindings == ~v\n\n" bindings)
+    (define (changed-key cx ax) (list (config-nth-category cx)
+                                    (config-nth-activity cx ax)))
+  (define(->int sm)(string->number(extract-binding/single sm bindings)))
+  (let*( (cx (->int 'category ))
+         (ax (->int 'activity ))
+         (timestr (extract-binding/single 'duration bindings))
+         (keep (filter
+                (lambda(assoc)
+                  (not (plan-key=? (car assoc) (changed-key cx ax))))
+                (plan-assocs (plan-c))))
+         (new-plan
+          (plan (plan-version (plan-c)) (plan-date (plan-c))
+                (plan-list->groups (cons (cons (changed-key cx ax) timestr) keep))) ))
+    (debug (plan-groups new-plan))
+    (plan-c new-plan)))
+                 
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
 ;;; ========================================================
 ;;;              REPORT/DISPLAY
-(define (report-plan-c)
-  (report *plan-c*))
+(define (plan-report)
+  (report (plan-c)))
 
 (define (report a-plan)
   (define (groups-html groups)
     (append '(table) 
             (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
   (let* ((datestr (plan-date a-plan))
+         (nada (debug datestr))
          (datestru (string->date datestr "~Y-~m-~d"))
          (date (date->string datestru "~A ~1")))       
     `(html
@@ -38,21 +58,23 @@
             (h1 "Plan C")
             (h2  ,date)
             ,(groups-html (plan-groups a-plan))
-            , (string->xexpr (include-template "files/input-form.html"))))))
+            , (string->xexpr (include-template
+                              "files/input-form.html"))))))
 ;...............................................................
 ;; For each major category, show  performed actions
 (define (row-html category groups)
   (define (matching-group-html cat grps)
     (let* ( (match (dict-ref grps cat '())))
       (map (lambda(row)  ; row is a triplet
-             (cons 'tr `((td ,(car row)) (td ((class "tentry"))
-                                             ,(cadr row)) (td ,(caddr row)))))
+             (cons 'tr `((td ,(car row)) 
+                         (td ((class "tentry"))
+                             ,(cadr row)) (td ,(caddr row)))))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
                 (filter performed (map reverse match))))))
   ;;; Gets the sum of durations in a group
   (define (group-sum)
-    (let* ((groups (plan-groups *plan-c*))
+    (let* ((groups (plan-groups (plan-c)))
            (match (dict-ref groups category '()))
            (tstrs (map (lambda(gel)(if (pair? gel)
                                        (car gel) "0:00"))
@@ -77,6 +99,3 @@
                               ,category))
                      (matching-group-html category groups))))
 ;...........................................................
-;;; Debug / Info
-;(report *plan-c*)
-;;(display-xml/content (xexpr->xml  (report *plan-c*) ))
