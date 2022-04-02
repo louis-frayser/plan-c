@@ -42,18 +42,19 @@
        (timestr (extract-binding/single 'duration bindings))
        (new-assoc (cons (changed-key cx ax) timestr))
        (orig-assocs (plan-assocs (plan-c)))
-       (DEB (debug (new-assocs orig-assocs new-assoc)))
+       (new-assocs+ (new-assocs orig-assocs new-assoc))
+       (new-groups (plan-list->groups new-assocs+))
        (keep (filter
               (lambda(assoc)
                 (not (plan-key=? (car assoc) (changed-key cx ax))))
               orig-assocs))
+       
        (new-plan
-        (plan (plan-version (plan-c)) (plan-date (plan-c))
-              (plan-list->groups (cons new-assoc keep))) ))
+        (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
   (debug (plan-groups new-plan))
   (plan-c new-plan)))
                  
-;;;  -------------------------------------------------------
+;;;  ------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
 ;;; ========================================================
