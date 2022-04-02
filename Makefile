@@ -13,3 +13,7 @@ clean:  Attic
 	  done; \
 	done
 	@echo CLEAN
+
+clobber: clean
+	@rm -frv compiled
+	@echo CLOBBER

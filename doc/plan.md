@@ -10,5 +10,6 @@
    for today.
    
 ## FIXME
-Adding time to and existing item doesn't update, but replaces the 
-original. Logic is there to add; it must be broken.
+1. Adding time to and existing item doesn't update, but replaces the 
+original. Logic is there to add; it must be broken. There is some 
+old logic still there; the now code is only called in display mode.
