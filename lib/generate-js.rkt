@@ -20,9 +20,6 @@
                       (map (lambda(cat)
                              (config-schema-subcategories cat))
                            cats)))))) 
-
-(displayln (options-array.js-str)); <= TESTING
-
 (define (generate-js)
   (with-output-to-file "scripts/options-array.js"
     (lambda()(displayln (options-array.js-str))) #:exists 'replace))
