@@ -11,10 +11,11 @@
      (lambda()(quotient/remainder tmins 60))
      (lambda(hrs mins)
        (string-append
-        (~a hrs) ":" (~a mins #:min-width 2 #:left-pad-string "0" ))))))
+        (~a hrs) ":" (~a mins #:align 'right #:min-width 2 #:left-pad-string "0" ))))))
 
 (define (debug . values)
   (newline)
   (void (map (lambda(v)(printf "DEBUG: ~v\n" v)) values)))
 
-;; (strtime+ "1:22" "2:35") ; => "3:57" Test
+ (strtime+ "1:00" "0:00") 
+(strtime+  "1:00" "0:02") 

@@ -31,7 +31,8 @@
 (define (plan-categories a-plan)  (map car (plan-groups a-plan)))
 
 (define (plan-key=? k1 k0)
-  (and (apply string=? (map car `(,k1 ,k0))) (apply string=? (map cadr `(,k1 ,k0)))))
+  (and (apply string=? (map car `(,k1 ,k0))) 
+       (apply string=? (map cadr `(,k1 ,k0)))))
 
 ;;; Returns all paired keys. Skips those without values > "0:00"
 (define (plan-keys aplan)
@@ -60,7 +61,7 @@
 ;; ...................................................................... 
 
 (define (plan-list->groups a-list)
- (let ((cgroups (group-by caar a-list)))
+  (let ((cgroups (group-by caar a-list)))
     (map (lambda(g)
            (cons (caaar g)(map (lambda(a)(list (cadar a) (cdr a))) g))) 
          cgroups)))
