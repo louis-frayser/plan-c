@@ -17,21 +17,41 @@
   ;;; After decoding  the numbers into to strings, the struct is
   ;;; addressible for "update".
   (printf "process-input-form: bindings == ~v\n\n" bindings)
-    (define (changed-key cx ax) (list (config-nth-category cx)
+  (define (changed-key cx ax) (list (config-nth-category cx)
                                     (config-nth-activity cx ax)))
-  (define(->int sm)(string->number(extract-binding/single sm bindings)))
-  (let*( (cx (->int 'category ))
-         (ax (->int 'activity ))
-         (timestr (extract-binding/single 'duration bindings))
-         (keep (filter
-                (lambda(assoc)
-                  (not (plan-key=? (car assoc) (changed-key cx ax))))
-                (plan-assocs (plan-c))))
-         (new-plan
-          (plan (plan-version (plan-c)) (plan-date (plan-c))
-                (plan-list->groups (cons (cons (changed-key cx ax) timestr) keep))) ))
-    (debug (plan-groups new-plan))
-    (plan-c new-plan)))
+  ;;; adding in the  time from the original activity 
+  (define (new-assocs orig-assocs new-assoc )
+    (let*-values (( (key) (car new-assoc))
+                  ((replace-assocs keep-assocs )
+                   (partition (lambda(a) (debug a)
+                                (plan-key=? (car a) key)) orig-assocs))
+                  ((DEBUG)     (debug replace-assocs))
+                  ((matching-assoc)  ;list of 0 or 1
+                   (if (pair? replace-assocs) (car replace-assocs) #f)))
+      (let* ((base-dur  (if (pair? matching-assoc)
+                            (cdr matching-assoc) "0:00"))
+             (xtra-dur (cdr new-assoc)) (D*(debug (cons xtra-dur base-dur)))
+             (tot-dur (strtime+ base-dur xtra-dur))
+             (adj-new-assoc (cons (car new-assoc) tot-dur)))
+        (cons adj-new-assoc keep-assocs))))
+;
+(define(->int sm)(string->number(extract-binding/single sm bindings)))
+;
+(let*( (cx (->int 'category ))
+       (ax (->int 'activity ))
+       (timestr (extract-binding/single 'duration bindings))
+       (new-assoc (cons (changed-key cx ax) timestr))
+       (orig-assocs (plan-assocs (plan-c)))
+       (DEB (debug (new-assocs orig-assocs new-assoc)))
+       (keep (filter
+              (lambda(assoc)
+                (not (plan-key=? (car assoc) (changed-key cx ax))))
+              orig-assocs))
+       (new-plan
+        (plan (plan-version (plan-c)) (plan-date (plan-c))
+              (plan-list->groups (cons new-assoc keep))) ))
+  (debug (plan-groups new-plan))
+  (plan-c new-plan)))
                  
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
