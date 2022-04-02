@@ -10,6 +10,8 @@
    for today.
    
 ## FIXME
-1. Adding time to and existing item doesn't update, but replaces the 
-original. Logic is there to add; it must be broken. There is some 
-old logic still there; the now code is only called in display mode.
+1. Adding 1hr of time to an existing crashes the response.
+2. The display is is changing to add newest items on top; put them
+   at the bottom, so the screen does appear to jump.
+3. Error #f instead of number, now particular line of code given
+   plan-c.rkt

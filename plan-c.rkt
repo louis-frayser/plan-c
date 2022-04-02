@@ -23,36 +23,29 @@
   (define (new-assocs orig-assocs new-assoc )
     (let*-values (( (key) (car new-assoc))
                   ((replace-assocs keep-assocs )
-                   (partition (lambda(a) (debug a)
+                   (partition (lambda(a) 
                                 (plan-key=? (car a) key)) orig-assocs))
-                  ((DEBUG)     (debug replace-assocs))
-                  ((matching-assoc)  ;list of 0 or 1
-                   (if (pair? replace-assocs) (car replace-assocs) #f)))
-      (let* ((base-dur  (if (pair? matching-assoc)
-                            (cdr matching-assoc) "0:00"))
-             (xtra-dur (cdr new-assoc)) (D*(debug (cons xtra-dur base-dur)))
+                  ((matching-assoc)  ;list of length 0 or 1
+                   (if (pair? replace-assocs)
+                       (car replace-assocs) (cons key "0:00"))))
+      (let* ((base-dur (cdr matching-assoc))
+             (xtra-dur (cdr new-assoc))
              (tot-dur (strtime+ base-dur xtra-dur))
              (adj-new-assoc (cons (car new-assoc) tot-dur)))
         (cons adj-new-assoc keep-assocs))))
-;
-(define(->int sm)(string->number(extract-binding/single sm bindings)))
-;
-(let*( (cx (->int 'category ))
-       (ax (->int 'activity ))
-       (timestr (extract-binding/single 'duration bindings))
-       (new-assoc (cons (changed-key cx ax) timestr))
-       (orig-assocs (plan-assocs (plan-c)))
-       (new-assocs+ (new-assocs orig-assocs new-assoc))
-       (new-groups (plan-list->groups new-assocs+))
-       (keep (filter
-              (lambda(assoc)
-                (not (plan-key=? (car assoc) (changed-key cx ax))))
-              orig-assocs))
-       
-       (new-plan
-        (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
-  (debug (plan-groups new-plan))
-  (plan-c new-plan)))
+  ;
+  (define(->int sm)(string->number(extract-binding/single sm bindings)))
+  ;
+  (let*( (cx (->int 'category ))
+         (ax (->int 'activity ))
+         (timestr (extract-binding/single 'duration bindings))
+         (new-assoc (cons (changed-key cx ax) timestr))
+         (orig-assocs (plan-assocs (plan-c)))
+         (new-assocs+ (new-assocs orig-assocs new-assoc))
+         (new-groups (plan-list->groups new-assocs+))
+         (new-plan
+          (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
+    (plan-c new-plan)))
                  
 ;;;  ------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
@@ -67,7 +60,6 @@
     (append '(table) 
             (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
   (let* ((datestr (plan-date a-plan))
-         (nada (debug datestr))
          (datestru (string->date datestr "~Y-~m-~d"))
          (date (date->string datestru "~A ~1")))       
     `(html
@@ -97,10 +89,8 @@
   (define (group-sum)
     (let* ((groups (plan-groups (plan-c)))
            (match (dict-ref groups category '()))
-           (tstrs (map (lambda(gel)(if (pair? gel)
-                                       (car gel) "0:00"))
-                       (map cdr match)))
-           
+           (tstrs (map (lambda(gel)
+                         (if (pair? gel) (car gel) "0:00")) (map cdr match)))
            (splits (map (lambda(s)(string-split s ":")) tstrs))
            (nsplits (map (lambda(pr)(map string->number pr))
                          splits))
