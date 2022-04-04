@@ -3,7 +3,7 @@
 ;;; Disk Database...
 (provide put-assoc-to-db retrieve-plan-c)
 
-(require srfi/19 "config.rkt" "lib.rkt" "plan-c-data.rkt")
+(require srfi/13 srfi/19 "config.rkt" "lib.rkt" "plan-c-data.rkt")
 ;;; ------------------------------------------------------------------
 (define get-db-dir-for-date
   (lambda(date) 
@@ -15,21 +15,27 @@
 (define (get-db-base-dir) (build-path (orig-dir) "lib/db"))
 
 (define (get-assoc-pathname-for ymd-str)
-  (build-path (get-db-base-dir) (date->string (current-date) "~1/assoc-~T.scm")))
+  (build-path
+   (get-db-base-dir) (date->string (current-date) "~1/assoc-~T.scm")))
 ;;; ..................................................................
 (define retrieve-plan-c  ; Get plan from permanent storage
   (lambda()
     (or (get-current-plan) (empty-plan))))
 ;  
 (define (get-plan-for-date datestr)
+  (define (file-ok? f)(string-suffix-ci? ".scm" (path->string f)))
+  (define (filter-files files )(filter file-ok? files))
   (let ((ddir (get-db-dir-for-date datestr)))
     (if (directory-exists? ddir)
-        (let ((dlist (directory-list ddir)))
+        (let ((dlist (directory-list ddir  #:build? #t)))
           (if (null? dlist)
               (empty-plan)
-              (plan "C" datestr (plan-list->groups (map file->string dlist)))))
+              (let ((assocs
+                     (map (lambda(pth)(with-input-from-file pth read))
+                          (filter-files dlist))))
+                (plan "C" datestr (plan-list->groups assocs)) )))
         (empty-plan))))
-    
+;;; .....................................................................
 (define (get-current-plan)
   (get-plan-for-date (get-ymd-string)))
 ;
@@ -44,4 +50,5 @@
     (unless (directory-exists? destdir)           
       (make-directory destdir))
     (with-output-to-file dest
-      (lambda()(println assoc)))))
+      ;; Don't use display or print!
+      (lambda()(writeln assoc)))))
