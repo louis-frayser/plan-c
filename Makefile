@@ -11,6 +11,9 @@ clean:  Attic
 	  do if test -e "$$k"; then  mv -v "$$k" $$d/Attic;fi ;\
 	  done; \
 	done
+	@find lib/db \( -name Attic -prune \) \
+	   -o -name "*~" -print |cpio -pvdm Attic
+	@find lib/db -name "*~" -delete
 	@echo CLEAN
 
 clobber: clean
