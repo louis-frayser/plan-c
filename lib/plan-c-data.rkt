@@ -1,17 +1,24 @@
 #lang racket
-;;;; *input-plan* is user input, all symbols.
-;;;; retrieve-plan-c() is automated input, all strings
-(require "lib.rkt")
+(require "lib.rkt" "config.rkt")
 
-(provide retrieve-plan-c (struct-out plan) plan-assocs plan-categories 
-         plan-key=? plan-keys plan-list->groups)
+(provide  empty-plan (struct-out plan) plan-assocs plan-categories 
+         plan-key=? plan-keys plan-list->groups plan-show)
 
 (struct plan (version date groups))
 
-(define (->string obj) 
-  (if (pair? obj) (map ->string obj) (symbol->string obj)))
-
-(define *input-plan*
+(define (plan-show pln)
+  (with-output-to-string
+    (lambda()
+      (writeln
+       `(plan ,(plan-version pln) ,(plan-date pln) ,(plan-groups pln))))))
+;
+;; ......................................................................
+;;; NEW
+(define (empty-plan)
+  (plan "C" (get-ymd-string) (map list (config-schema-categories))))
+;; .......................................................................
+#| OBSOLETE
+(define *input-plan* 
   (let ((path
          (if (directory-exists? "lib")
              "lib/db/manual-input.scm"  "../lib/db/manual-input.scm")))
@@ -22,12 +29,10 @@
               (plan (cadr val) (caddr val) (cadddr val))
               (error "Invalid user input:\
  db/manual-input.scm!")))))))
-
-(define retrieve-plan-c   
   (let ((pc (plan "C" (symbol->string (plan-date *input-plan*))
                   (->string (plan-groups *input-plan*)))))
     (lambda() pc)))
-
+|#
 (define (plan-categories a-plan)  (map car (plan-groups a-plan)))
 
 (define (plan-key=? k1 k0)
@@ -66,4 +71,9 @@
            (cons (caaar g)(map (lambda(a)(list (cadar a) (cdr a))) g))) 
          cgroups)))
 ;; ...........................................................
-;; ====================================================================
+
+;;; ===================================================================
+(newline)
+;(plan-show (retrieve-plan-c))
+;(serialize  (retrieve-plan-c))
+;(string->file (retrieve-plan-c) "/tmp/list.scm")
