@@ -10,6 +10,7 @@
 (define (performed act) (and (> (length act) 1) (string>? (car act) "0:00")))
 ;;; ==============================================================
 ;;;             INPUT FORM
+
 (define (process-input-form bindings)
   ;;; We are looking at a form that changes only one trie key (cat,act)
   ;;; The pair is of numerical indices representing strings in config
@@ -39,13 +40,14 @@
   (let*( (cx (->int 'category ))
          (ax (->int 'activity ))
          (timestr (extract-binding/single 'duration bindings))
-         (new-assoc (cons (changed-key cx ax) timestr))
-         (orig-assocs (plan-assocs (plan-c)))
-         (new-assocs+ (new-assocs orig-assocs new-assoc))
-         (new-groups (plan-list->groups new-assocs+))
-         (new-plan
-          (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
-    (plan-c new-plan)))
+         (new-assoc (cons (changed-key cx ax) timestr)))
+    (put-assoc-to-db new-assoc)
+    (let* ( (orig-assocs (plan-assocs (plan-c)))
+            (new-assocs+ (new-assocs orig-assocs new-assoc))
+            (new-groups (plan-list->groups new-assocs+))
+            (new-plan
+             (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
+      (plan-c new-plan))))
  
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
@@ -110,4 +112,3 @@
                               ,category))
                      (matching-group-html category groups))))
 ;...........................................................
-(plan-date (plan-c))

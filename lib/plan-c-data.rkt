@@ -13,26 +13,10 @@
        `(plan ,(plan-version pln) ,(plan-date pln) ,(plan-groups pln))))))
 ;
 ;; ......................................................................
-;;; NEW
 (define (empty-plan)
   (plan "C" (get-ymd-string) (map list (config-schema-categories))))
 ;; .......................................................................
-#| OBSOLETE
-(define *input-plan* 
-  (let ((path
-         (if (directory-exists? "lib")
-             "lib/db/manual-input.scm"  "../lib/db/manual-input.scm")))
-    (with-input-from-file path
-      (lambda() 
-        (let ((val (read)))
-          (if (and (pair? val) (eq? (car val) 'plan))
-              (plan (cadr val) (caddr val) (cadddr val))
-              (error "Invalid user input:\
- db/manual-input.scm!")))))))
-  (let ((pc (plan "C" (symbol->string (plan-date *input-plan*))
-                  (->string (plan-groups *input-plan*)))))
-    (lambda() pc)))
-|#
+
 (define (plan-categories a-plan)  (map car (plan-groups a-plan)))
 
 (define (plan-key=? k1 k0)

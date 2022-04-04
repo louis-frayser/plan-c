@@ -1,14 +1,18 @@
 #lang racket
-(require  seq/iso yaml canonicalize-path)
+(require  seq/iso yaml canonicalize-path "lib.rkt")
+
 
 (provide config-nth-activity config-nth-category
-         config-schema-categories config-schema-subcategories)
+         config-schema-categories config-schema-subcategories orig-dir)
 
+(define orig-dir (make-parameter (find-system-path 'orig-dir)))
+(debug (orig-dir))
+
+;; --------------------------------------------------------------------
 (define *config-schema
-  (let* ((base "config/schema.yaml")
-         (base+ "../config/schema.yaml"))
+  (let* ((schema-file (build-path (orig-dir) "config/schema.yaml")))
     (with-input-from-file
-        (if (file-exists? base ) base base+ )
+        schema-file
       (lambda() (read-yaml)))))
 
 (define (config-schema-categories) (hash-keys *config-schema))
