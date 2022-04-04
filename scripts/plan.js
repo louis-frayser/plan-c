@@ -1,9 +1,7 @@
 // Update Ativities control when Categories is changed
+import { c, a, s } from "./controls.js"
 import { Categories, ActionsByCatIx } from "./options-array.js";
-
-// A for activities, C for categories
-var c = document.getElementById("category");
-var a = document.getElementById("activity");
+import { validateSubmit } from "./on-submit.js";
 
 function populate(sel, items){
     // empty then repopulate
@@ -24,6 +22,13 @@ function putOptions(){
 }
 
 /* Startup */
-c.onchange=putOptions;
 populate(c,Categories);
 putOptions();
+c.onchange=putOptions;
+
+let fx=document.getElementById('assoc_form');
+fx.onsubmit=validateSubmit;
+
+s.onsubmit=validateSubmit;
+s.onChange=validateSubmit;
+
