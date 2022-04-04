@@ -6,7 +6,6 @@
          config-schema-categories config-schema-subcategories orig-dir)
 
 (define orig-dir (make-parameter (find-system-path 'orig-dir)))
-(debug (orig-dir))
 
 ;; --------------------------------------------------------------------
 (define *config-schema

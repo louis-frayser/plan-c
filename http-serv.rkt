@@ -19,4 +19,4 @@
     (render-page))
 
 ;;; This starts the servelet with param "start respons/xepr" (above) 
-(serve/servlet start #:extra-files-paths (list %files-dir %cwd ))
+(serve/servlet start #:extra-files-paths (list %files-dir %cwd))
