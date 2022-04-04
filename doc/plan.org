@@ -1,14 +1,14 @@
 * The Plan
 
 ** Current design, repair and enhancement strategies
-*** PENDING Save form data to disk after agregating changes.
+*** DONE Save form data to disk after agregating changes.
 1. Saving is done, but decided to save before agregation, so 
    more detail is preserved. This was done be accident, but 
    the result seems better than the original [no pun ] plan.
    
-*** PENDING If saved data exists in a recent file, use it rather than the original
+*** DONE If saved data exists in a recent file, use it rather than the original
     file on disk. -- #'retrive-plan-c
-*** PENDING Save new daily data to seperate file directories on disk
+*** DONE Save new daily data to seperate file directories on disk
     If the current date is newer than that of the saved data,
     stash the disk data to history; start with fresh values
     for today. -- #'retrieve-plan-c
@@ -26,12 +26,9 @@
 
 
 *** Bad
-**** TODO Upon  1st entry activites (probably the "0:00" ones) dissapear from form.
-   + Upon adding missing activities, they apear at top of form,
-     not in alpahbetical order.Aparently display is alphabetical order, but form is canonical.
-     Decide on with to use in both places.
 *** Anoying
-**** Often it seems that WWW-form input is not excepted and needs to be repeated.
+**** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
+     Fixed by adding a conifmation dialog.  No posts can happen without consent.
 
 *** Cosmetic
 **** TODO Make form-label text bold.
@@ -46,3 +43,7 @@
 	 different but still intersting.
       2. An ability to show all detail includeint times activer were peformet 
          is  also desired.
+**** Add time of day to page
+**** Add total time to page
+
+
