@@ -1,22 +1,24 @@
 * The Plan
 
 ** Current strategy
+1. Save form data to disk after agregating changes.
 
-1. Save formdata to disk after agregating changes.
-2. If saved data exists in a recent file, use it rather than the original
-   file on disk.
-3. If the current date is newer the the saved data,
+
+   
+*** Done Not Tested
+1. If saved data exists in a recent file, use it rather than the original
+   file on disk. -- #'retrive-plan-c
+2. If the current date is newer than that of the saved data,
    stash the disk data to history; start with fresh values
-   for today.
-   
+   for today. -- #'retrieve-plan-c
 ** FIXME
-2. Crash is ':' is missig from input timesring.
-3. Aparently display is alphabetical order, but form is canonical.
+1. Crash if ':' is missig from input timesring.
+2. Upon  1st entry activites (probably the "0:00" ones) dissapear from form.
+2.2 Upon adding missing activities, they apear at top of form,
+   not in alpahbetical order.Aparently display is alphabetical order, but form is canonical.
    Decide on with to use in both places.
-4. On 1st entry activites (probably the "0:00" ones) dissapear from form.
-   Upon adding times for the missing, they apear at top of form,
-   no in alpahbetical order.
-   
-   *** Fixed
+3. Make form-label text bold.
+
+*** Fixed
    1. Adding 1hr of time to an existing crashes the response.
       #f instead of number was the errr.
