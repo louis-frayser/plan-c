@@ -1,4 +1,5 @@
-// Update Ativities control when Categories is changed
+// 1. Update Ativities control when Categories is changed
+// 2. Connect form validation
 import { c, a, s } from "./controls.js"
 import { Categories, ActionsByCatIx } from "./options-array.js";
 import { validateSubmit } from "./on-submit.js";
@@ -28,7 +29,4 @@ c.onchange=putOptions;
 
 let fx=document.getElementById('assoc_form');
 fx.onsubmit=validateSubmit;
-
-s.onsubmit=validateSubmit;
-s.onChange=validateSubmit;
 

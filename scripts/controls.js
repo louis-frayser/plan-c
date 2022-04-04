@@ -11,6 +11,8 @@ export function getSelVal(sel){
 }
 
 export function getKey(){
+    // Not currently used by may be preferrable
+    // to sending back cx,ax as is currently done
     let cx = getSelVal('category'),
 	ax = getSelVal('activity');
     
