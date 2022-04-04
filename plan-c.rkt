@@ -1,10 +1,10 @@
 #lang racket
 
 (provide plan-c process-input-form plan-report (struct-out plan))
-(require web-server/templates web-server/http/bindings )
+(require web-server/templates web-server/http/bindings)
 (require xml srfi/19 seq/iso
          "lib/plan-c-data.rkt" "lib/config.rkt"
-         "lib/generate-js.rkt" "lib/lib.rkt")
+         "lib/generate-js.rkt" "lib/lib.rkt" "lib/db-files.rkt")
 (define *spc*  'nbsp)
 (define plan-c (make-parameter (retrieve-plan-c)))
 (define (performed act) (and (> (length act) 1) (string>? (car act) "0:00")))
@@ -46,11 +46,11 @@
          (new-plan
           (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
     (plan-c new-plan)))
-                 
-;;;  ------------------------------------------------------
+ 
+;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
-;;; ========================================================
+;;; =========================================================
 ;;;              REPORT/DISPLAY
 (define (plan-report)
   (report (plan-c)))
@@ -110,3 +110,4 @@
                               ,category))
                      (matching-group-html category groups))))
 ;...........................................................
+(plan-date (plan-c))

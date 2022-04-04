@@ -18,5 +18,5 @@
         (println (plan-groups (plan-c))))))
     (render-page))
 
-;;; This starts servelet with param "start respons/xepr" (above) 
+;;; This starts the servelet with param "start respons/xepr" (above) 
 (serve/servlet start #:extra-files-paths (list %files-dir %cwd ))
