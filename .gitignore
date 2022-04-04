@@ -4,5 +4,6 @@ compiled
 test.rkt
 tmp.rkt
 lib/db/planc-data-*
+lib/db/20*
 */#*#
 .#*
