@@ -12,7 +12,7 @@
 (define (get-current-db-dir)
   (get-db-dir-for-date (get-ymd-string)))
 
-(define (get-db-base-dir) (build-path (orig-dir) "lib/db"))
+(define (get-db-base-dir) (build-path %orig-dir% "lib/db"))
 
 (define (get-assoc-pathname-for ymd-str)
   (build-path

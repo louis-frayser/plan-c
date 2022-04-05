@@ -3,13 +3,13 @@
 
 
 (provide config-nth-activity config-nth-category
-         config-schema-categories config-schema-subcategories orig-dir)
+         config-schema-categories config-schema-subcategories %orig-dir%)
 
-(define orig-dir (make-parameter (find-system-path 'orig-dir)))
+(define %orig-dir% (find-system-path 'orig-dir))
 
 ;; --------------------------------------------------------------------
 (define *config-schema
-  (let* ((schema-file (build-path (orig-dir) "config/schema.yaml")))
+  (let* ((schema-file (build-path %orig-dir% "config/schema.yaml")))
     (with-input-from-file
         schema-file
       (lambda() (read-yaml)))))
