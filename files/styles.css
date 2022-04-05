@@ -10,14 +10,21 @@ form {
     //margin: 20px;
     padding: 10px;
 }
-button,input,label { background-color: #ffffee; width: 120px; }
-input[type="submit"] { display inline-block;
-		       background-color: #d0c0b0;
-		       margin-top:8px; margin-left: 6px;
-		       border:1px solid;}
+
+button,input,label,select { width: 120px; }
+button,input { background-color: #ffffee; width: 120px; }
+select,input[type="submit"] {
+    display: inline-block;
+    background-color: #c7c0b0;
+    margin-top:8px; margin-left: 6px;
+    border:1px solid;
+}
 input { border: 1px inset; }
 label { border: 1px insert;  margin-top: 8px;
-	display: inline-block;margin-left:8px; }
+	display: inline-block;margin-left:8px;
+        font-weight: 900;
+	text-align: right;
+      }
 
 hr {
     width: 30% !important;
@@ -34,7 +41,7 @@ th,td {
     border: 1px inset;
 }
 th {
-    background-color: #ffffee;
+    background-color: #d0d0c0;
     /*/#c0c0b0; */
 }
 .tsum,.tentry { text-align: right;

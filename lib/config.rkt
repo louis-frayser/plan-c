@@ -14,7 +14,7 @@
         schema-file
       (lambda() (read-yaml)))))
 
-(define (config-schema-categories) (hash-keys *config-schema))
+(define (config-schema-categories) (sort(hash-keys *config-schema) string<?))
 (define (config-schema-subcategories cat)
   (hash-ref *config-schema cat)) 
 (define (config-nth-category  n) (nth n (config-schema-categories) ))

@@ -1,18 +1,38 @@
 ---
 #title = "Plan C Category and Groups declarations"
 
-Fitness: [ "Yoga", "Walking", "Pull-Ups", "Dance" ]
+Fitness:
+- Dance
+- Other
+- Pull-Ups
+- Walking
+- Yoga
+
+Maitenance: 
+- Clean House
+- Instrument Maint.  
+- Kitchen:cook/clean
+- Laundry
+- Misc
+- SSS
+
+Media: [ Movies/AV, News, Social, Study ]
 
 Music Practice:
-   - Cello/Guitar/Piano
-   - Trombone/Trumpet/Flugelhorn
-   - Clarinet/Flute/Recorder
-   - Voice/Percussion/Dance
+- Cello
+- Clarinet
+- Dance
+- Flugelhorn
+- Flute
+- Guitar
+- Other
+- Percussion
+- Piano/Keyboard
+- Recorder
+- Trombone
+- Trumpet
+- Voice
 
-Maitenance: [ SSS, "Kitchen:cook/clean", Clean House,  Laundry, Instrument Maint. ]
+PIM: [ Finance, Planning, SysAdm ]
 
-Media: [News, Social, Movies/AV]
-
-PIM: [ Planning, SysAdm]
-
-Special Interest: [ Programming ]
+Special Interest: [ CM, Engineering, Programming, Testing ]

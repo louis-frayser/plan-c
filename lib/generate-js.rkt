@@ -1,9 +1,11 @@
 #lang racket
 (require seq/iso "config.rkt")
 (provide generate-js)
+
 ;;; ============================================================
 (define (js-list l)
   (format "['~a']" (apply string-append (intersperse "', '" l))))
+
 (define (js-list-ar l) ; List of js arrays  =>  array of arrays
   (format "[~a];\n" (apply string-append (intersperse ",\n  " l))))
 

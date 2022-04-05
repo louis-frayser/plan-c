@@ -1,10 +1,15 @@
 <form name='New Activity Form' id='assoc_form'>
   <!-- Data entry for Category, Activity and Duration  -->
-  <label for="category">Category:</label>
-  <select name="category" id="category" required="true"></select>
-  <label for="activity">Activity:</label>
-  <select name="activity" id="activity" required="true"> </select>
-  <label for="duration">Duration:</label> 
-  <input id="duration" name="duration" value="0:00" />
-  <input type="submit" value="Submit" class="metalic" id="change" name="change" />
+  <div>
+    <label for="category">Category:</label>
+    <select name="category" id="category" required="true"></select>
+    <label for="activity">Activity:</label>
+    <select name="activity" id="activity" required="true"> </select>
+    <label for="duration">Duration:</label> 
+    <input id="duration" name="duration" value="0:00" class="tentry" />
+  </div>
+  <div>
+    <input type="submit" value="Submit" class="metalic" id="change" name="change"/> &nbsp;
+    <a href="/servlets/PLAN-C">Back to home</a>
+  </div>
 </form>
