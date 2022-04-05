@@ -45,5 +45,7 @@
          is  also desired.
 **** Add time of day to page
 **** Add total time to page
+**** Add a Notes sub valute to Activitie
+**** Expand the mutiple-instrument fields in music practice
 
 
