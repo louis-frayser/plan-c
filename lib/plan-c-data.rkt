@@ -57,7 +57,3 @@
 ;; ...........................................................
 
 ;;; ===================================================================
-(newline)
-;(plan-show (retrieve-plan-c))
-;(serialize  (retrieve-plan-c))
-;(string->file (retrieve-plan-c) "/tmp/list.scm")
