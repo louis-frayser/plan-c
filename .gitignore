@@ -7,3 +7,4 @@ lib/db/planc-data-*
 lib/db/20*
 */#*#
 .#*
+scripts/options-array.js
