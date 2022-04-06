@@ -39,7 +39,7 @@
 
 
 *** Cosmetic
-**** TODO Make form-label text bold.
+**** DONE Make form-label text bold.
 
 
 *** Wish List
@@ -54,7 +54,7 @@
          is  also desired.
 **** Add time of day to page
 **** Add total time to page
-**** Add a Notes sub valute to Activitie
+**** Add a Notes sub valute to Activity
 **** Expand the mutiple-instrument fields in music practice
 
 
