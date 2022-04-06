@@ -1,12 +1,15 @@
 <form name='New Activity Form' id='assoc_form'>
-  <!-- Data entry for Category, Activity and Duration  -->
+  <!-- Data entry for Category, Activity and Duration. 'action=' is added by the server:
+       See ../plan-c.rkt.  Styles are in ../files/styles.css                             -->
   <div>
     <label for="category">Category:</label>
     <select name="category" id="category" required="true"></select>
     <label for="activity">Activity:</label>
     <select name="activity" id="activity" required="true"> </select>
     <label for="duration">Duration:</label> 
-    <input id="duration" name="duration" title="HH:MM up to 16:00 hrs" pattern="[01][0-9]:[0-9]{2}" value="0:00" required="true" />
+    <input id="duration" name="duration"
+	   title="A duration H:MM, or HH:MM from 0:01 up to 16:00 hrs"
+	   pattern="[01]{0,1}[0-9]:[0-9]{2}" value="0:00" required="true" />
   </div>
 
   <div>
