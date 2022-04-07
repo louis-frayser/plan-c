@@ -2,7 +2,7 @@
 
 (provide plan-c process-input-form plan-report (struct-out plan))
 (require web-server/templates web-server/http/bindings)
-(require xml srfi/19 seq/iso
+(require xml srfi/19 seq/iso racket/trace
          "lib/plan-c-data.rkt" "lib/config.rkt"
          "lib/generate-js.rkt" "lib/lib.rkt" "lib/db-files.rkt")
 (define *spc*  'nbsp)
@@ -20,7 +20,7 @@
   (printf "process-input-form: bindings == ~v\n\n" bindings)
   (define (changed-key cx ax) (list (config-nth-category cx)
                                     (config-nth-activity cx ax)))
-  ;;; adding in the  time from the original activity 
+  ;;; adding in the  time from the original activity
   (define (new-assocs orig-assocs new-assoc )
     (let*-values (( (key) (car new-assoc))
                   ((replace-assocs keep-assocs )
@@ -34,7 +34,7 @@
              (tot-dur (strtime+ base-dur xtra-dur))
              (adj-new-assoc (cons (car new-assoc) tot-dur)))
         (cons adj-new-assoc keep-assocs))))
-  ;
+
   (define(->int sm)(string->number(extract-binding/single sm bindings)))
   ;
   (let*( (cx (->int 'category ))
