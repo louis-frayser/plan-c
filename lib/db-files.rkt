@@ -1,8 +1,7 @@
 #lang racket
 ; ====================================================================
-;;; Disk Database...
-(provide put-assoc-to-db retrieve-plan-c)
-
+;;; Disk Database....
+(provide put-assoc-to-db plan-c)
 (require srfi/13 srfi/19 "config.rkt" "lib.rkt" "plan-c-data.rkt")
 ;;; ------------------------------------------------------------------
 (define get-db-dir-for-date
@@ -38,6 +37,8 @@
 ;;; .....................................................................
 (define (get-current-plan)
   (get-plan-for-date (get-ymd-string)))
+;
+(define plan-c (make-parameter (retrieve-plan-c)))
 ;
 (define (put-assoc-to-db assoc) 
   ;; put in db-basedir/yyyy-mm-dd

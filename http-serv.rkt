@@ -11,7 +11,7 @@
       (redirect/get)))
   (send/suspend/dispatch render-page))
   
-;;; This starts the servelet with param "start respons/xepr" (above) 
+;;; This starts the servelet with param "start respons/xepr" (above)
 (require web-server/servlet-env "plan-c.rkt")
 (serve/servlet start
                #:launch-browser? #t

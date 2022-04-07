@@ -6,6 +6,7 @@
 
 (struct plan (version date groups))
 
+
 (define (plan-show pln)
   (with-output-to-string
     (lambda()
