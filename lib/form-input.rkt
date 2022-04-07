@@ -3,8 +3,8 @@
 (provide handle-input-form plan-c process-input-form plan-report render-page (struct-out plan))
 (require web-server/templates web-server/servlet)
 (require xml srfi/19 (only-in seq/iso drop)
-         "lib/plan-c-data.rkt" "lib/config.rkt" "lib/render.rkt"
-         "lib/generate-js.rkt" "lib/lib.rkt" "lib/db-files.rkt")
+         "plan-c-data.rkt" "config.rkt" "render.rkt"
+         "generate-js.rkt" "lib.rkt" "db-files.rkt")
 
 (define (render-page embed/url)
   (response/xexpr  #:preamble #"<!DOCTYPE html>\n"
