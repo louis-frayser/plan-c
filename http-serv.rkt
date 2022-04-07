@@ -3,16 +3,13 @@
 (require web-server/servlet "lib/config.rkt" "plan-c.rkt" "lib/lib.rkt")
 (provide/contract (start (request? . -> . response?)))
 
-(define (render-page)
-  (response/xexpr  #:preamble #"<!DOCTYPE html>\n"
-                   (plan-report)))
 
 (define (start req)
   (let* ((bindings (request-bindings req)))
     (when (exists-binding? 'change bindings)
       (process-input-form bindings)
       (redirect/get)))
-  (render-page))
+  (send/suspend/dispatch render-page))
   
 ;;; This starts the servelet with param "start respons/xepr" (above) 
 (require web-server/servlet-env "plan-c.rkt")
