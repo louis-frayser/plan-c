@@ -20,20 +20,29 @@
      2. In the database, it seems the missing value (time-duration) 
         was assigned to  the wrong activity
 **** TODO Crashes if ':' is missig from input timesring.
+     1. Also fails on '::' - to many colons.
+     2. (note: add validation 1st to the server, then to the client)
+         validation need to occur before storage.
+
 **** DONE Crash on input of hours
 - Adding 1 hr of time to an existing crashes the response.
   #f instead of number was the errr.
 
 
 *** Bad
+**** Redirect/get is not correct--sends the page to nowhere.
+     I want to redirect back the start page.
 *** Anoying
 **** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
      Fixed by adding a conifmation dialog.  No posts can happen without consent.
+**** Filter out inputs > 16 hrs in the validation.  Just entered 30:00 instead of 0:30.
+
 
 *** Cosmetic
 **** TODO Make form-label text bold.
 
-*** TODO Wish List 
+
+*** Wish List
 **** STARTED Make the amount of detail displayed adjustable
      It was not anticipated, but by saving data as ativites rather thanas  plans, more
      detail is available (the date and time and any repetitions of an activity are
