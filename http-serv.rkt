@@ -1,6 +1,6 @@
 #lang racket
 
-(require web-server/servlet "lib/config.rkt" "plan-c.rkt")
+(require web-server/servlet "lib/config.rkt" "plan-c.rkt" "lib/lib.rkt")
 (provide/contract (start (request? . -> . response?)))
 
 (define (render-page)
@@ -11,7 +11,6 @@
   (let* ((bindings (request-bindings req)))
     (when (exists-binding? 'change bindings)
       (process-input-form bindings)
-      (println (plan-groups (plan-c)))
       (redirect/get)))
   (render-page))
   
