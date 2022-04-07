@@ -1,12 +1,12 @@
 #lang racket
 (require  seq/iso yaml canonicalize-path "lib.rkt")
 
-
 (provide config-nth-activity config-nth-category
-         config-schema-categories config-schema-subcategories %orig-dir%)
+         config-schema-categories config-schema-subcategories 
+         %orig-dir%  %servlet-path%)
 
 (define %orig-dir% (find-system-path 'orig-dir))
-
+(define %servlet-path% "/servlets/PLAN-C")
 ;; --------------------------------------------------------------------
 (define *config-schema
   (let* ((schema-file (build-path %orig-dir% "config/schema.yaml")))

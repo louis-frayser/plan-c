@@ -20,4 +20,4 @@
                #:port 8000
                #:extra-files-paths (list %orig-dir%
                                          (build-path %orig-dir% "htdocs"))
-               #:servlet-path "/servlets/PLAN-C")
+               #:servlet-path %servlet-path%)

@@ -17,7 +17,7 @@
   ;;; config-schema-categories() and config-schema-subcategories()
   ;;; After decoding  the numbers into to strings, the struct is
   ;;; addressible for "update".
-  (printf "process-input-form: bindings == ~v\n\n" bindings)
+  (eprintf "\nDEBUG: process-input-form: bindings == ~v\n\n" bindings)
   (define (changed-key cx ax) (list (config-nth-category cx)
                                     (config-nth-activity cx ax)))
   ;;; adding in the  time from the original activity
@@ -62,8 +62,6 @@
 (define (plan-report embed/url)
   (report (plan-c) embed/url))
 
-
-
 (define (report a-plan embed/url)
   ;; Punch a whole in the form elemet's attributes and insert  '(action ,embed/url)5
   (define (add-form-action form)
@@ -79,9 +77,11 @@
             (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
   (let* ((datestr (plan-date a-plan))
          (datestru (string->date datestr "~Y-~m-~d"))
-         (date (date->string datestru "~A ~1")))       
+         (date (date->string datestru "~A ~1"))
+         (meta-cont-val (string-append "30;url=" %servlet-path%)))       
     `(html
       (head (title "Plan C")
+            (meta ((http-equiv "refresh")(content ,meta-cont-val)))
             (link ((rel "stylesheet")(href "/files/styles.css")
                                      (type "text/css")))
             (script ((src "/scripts/plan.js")(type "module"))))
