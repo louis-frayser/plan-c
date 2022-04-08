@@ -26,13 +26,13 @@
       (append (list head new-atts ) rest)))
 
   (define (groups-html groups)
-    (append '(table) 
+    (append '(table)
             (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
   ;; HTML starts here ...
   (let* ((datestr (plan-date a-plan))
          (datestru (string->date datestr "~Y-~m-~d"))
          (date (date->string datestru "~A ~1"))
-         (meta-cont-val (string-append "60;url=" %servlet-path%)))       
+         (meta-cont-val (string-append "120;url=" %servlet-path%)))
     `(html
       (head (title "Plan C") "\n"
             (meta ((http-equiv "refresh")(content ,meta-cont-val))) "\n"
@@ -45,7 +45,7 @@
             (div ((id "wrap")) "\n"
                  (div ((id "left_col"))
             ,(string->xexpr (include-template "../files/time-frame.html")) "\n"
-            ,(groups-html (plan-groups a-plan)) "\n" ) 
+            ,(groups-html (plan-groups a-plan)) "\n" )
                  (div ((id "right_col"))
             ,(add-form-action (string->xexpr (include-template "../files/input-form.html"))))) "\n"))))
 ;...............................................................
@@ -76,12 +76,12 @@
             (call-with-values
              (lambda()(quotient/remainder tot-seconds 3600))
              (lambda(h m)
-               (format "~a:~a" h 
+               (format "~a:~a" h
                        (~a #:width 2
                            #:align 'right #:pad-string "0"
                            (round (/ m 60))))))))
       timestr))
-  (cons 'tbody (cons `(tr (th ((class "tsum")) ,(group-sum)) 
+  (cons 'tbody (cons `(tr (th ((class "tsum")) ,(group-sum))
                           (th ((colspan "2"))
                               ,category))
                      (matching-group-html category groups))))
