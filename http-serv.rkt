@@ -1,7 +1,8 @@
 #lang racket
 
-(require web-server/servlet "lib/config.rkt" "lib/form-input.rkt" "lib/lib.rkt")
+(require web-server/servlet "lib/config.rkt" "lib/form-input.rkt")
 (provide/contract (start (request? . -> . response?)))
+
 (define (start req)
   (let* ((bindings (request-bindings req)))
     (when (exists-binding? 'change bindings)
