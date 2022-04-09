@@ -1,10 +1,8 @@
-#lang racket
+#lang debug racket
 
 (provide handle-input-form plan-c process-input-form plan-report render-page (struct-out plan))
-(require web-server/templates web-server/servlet)
-(require xml srfi/19 (only-in seq/iso drop)
-         "plan-c-data.rkt" "config.rkt" "render.rkt"
-         "generate-js.rkt" "lib.rkt" "db-files.rkt")
+(require web-server/servlet)
+(require "plan-c-data.rkt" "config.rkt" "render.rkt" debug "lib.rkt" "db-files.rkt")
 
 (define (render-page embed/url)
   (response/xexpr  #:preamble #"<!DOCTYPE html>\n"
@@ -19,7 +17,7 @@
   ;;; config-schema-categories() and config-schema-subcategories()
   ;;; After decoding  the numbers into to strings, the struct is
   ;;; addressible for "update".
-  (eprintf "\nDEBUG: process-input-form: bindings == ~v\n\n" bindings)
+ (void #RRR bindings); (debug-value "process-input-form with bindings: ~v"  bindings)
   (define (changed-key cx ax) (list (config-nth-category cx)
                                     (config-nth-activity cx ax)))
   ;;; adding in the  time from the original activity
