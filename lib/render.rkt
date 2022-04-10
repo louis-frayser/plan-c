@@ -12,7 +12,6 @@
 ;;; =========================================================
 ;;;              REPORT/DISPLAY
 
-
 (define (plan-report embed/url handle-input-form)
   (report (plan-c) embed/url handle-input-form) )
 
@@ -41,10 +40,10 @@
             (script ((src "/scripts/plan.js")(type "module")))) "\n"
       (body ((class "container")) "\n"
             (h1 "Plan C") "\n"
-            (h2  ,date) "\n"
+            ;(h2  ,date) "\n"
+            ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
             (div ((id "wrap")) "\n"
                  (div ((id "left_col"))
-            ,(string->xexpr (include-template "../files/time-frame.html")) "\n"
             ,(groups-html (plan-groups a-plan)) "\n" )
                  (div ((id "right_col"))
             ,(add-form-action (string->xexpr (include-template "../files/input-form.html"))))) "\n"))))
