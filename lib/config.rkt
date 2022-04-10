@@ -5,7 +5,16 @@
          config-schema-categories config-schema-subcategories 
          %orig-dir%  %servlet-path%)
 
-(define %orig-dir% (find-system-path 'orig-dir))
+(define %orig-dir%
+  (let*-values
+      (((i-is) ;https://stackoverflow.com/a/57165702/187122
+        (resolved-module-path-name
+         (variable-reference->resolved-module-path
+          (#%variable-reference))))
+       ((idir _path _ignore) (split-path i-is))
+       ((i-parent _i _ig) (split-path idir)))
+    i-parent))
+
 (define %servlet-path% "/servlets/PLAN-C")
 ;; --------------------------------------------------------------------
 (define *config-schema
