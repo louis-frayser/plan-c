@@ -34,13 +34,11 @@
          (meta-cont-val (string-append "120;url=" %servlet-path%)))
     `(html
       (head (title "Plan C") "\n"
-            (meta ((http-equiv "refresh")(content ,meta-cont-val))) "\n"
             (link ((rel "stylesheet")(href "/files/styles.css")
                                      (type "text/css"))) "\n"
             (script ((src "/scripts/plan.js")(type "module")))) "\n"
       (body ((class "container")) "\n"
             (h1 "Plan C") "\n"
-            ;(h2  ,date) "\n"
             ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
             (div ((id "wrap")) "\n"
                  (div ((id "left_col"))
