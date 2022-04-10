@@ -2,9 +2,9 @@
 import { Categories, ActionsByCatIx } from "./options-array.js";
 
 // A for activities, C for categories
-export var c = document.getElementById("category");
-export var a = document.getElementById("activity");
-export var s = document.getElementById("change");
+export const c = document.getElementById("category");
+export const a = document.getElementById("activity");
+export const s = document.getElementById("change");
 
 export function getSelVal(sel){
    return sel.options[sel.selectedIndex].value;
