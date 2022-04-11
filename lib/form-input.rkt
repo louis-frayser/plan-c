@@ -17,9 +17,7 @@
   ;;; config-schema-categories() and config-schema-subcategories()
   ;;; After decoding  the numbers into to strings, the struct is
   ;;; addressible for "update".
- (void #RRR bindings); (debug-value "process-input-form with bindings: ~v"  bindings)
-  (define (changed-key cx ax) (list (config-nth-category cx)
-                                    (config-nth-activity cx ax)))
+  (void #RRR bindings); (debug-value "process-input-form with bindings: ~v"  bindings)
   ;;; adding in the  time from the original activity
   (define (new-assocs orig-assocs new-assoc )
     (let*-values (( (key) (car new-assoc))
@@ -35,12 +33,11 @@
              (adj-new-assoc (cons (car new-assoc) tot-dur)))
         (cons adj-new-assoc keep-assocs))))
 
-  (define(->int sm)(string->number(extract-binding/single sm bindings)))
+  (define(->str sm)(extract-binding/single sm bindings))
   ;
-  (let*( (cx (->int 'category ))
-         (ax (->int 'activity ))
-         (timestr (extract-binding/single 'duration bindings))
-         (new-assoc (cons (changed-key cx ax) timestr)))
+  (let*((changed-key (map ->str (list 'category 'activity)))
+        (timestr (->str 'duration ))
+        (new-assoc (cons changed-key timestr)))
     (put-assoc-to-db new-assoc)
     (let* ( (orig-assocs (plan-assocs (plan-c)))
             (new-assocs+ (new-assocs orig-assocs new-assoc))

@@ -10,15 +10,14 @@ function populate(sel, items){
     
     for (let i=0; i <  items.length; i++){
         var option = document.createElement("option");
-        option.value = i;
-        option.text = items[i];
+	option.value = option.text = items[i];
         sel.appendChild(option);
     }
 }
 
 function putOptions(){
-    let cix = c.options[c.selectedIndex].value;
-    let items = ActionsByCatIx[cix];
+    let csix = c.selectedIndex;
+    let items = ActionsByCatIx[csix];
     populate(a, items);  
 }
 

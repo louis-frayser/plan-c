@@ -11,12 +11,10 @@ export function getSelVal(sel){
 }
 
 export function getKey(){
-    // Not currently used by may be preferrable
-    // to sending back cx,ax as is currently done
-    let cx = getSelVal('category'),
-	ax = getSelVal('activity');
-    
-    return [Categories[cx],ActionsByCatIx[cx][ax]];
+    // Not curently used, but in the app, key = `(cat act) 
+    let cat = getSelVal(c),
+	act = getSelVal(a);
+    return [cat,act];
 }
 
 export function getDuration(){
