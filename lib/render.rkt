@@ -1,6 +1,6 @@
 #lang debug racket
 
-(provide #|plan-c |# plan-report)
+(provide plan-report)
 (require web-server/templates web-server/servlet)
 (require xml srfi/19 (only-in seq/iso drop)
          "plan-c-data.rkt" "config.rkt"
