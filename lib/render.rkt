@@ -1,6 +1,6 @@
-#lang racket
+#lang debug racket
 
-(provide plan-c plan-report)
+(provide #|plan-c |# plan-report)
 (require web-server/templates web-server/servlet)
 (require xml srfi/19 (only-in seq/iso drop)
          "plan-c-data.rkt" "config.rkt"
@@ -13,7 +13,7 @@
 ;;;              REPORT/DISPLAY
 
 (define (plan-report embed/url handle-input-form)
-  (report (plan-c) embed/url handle-input-form) )
+  (report (get-plan-c) embed/url handle-input-form) )
 
 (define (report a-plan embed/url handle-input-form)
   ;; Punch a whole in the form elemet's attributes and insert  '(action ,embed/url)5
@@ -24,9 +24,9 @@
            (new-atts (cons `(action ,(embed/url handle-input-form)) orig-atts)))
       (append (list head new-atts ) rest)))
 
-  (define (groups-html groups)
+  (define (groups-html a-plan)
     (append '(table)
-            (map (lambda (c)(row-html c groups)) (plan-categories a-plan)) ))
+            (map (lambda (c)(row-html c (plan-groups a-plan))) (plan-categories a-plan)) ))
   ;; HTML starts here ...
   (let* ((datestr (plan-date a-plan))
          (datestru (string->date datestr "~Y-~m-~d"))
@@ -42,7 +42,7 @@
             ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
             (div ((id "wrap")) "\n"
                  (div ((id "left_col"))
-            ,(groups-html (plan-groups a-plan)) "\n" )
+            ,(groups-html a-plan) "\n" )
                  (div ((id "right_col"))
             ,(add-form-action (string->xexpr (include-template "../files/input-form.html"))))) "\n"))))
 ;...............................................................
@@ -59,9 +59,8 @@
                                            d (cons *spc* d))))
                 (filter performed (map reverse match))))))
   ;;; Gets the sum of durations in a group
-  (define (group-sum)
-    (let* ((groups (plan-groups (plan-c)))
-           (match (dict-ref groups category '()))
+  (define (group-sum groups)
+    (let* ((match (dict-ref groups category '()))
            (tstrs (map (lambda(gel)
                          (if (pair? gel) (car gel) "0:00")) (map cdr match)))
            (splits (map (lambda(s)(string-split s ":")) tstrs))
@@ -78,7 +77,7 @@
                            #:align 'right #:pad-string "0"
                            (round (/ m 60))))))))
       timestr))
-  (cons 'tbody (cons `(tr (th ((class "tsum")) ,(group-sum))
+  (cons 'tbody (cons `(tr (th ((class "tsum")) ,(group-sum groups))
                           (th ((colspan "2"))
                               ,category))
                      (matching-group-html category groups))))

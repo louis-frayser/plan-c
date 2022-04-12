@@ -1,7 +1,7 @@
 #lang racket
 ; ====================================================================
 ;;; Disk Database....
-(provide put-assoc-to-db plan-c)
+(provide put-assoc-to-db get-plan-c)
 (require srfi/13 srfi/19 "config.rkt" "lib.rkt" "plan-c-data.rkt")
 ;;; ------------------------------------------------------------------
 (define get-db-dir-for-date
@@ -17,7 +17,7 @@
   (build-path
    (get-db-base-dir) (date->string (current-date) "~1/assoc-~T.scm")))
 ;;; ..................................................................
-(define retrieve-plan-c  ; Get plan from permanent storage
+(define get-plan-c  ; Get plan from permanent storage
   (lambda()
     (or (get-current-plan) (empty-plan))))
 ;  
@@ -37,8 +37,6 @@
 ;;; .....................................................................
 (define (get-current-plan)
   (get-plan-for-date (get-ymd-string)))
-;
-(define plan-c (make-parameter (retrieve-plan-c)))
 ;
 (define (put-assoc-to-db assoc) 
   ;; put in db-basedir/yyyy-mm-dd

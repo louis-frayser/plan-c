@@ -1,6 +1,6 @@
 #lang debug racket
 
-(provide handle-input-form plan-c process-input-form plan-report render-page (struct-out plan))
+(provide handle-input-form #|plan-c|# process-input-form plan-report render-page (struct-out plan))
 (require web-server/servlet)
 (require "plan-c-data.rkt" "config.rkt" "render.rkt" debug "lib.rkt" "db-files.rkt")
 
@@ -38,12 +38,14 @@
   (let*((changed-key (map ->str (list 'category 'activity)))
         (timestr (->str 'duration ))
         (new-assoc (cons changed-key timestr)))
-    (put-assoc-to-db new-assoc)
+    (put-assoc-to-db new-assoc))
+#|
     (let* ( (orig-assocs (plan-assocs (plan-c)))
             (new-assocs+ (new-assocs orig-assocs new-assoc))
             (new-groups (plan-list->groups new-assocs+))
             (new-plan
              (plan (plan-version (plan-c)) (plan-date (plan-c)) new-groups) ))
       (plan-c new-plan)))
+|#
   (send/suspend/dispatch render-page))
  
