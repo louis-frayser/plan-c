@@ -58,7 +58,7 @@
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
                 (filter performed (map reverse match))))))
-  ;;; Gets the sum of durations in a group
+  ;;; Gets the sum of durations in the matching group
   (define (group-sum groups)
     (let* ((match (dict-ref groups category '()))
            (tstrs (map (lambda(gel)
