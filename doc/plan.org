@@ -33,6 +33,7 @@
 
 *** Bad
 **** Redirect/get is not correct--sends the page to nowhere.
+**** Items entered from another client do show
      I want to redirect back the start page.
 *** Annoying
 **** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
