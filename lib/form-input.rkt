@@ -6,7 +6,9 @@
 
 ;;; ==============================================================
 ;;;              INPUT FORM
-(define (handle-input-form req render-page) (process-input-form (request-bindings req)))
+(define (handle-input-form req render-page) 
+  (process-input-form (request-bindings req) render-page))
+
 (define (process-input-form bindings render-page)
   ;;; We are looking at a form that changes only one trie key (cat,act)
   ;;; The pair is of numerical indices representing strings in config
