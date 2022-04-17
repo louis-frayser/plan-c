@@ -1,17 +1,17 @@
 #lang racket
 
-(provide ->string get-ymd-string strtime+)
+(provide ->string get-ymd-string string-time+)
 (require srfi/19)
 ;; ========================================================================
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings
-(define (strtime+ strt1 strt2)
-  (with-handlers ((exn:fail? (lambda(exn)(eprintf "strtime+: ~v ~v ~v~n"
-                                                  strt1 strt2  exn))) )
-    (let*((2lists (map (lambda(s)(string-split s ":"))(list strt1 strt2)))
-          (2Nlists (map (lambda(ls)(map string->number ls)) 2lists))
+(define (string-time+ .  strings)
+  (with-handlers ((exn:fail? (lambda(exn)(eprintf "strtime+: ~v ~v~n"
+                                                  strings  exn))))
+    (let*((lists (map (lambda(s)(string-split s ":")) strings))
+          (nlists (map (lambda(ls)(map string->number ls)) lists))
           (mins-ea (map (lambda(nlist)
-                          (+ (* 60 (car nlist)) (cadr nlist))) 2Nlists))
+                          (+ (* 60 (car nlist)) (cadr nlist))) nlists))
           (tmins (apply + mins-ea)))
       (call-with-values
        (lambda()(quotient/remainder tmins 60))

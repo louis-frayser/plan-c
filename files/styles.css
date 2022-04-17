@@ -12,7 +12,7 @@ iframe { margin-left: 10px;}
 table { width: 300px;
 	border: 1px solid;
 	margin-top: 10px;
-	}
+      }
 form {
     border: 1px solid;
     background-color: #e7e0e0;
@@ -40,6 +40,8 @@ label { border: 1px insert;  margin-top: 8px;
 th,td { border: 1px inset; }
 th { background-color: #d0d0c0; }
 
-/*
-.tsum,.tentry { text-align: right; width: 50px;
-*/
+#ttotal {
+    text-align: center;
+    font-weight: 500;
+   
+}
