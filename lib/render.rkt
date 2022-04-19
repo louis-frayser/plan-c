@@ -39,7 +39,7 @@
     (define groups (filter pair? (plan-groups a-plan)))
     (define tstrings (map cadr (apply append (map cdr groups))))
     `(div (p ((id "ttotal"))
-          "Daily total: " ,(apply string-time+ tstrings))))
+             "Daily total: " ,(apply string-time+ tstrings))))
 
   ;; HTML starts here ...
   (let* ((datestr (plan-date a-plan))
@@ -72,21 +72,22 @@
 ;...............................................................
 ;; For each major category, show  performed actions
 (define (row-html category groups)
-  (define (performed act) (and (> (length act) 1) (string>? (car act) "0:00")))
+  (define (performed act) (and (> (length act) 1) (string>? (car act) "00:00")))
   (define (matching-group-html cat grps)
-    (let* ( (match (dict-ref grps cat '())))
+    (let* ( (cmatch (dict-ref grps cat '()))
+            (perfed  (filter performed (map reverse cmatch))))
       (map (lambda(row)  ; row is a triplet
              (cons 'tr `((td ,(car row)) 
                          (td ((class "tentry"))
                              ,(cadr row)) (td ,(caddr row)))))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)
                                            d (cons *spc* d))))
-                (filter performed (map reverse match))))))
+                perfed))))
   ;;; Gets the sum of durations in the matching group
   (define (group-sum groups)
-    (let* ((match (dict-ref groups category '()))
+    (let* ((cmatch (dict-ref groups category '()))
            (tstrs (map (lambda(gel)
-                         (if (pair? gel) (car gel) "0:00")) (map cdr match)))
+                         (if (pair? gel) (car gel) "0:00")) (map cdr cmatch)))
            (splits (map (lambda(s)(string-split s ":")) tstrs))
            (nsplits (map (lambda(pr)(map string->number pr))
                          splits))
