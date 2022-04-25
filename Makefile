@@ -19,3 +19,10 @@ clean:  Attic
 clobber: clean
 	@rm -frv compiled
 	@echo CLOBBER
+
+install:
+	chgrp wheel scripts
+	chgrp +ws scripts
+	mkdir -p lib/db
+	chgrp wheel lib/db
+	chmod g+ws lib/db
