@@ -1,0 +1,37 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="plan-c daemon"
+description="Online TODO list"
+command="/usr/bin/racket"
+command_args="${plan_c_args}"
+command_user="${plan_c_user}"
+output_log="${plan_c_log}"
+error_log="${plan_c_error_log}"
+command_background="true"
+required_dirs="$PLAN_C_HOME ${PLAN_C_HOME}/lib/db"
+pidfile="/run/plan-c.pid"
+procname="su"
+depend() {
+    need net
+}
+
+start(){
+    su $command_user \
+       -c "exec $command $command_args >>$output_log 2>>$error_log " &
+    echo $! > $pidfile
+}
+stop(){
+        local pids=$(pidof $procname)
+        local kpid=$(cat $pidfile)
+        if [ -n "$kpid" ]
+        then for pid in $pids  
+              do [ $pid -eq  "$kpid" ] && {
+                     kill $kpid
+                 }
+                 kill -0 $kpid || rm $pidfile
+              done
+        else eerror "No pid for proc!"
+        fi
+}
