@@ -1,7 +1,7 @@
 #lang racket
 
-(provide ->string get-ymd-string string-time+)
-(require srfi/19)
+(provide (all-defined-out))
+(require srfi/1 srfi/19)
 ;; ========================================================================
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings
@@ -19,6 +19,14 @@
          (string-append
           (~a hrs) ":" (~a mins #:align 'right 
                            #:min-width 2 #:left-pad-string "0" )))))))
+
+(define (time-string->hrs hh:mm-str)
+  (let*-values ( ((h m0) (car+cdr (map string->number
+                                       (string-split hh:mm-str ":") )))
+                 ( (m) (first m0)))
+    (+ h  (/ m 60))))
+
+
 ;; .......................................................................
 ;;; Get date string
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))

@@ -15,13 +15,10 @@
 
 ** FIXME
 *** Critical
-**** STARTED Activities are definitely disappearing from the WWW display
+**** PENDING Activities are definitely disappearing from the WWW display
      1. After entry, some previous entries disappear. Mon 10:04:39
      2. In the database, it seems the missing value (time-duration)
         was assigned to  the wrong activity
-***** I suspect that 1 and 2 above are due to data entered at the time of timeout when all values are zeroed forced input to register jusing categor 0 and activity 0.y
-      This does not explain disapearing items, though.  Those missing items do show up upon restart.
-      Suggest, do not zero and reload categories except for the inital time, by setting a flag after initialiazation. FInit=treue.  And unless FInit ... for the intialization code.
 **** DONE Crashes if ':' is missing from input timesring.
      1. Also fails on '::' - to many colons.
      2. (note: add validation 1st to the server, then to the client)
@@ -31,15 +28,18 @@
 - Adding 1 hr of time to an existing crashes the response.
   #f instead of number was the error.
 
+
 *** Bad
 **** Redirect/get is not correct--sends the page to nowhere.
 **** Items entered from another client do show
      I want to redirect back the start page.
+
 *** Annoying
 **** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
      Fixed by adding a confirmation dialog.  No posts can happen without consent.
 **** TODO Filter out inputs > 16 hrs in the validation.  Just entered 30:00 instead of 0:30.
-**** TODO Date a top of form is static; need to be updated on refresh (or clock chage)
+**** DONE Date a top of form is static; need to be updated on refresh (or clock chage)
+**** TODO Needs ability to edit past events (especially the prior day)
 
 *** Cosmetic
 **** DONE Make form-label text bold.
@@ -56,8 +56,9 @@
       2. An ability to show all detail including times activities were performed
          is  also desired.
 **** PENDING Add time of day to page 
-**** Add total time to page
-**** Add a Notes sub validate to Activity
-**** Expand the mutiple-instrument fields in music practice
+**** DONE Add total time to page
+**** Add a Notes field to Activity
+**** DONE Expand the mutiple-instrument fields in music practice
+**** Add Historical 'Edit/Add/Delete' to plan
 
 
