@@ -3,15 +3,19 @@ body {
 }
 
 /* These 3 lines set layout */
-#wrap { width: 600px; }
+#wrap { width: 670px; }
+#left_col  { float: left;  width: 370px; }
 #right_col { float: right; width: 300px; }
-#left_col  { float: left;  width: 300px; }
-
+#daily_time { alt: "Time praticed by day"; caption: "Time practiced";
+	      title: "Practice time";
+	      height: 300px; width: 370px; margin-top: 10px;
+	      border: 1px dotted; }
 iframe { margin-left: 10px;}
 
 table { width: 300px;
 	border: 1px solid;
 	margin-top: 10px;
+	margin-left: 35px;
       }
 form {
     border: 1px solid;

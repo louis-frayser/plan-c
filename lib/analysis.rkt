@@ -5,79 +5,82 @@
 (require srfi/19)
 (require "config.rkt" "lib.rkt" "reports/series-to-svg.rkt")
 
+(provide render-svg-img)
+
 
 (define %dbdir "/usr/lucho/var/www/plan-c/lib/db")
+(define svg-basename "music-practice-minutes-daily.svg")
 (define svg-path 
-  "/usr/lucho/var/www/plan-c/htdocs/music-practice-minutes-daily.svg"
-  #;(build-path %orig-dir% "htdocs/music-practice-minutes-daily.svg"))
+  (build-path %orig-dir% "htdocs" svg-basename))
 
 (define (read-file path/string)
   (with-input-from-file path/string (lambda()(read))))
+
+(define (render-svg-to-file)
+  ;; ddate/directory
+  (define ddlist (map path->string (directory-list %dbdir)))
+
+  ;; A list of date and associated files
+  (define flist
+    (map (lambda(d) (list d (directory-list (build-path %dbdir d))))
+         ddlist))
   
-;; ddate/directory
-(define *ddlist (map path->string (directory-list %dbdir)))
+  ;; Replae files with their contents
+  (define assocs-by-datestr
+    (map
+     (lambda(pr)
+       (define dbase (first pr))
+       (list dbase
+             (map (compose read-file (curry build-path %dbdir dbase)) 
+                  (second pr))))
+     flist))
 
-;*ddlist
+  ;;; Assocs by date...
+  (define assocs-by-date
+    (map (lambda (pr)(list (first pr)  (second pr))) assocs-by-datestr))
 
-;; A list of date and associated files
-(define *flist
-  (map (lambda(d)
-         (list d (directory-list (build-path %dbdir d))))
-       *ddlist))
+  ;;; 1 assocs-by-date el
+  (define abd (car assocs-by-date))
 
-(void (map displayln `(,*flist ,(length *flist))))
+  ;;;; Returns the Music records only
+  (define (music-practice abd)
+    (list (car abd)
+          (filter (compose (curry string=? "Music Practice") caar) (second abd))))
 
-;; Replae files with their contents
-'|FIXME-reading-only-1'st|
-(define *assocs-by-datestr
-  (map
-   (lambda(pr)
-     (define dbase (first pr))
-     (list dbase
-           (map (compose read-file (curry build-path %dbdir dbase)) 
-                (second pr))))
-   *flist))
+  (define music-by-date (map music-practice assocs-by-date))
 
-(info *assocs-by-datestr )
+  (define music-times-by-date
+    (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) music-by-date))
 
-;;; Assocs by date...
-(define *assocs-by-date
-  (map (lambda (pr)(list (first pr)  (second pr))) *assocs-by-datestr))
+  ;music-times-by-date
 
-(info *assocs-by-date)
+  (define music-time-series 
+    (map
+     (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
+     music-times-by-date) )
+  ;(newline)
+  ;music-time-series
 
-;;; 1 assocs-by-date el
-(define *abd (car *assocs-by-date))
+  (define music-hours-daily
+    (map (lambda(rec)(list (car rec)(exact->inexact (time-string->hrs (second rec)))))
+         music-time-series))
 
-;;;; Returns the Music records only
-(define (music-practice abd)
-  (list (car abd)
-        (filter (compose (curry string=? "Music Practice") caar) (second abd))))
+  ;(newline)
+  ;music-hours-daily
 
-(define *music-by-date (map music-practice *assocs-by-date))
+  (define music-minutes-daily
+    (map (lambda(pr)
+           (let* (( h (second pr))
+                  ( m (inexact->exact (round (* h 60)))))
+             (cons (car pr) m)))
+         music-hours-daily))
+  ;  music-minutes-daily
+  ; (displayln (minutes-daily->svg-string music-minutes-daily))
+  (minutes-daily->svg-file music-minutes-daily svg-path))
 
-(define *music-times-by-date
-  (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) *music-by-date))
-
-*music-times-by-date
-
-(define *music-time-series (map
-                            (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
-                            *music-times-by-date) )
-(newline)
-*music-time-series
-
-(define *music-hours-daily
-  (map (lambda(rec)(list (car rec)(exact->inexact (time-string->hrs (second rec)))))
-       *music-time-series))
-
-(newline)
-*music-hours-daily
-
-(define *minutes
-  (map (lambda(pr)(define h (second pr)) (inexact->exact (round (* h 60))))
-       *music-hours-daily))
-*minutes
-
-(displayln (minutes-daily->svg-string *minutes))
-(minutes-daily->svg-file *minutes svg-path)
+(define (render-svg-img)
+  (render-svg-to-file)
+  `(img ((id "daily_time" )(class "svg") (name "daly_chart")
+                           (alt "Chart of time practiced per day")
+                           (title "Day and duration of practice")
+                           (src ,(string-append "/" svg-basename)))))

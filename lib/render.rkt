@@ -4,7 +4,7 @@
 (require web-server/servlet web-server/templates)
 (require xml srfi/19 (only-in seq/iso drop)
          "plan-c-data.rkt" "config.rkt" "form-input.rkt"
-         "generate-js.rkt" "db-files.rkt" "lib.rkt")
+         "generate-js.rkt" "db-files.rkt" "lib.rkt" "analysis.rkt")
 (define *spc*  'nbsp)
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
@@ -63,7 +63,8 @@
                  (div ((id "left_col"))
                       ,(groups-html a-plan)  ; Include a table from group data
                       "\n"
-                      ,(summary-html))
+                      ,(summary-html)
+                      ,(render-svg-img)); Link to graph)
                  (div ((id "right_col"))
                       ,(add-form-action ; Add 'action' attribute
                         (string->xexpr  ;  to included form
