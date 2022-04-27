@@ -1,7 +1,7 @@
 #lang racket
 ;;;; bargraph from a data series
 ;;; ==========================================================================
-(provide series->svg-file series->svg-string)
+(provide minutes-daily->svg-file minutes-daily->svg-string)
 
 (require simple-svg)
 ;;; --------------------------------------------------------------------------
@@ -15,35 +15,6 @@
     (sstyle-set! _sstyle 'stroke-width 1)
     _sstyle))
 ;;; ............................................................................
-(define rectangle-thunk 
-  (lambda()
-    (let ([rec (svg-def-rect 100 100)]
-          [_sstyle (sstyle-new)])
-      (sstyle-set! _sstyle 'fill "#DDC42A")
-      (svg-use-shape rec _sstyle)
-      (svg-show-default)) ))
-;;; ............................................................................
-(define multi-rect-thunk
-  (lambda()
-    (let (
-          [blue_rec (svg-def-rect 150 150)]
-          [_blue_sstyle (sstyle-new)]
-          [green_rec (svg-def-rect 100 100)]
-          [_green_sstyle (sstyle-new)]
-          [red_rec (svg-def-rect 50 50)]
-          [_red_sstyle (sstyle-new)])
- 
-      (sstyle-set! _blue_sstyle 'fill "blue")
-      (svg-use-shape blue_rec _blue_sstyle)
- 
-      (sstyle-set! _green_sstyle 'fill "green")
-      (svg-use-shape green_rec _green_sstyle #:at? '(25 . 25))
- 
-      (sstyle-set! _red_sstyle 'fill "red")
-      (svg-use-shape red_rec _red_sstyle #:at? '(50 . 50))
- 
-      (svg-show-default))))
-;;;............................................................................
 (define margin 10)
 (define w 10)
 (define dx 15)
@@ -75,12 +46,12 @@
   bar-graph)
 ;;; ---------------------------------------------------------------------------
 
-(define (series->svg-string series)
+(define (minutes-daily->svg-string series)
   (svg-out canvas_size canvas_size (bar-graph5 series)))
 
-(define (series->svg-file series path)
+(define (minutes-daily->svg-file series path)
   (with-output-to-file path
-    (lambda() (displayln (series->svg-string series)))
+    (lambda() (displayln (minutes-daily->svg-string series)))
     #:exists 'replace))
 ;;; ============================================================================
 #;(begin
