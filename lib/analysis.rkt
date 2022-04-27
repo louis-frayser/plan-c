@@ -3,18 +3,17 @@
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
 (require srfi/19)
-(require syntax/parse/define)
-(require "lib.rkt" "reports/gen-svg.rkt")
-;(define-syntax-parse-rule (fn x:id rhs:expr) (lambda (x) rhs))
+(require "config.rkt" "lib.rkt" "reports/series-to-svg.rkt")
 
-(define-syntax-parse-rule (info x:id)
-  `( ,x x ,(length x)))
+
+(define %dbdir "/usr/lucho/var/www/plan-c/lib/db")
+(define svg-path 
+  "/usr/lucho/var/www/plan-c/htdocs/music-practice-minutes-daily.svg"
+  #;(build-path %orig-dir% "htdocs/music-practice-minutes-daily.svg"))
 
 (define (read-file path/string)
   (with-input-from-file path/string (lambda()(read))))
   
-(define %dbdir "/usr/lucho/var/www/plan-c/lib/db")
-
 ;; ddate/directory
 (define *ddlist (map path->string (directory-list %dbdir)))
 
@@ -72,55 +71,13 @@
   (map (lambda(rec)(list (car rec)(exact->inexact (time-string->hrs (second rec)))))
        *music-time-series))
 
-*music-hours-daily
 (newline)
+*music-hours-daily
 
-(require simple-svg)
+(define *minutes
+  (map (lambda(pr)(define h (second pr)) (inexact->exact (round (* h 60))))
+       *music-hours-daily))
+*minutes
 
-(define of "music-practice-daily.svg")
-
-(let ([canvas_size 600])
-  (with-output-to-file
-      of #:exists 'replace
-    (lambda ()
-      (printf
-       "~a\n"
-       (svg-out
-        canvas_size canvas_size
-        (lambda ()
-          (let ([_sstyle (sstyle-new)])
-            (sstyle-set! _sstyle 'stroke "blue")'
-            (sstyle-set! _sstyle 'fill "green")
-            (sstyle-set! _sstyle 'stroke-width 2)
- 
-            (letrec
-                ([rectangle
-                  (lambda (x y width height)
-                    (let ([ rect [svg-def-rect width height]])
-                      (svg-use-shape rect _sstyle #:at? (cons x y))))])
-              (rectangle 0 0 600 600)
-              (svg-show-default))))))))
-  (printf "file written: ~v\n" of))
-
-
-(let ([canvas_size 600])
-  (with-output-to-file
-      of #:exists 'replace
-    (lambda ()
-      (printf
-       "~a\n"
-       (svg-out
-        canvas_size canvas_size
-        (lambda ()
-          (let ([_sstyle (sstyle-new)])
-            (sstyle-set! _sstyle 'stroke "blue")'
-            (sstyle-set! _sstyle 'fill "green")
-            (sstyle-set! _sstyle 'stroke-width 2)
- 
-            (letrec
-                ([rectangle
-                  (lambda (x y width height)
-                    (let ([ rect [svg-def-rect width height]])
-                      (svg-use-shape rect _sstyle #:at? (cons x y))))])
-              (rectangle 0 0 600 600)
-              (svg-show-default)))))))))
+(displayln (minutes-daily->svg-string *minutes))
+(minutes-daily->svg-file *minutes svg-path)
