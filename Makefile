@@ -26,3 +26,4 @@ install:
 	mkdir -p lib/db
 	chgrp wheel lib/db
 	chmod g+ws lib/db
+	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
