@@ -2,7 +2,14 @@
 
 (provide (all-defined-out))
 (require srfi/1 srfi/19)
+
 ;; ========================================================================
+(require syntax/parse/define)
+
+;(define-syntax-parse-rule (fn x:id rhs:expr) (lambda (x) rhs))
+(define-syntax-parse-rule (info x:id)
+  `( ,x x ,(length x)))
+
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings
 (define (string-time+ .  strings)
