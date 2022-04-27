@@ -1,6 +1,46 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
 
-PLAN_C_HOME="/usr/lucho/var/www/plan-c"
-plan_c_args="$PLAN_C_HOME/http-serv.rkt"
-plan_c_user="frayser"
-plan_c_log="/var/log/local/plan-c.log"
-plan_c_error_log="/var/log/local/plan-c-errors.log"
+name="plan-c daemon"
+description="Online TODO list"
+command="/usr/bin/racket"
+command_args="${plan_c_args}"
+command_user="${plan_c_user}"
+output_log="${plan_c_log}"
+error_log="${plan_c_error_log}"
+command_background="true"
+required_dirs="$PLAN_C_HOME ${PLAN_C_HOME}/lib/db"
+pidfile="/run/plan-c.pid"
+procname="su"
+depend() {
+    need net
+}
+
+start(){
+    su $command_user \
+       -c "exec $command $command_args >>$output_log 2>>$error_log " &
+    echo $! > $pidfile
+}
+stop(){
+        local pids=$(pidof $procname)
+        local kpid=$(cat $pidfile)
+        ebegin "Stoppng $procname $command_args"
+        if [ -n "$kpid" ]
+        then for pid in $pids  
+              do [ $pid -eq  "$kpid" ] &&  kill $kpid
+              done
+        else ewarn "No pid for proc!"
+        fi
+        eend 0
+}
+status(){
+    ebegin "Checking $pidfile"
+    read spid < $pidfile
+    if [ -n "$spid" ] && kill -0 "$spid" >& /dev/null
+    then einfo $(pstree -p $spid)
+         eend 0
+    else eerror "'$procname $command_args' is dead"
+         eend 1
+   fi
+}
