@@ -10,6 +10,8 @@
 (define-syntax-parse-rule (info x:id)
   `( ,x x ,(length x)))
 
+(define (integer  x)
+  (inexact->exact (round x)))
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings
 (define (string-time+ .  strings)
@@ -27,12 +29,13 @@
           (~a hrs) ":" (~a mins #:align 'right 
                            #:min-width 2 #:left-pad-string "0" )))))))
 
-(define (time-string->hrs hh:mm-str)
-  (let*-values ( ((h m0) (car+cdr (map string->number
+(define (time-string->mins hh:mm-str)
+         (let*-values ( ((h m0) (car+cdr (map string->number
                                        (string-split hh:mm-str ":") )))
                  ( (m) (first m0)))
-    (+ h  (/ m 60))))
-
+    (+ (* h 60) m)))  
+(define (time-string->hrs hh:mm-str)
+  (/ (time-string->mins hh:mm-str) 60))
 
 ;; .......................................................................
 ;;; Get date string

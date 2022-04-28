@@ -64,7 +64,8 @@
                       ,(groups-html a-plan)  ; Include a table from group data
                       "\n"
                       ,(summary-html)
-                      ,(render-svg-img)); Link to graph)
+                      ,(render-svg-img)
+                      ,(render-svg-time/instrument)); Link to graph
                  (div ((id "right_col"))
                       ,(add-form-action ; Add 'action' attribute
                         (string->xexpr  ;  to included form
