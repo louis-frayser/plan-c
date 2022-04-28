@@ -18,9 +18,11 @@ depend() {
 }
 
 start(){
+    ebegin "Starting $procname $command_args"
     su $command_user \
        -c "exec $command $command_args >>$output_log 2>>$error_log " &
     echo $! > $pidfile
+    eend
 }
 stop(){
         local pids=$(pidof $procname)
