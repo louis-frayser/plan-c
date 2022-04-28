@@ -9,3 +9,4 @@ lib/db/20*
 .#*
 scripts/options-array.js
 *.swp
+htdocs/*.svg
