@@ -1,11 +1,13 @@
 #lang debug racket
 
 (provide plan-report render-page)
+
 (require web-server/servlet web-server/templates)
 (require xml srfi/19 (only-in seq/iso drop)
          "plan-c-data.rkt" "config.rkt" "form-input.rkt"
          "generate-js.rkt" "db-files.rkt" "lib.rkt" "analysis.rkt")
 (define *spc*  'nbsp)
+
 ;;;  -------------------------------------------------------
 ;;; Generate Javascript to "scripts/option-controls.js"
 (generate-js)
@@ -22,7 +24,7 @@
   (report (get-plan-c) embed/url handle-input-form) )
 
 (define (report a-plan embed/url handle-input-form)
-  ;; Punch a whole in the form elemet's attributes and insert  '(action ,embed/url)5
+  ;; Punch a whole in the form elemet's attributes; insert'(action ,embed/url)
   (define (add-form-action form)
     (let* (( head (first form))
            (orig-atts (second form))
@@ -42,39 +44,36 @@
              "Daily total: " ,(apply string-time+ tstrings))))
 
   ;; HTML starts here ...
-  (let* ((datestr (plan-date a-plan))
-         (datestru (string->date datestr "~Y-~m-~d"))
-         (date (date->string datestru "~A ~1"))
-         (meta-cont-val (string-append "120;url=" %servlet-path%)))
-    `(html
-      (head (title "Plan C") "\n"
-            (link ((rel "stylesheet")(href "/files/styles.css")
-                                     (type "text/css")))
-            "\n"
-            (script ((src "/scripts/plan.js")(type "module"))))
-      "\n"
-      (body ((class "container"))
-            "\n"
-            (h1 "Plan C")
-            "\n"
-            ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
-            (div ((id "wrap"))
-                 "\n"
-                 (div ((id "left_col"))
-                      ,(groups-html a-plan)  ; Include a table from group data
-                      "\n"
-                      ,(summary-html)
-                      ,(render-svg-img)
-                      ,(render-svg-time/instrument)); Link to graph
-                 (div ((id "right_col"))
-                      ,(add-form-action ; Add 'action' attribute
-                        (string->xexpr  ;  to included form
-                         (include-template "../files/input-form.html")))))
-            "\n"))))
+  `(html
+    (head (title "Plan C") "\n"
+          (meta ((http-equiv "refresh")(content "1200"))) "\n"
+          (link ((rel "stylesheet")(href "/files/styles.css")
+                                   (type "text/css")))
+          "\n"
+          (script ((src "/scripts/plan.js")(type "module"))))
+    "\n"
+    (body ((class "container"))
+          "\n"
+          (h1 "Plan C")
+          "\n"
+          ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
+          (div ((id "wrap"))
+               "\n"
+               (div ((id "left_col"))
+                    ,(groups-html a-plan)  ; Include a table from group data
+                    "\n"
+                    ,(summary-html)
+                    ,(render-svg-img)
+                    ,(render-svg-time/instrument)); Link to graph
+               (div ((id "right_col"))
+                    ,(add-form-action ; Add 'action' attribute
+                      (string->xexpr  ;  to included form
+                       (include-template "../files/input-form.html")))))
+          "\n")))
 ;...............................................................
 ;; For each major category, show  performed actions
 (define (row-html category groups)
-  (define (performed act) (and (> (length act) 1) (string>? (car act) "00:00")))
+  (define (performed act) (and (> (length act) 1)(string>? (car act) "00:00")))
   (define (matching-group-html cat grps)
     (let* ( (cmatch (dict-ref grps cat '()))
             (perfed  (filter performed (map reverse cmatch))))
