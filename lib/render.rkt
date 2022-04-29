@@ -46,7 +46,7 @@
   ;; HTML starts here ...
   `(html
     (head (title "Plan C") "\n"
-          (meta ((http-equiv "refresh")(content "1200"))) "\n"
+          (meta ((http-equiv "refresh")(content "1200; url=/"))) "\n"
           (link ((rel "stylesheet")(href "/files/styles.css")
                                    (type "text/css")))
           "\n"
