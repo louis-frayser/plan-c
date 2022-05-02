@@ -1,9 +1,10 @@
 #lang racket
-(require  seq/iso yaml canonicalize-path "lib.rkt")
+(require  seq/iso yaml)
 
-(provide config-nth-activity config-nth-category
-         config-schema-categories config-schema-subcategories 
-         %orig-dir%  %servlet-path%)
+
+(provide %auth-db-path% %auth-db-path% %orig-dir% %servlet-path%
+         config-nth-activity config-nth-category config-schema-categories
+         config-schema-subcategories)
 
 (define %orig-dir%
   (let*-values
@@ -16,6 +17,7 @@
     i-parent))
 
 (define %servlet-path% "/servlets/PLAN-C")
+(define %auth-db-path% (path->string (build-path  %orig-dir% "config/passwd")))
 ;; --------------------------------------------------------------------
 (define *config-schema
   (let* ((schema-file (build-path %orig-dir% "config/schema.yaml")))
