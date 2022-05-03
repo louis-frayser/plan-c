@@ -8,8 +8,7 @@
 (require "../db-files.rkt" "../lib.rkt")
 ;;; --------------------------------------------------------------------------
 
-(define outfile (path->string (build-path (current-directory) "route5.svg")))
-(define canvas_size '(370 . 300 ))
+(define canvas-size '(370 . 300 ))
 ;;; ------------------------------------------------------------------------
 (define *sstyle
   (let ([_sstyle (sstyle-new)])
@@ -23,6 +22,7 @@
 (define hmax 270 #; (*4.5 60)); 4-1/2 hrs
 (define xmax (+  margin (* 30.5 dx))) (define ymax (+ hmax margin))
 (define (rand-h) (random 0 hmax))
+
 (define (use-rect@ x y w h #:horiz? (horiz? #f))
   (let (( rect (svg-def-rect w h))
         [_sstyle (sstyle-new)])
@@ -44,10 +44,16 @@
       (cond
         ((null? rest-data ) #t)
         (else
-         (use-rect@ (+ margin label-width) y (cdar rest-data)  w  #:horiz? #t)
-         (use-text@  ix margin (+ margin y))
-         (loop (+ y dy) (cdr rest-data)
-               (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
+         (let* ((mins (cdar rest-data))
+                (hrs (integer (/ mins 60)))
+                (scaled (integer (/ mins 2))) ; scale to 2min units
+                (y-adj (+ y (integer (* 1.5 margin)))))
+           (use-rect@ (+ margin label-width) y scaled  w  #:horiz? #t)
+           (use-text@  ix margin y-adj)
+           (use-text@ (string-append (~a #:min-width 3 hrs) "hrs")
+                      (integer (/ (car canvas-size) 2)) y-adj)
+           (loop (+ y dy) (cdr rest-data)
+                 (and (pair? (cdr rest-data)) (caadr rest-data)) )))))
     (svg-show-default))
   bar-graph5h)
 ;;;............................................................................
@@ -95,9 +101,9 @@
 ;;; ---------------------------------------------------------------------------
 
 (define (minutes-daily->svg-string series)
-  (svg-out (car canvas_size) (cdr canvas_size) (bar-graph series)))
+  (svg-out (car canvas-size) (cdr canvas-size) (bar-graph series)))
 (define (instrument-summary->svg-string series)
-  (svg-out (car canvas_size) (integer (/  (cdr canvas_size) 2))
+  (svg-out (car canvas-size) (integer (/  (cdr canvas-size) 2))
            (bar-graph series #:orientation 'horizontal)))
 
 (define (minutes-daily->svg-file series path)
@@ -119,5 +125,5 @@
 #;(displayln (minutes-daily->svg-string '(("ab" . 1) ("bc" . 2) ("dx" . 3))))
 #;(displayln (minutes-daily->svg-string '(1 2 3 4 5 6 )))
 #;(displayln (instrument-summary->svg-string
-            '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
+              '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
 
