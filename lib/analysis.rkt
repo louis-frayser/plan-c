@@ -86,16 +86,21 @@
     (_group-summary (activity-group-name activity-group) 
                     (activity-group-data activity-group)))
 
-  (map group-summary-minutes (group-by-instrument (get-music-assocs))))
-;; ============================================================================
-(define (render-svg-time/instrument)
-  (let* ((filebase "htdocs/instrument-summary.svg")
-         (url (string-append "/" filebase))
-         (path (build-path %orig-dir% filebase)))
-    (instrument-summary->svg-file (get-music-group-summary) path)
-    `(a ((href "/"))
-        (img ((src ,url)(id "ins-summary")
-                         (class "svg")(name "ins-summary"))))))
+  (map group-summary-minutes 
+       (group-by-instrument
+        (append (get-music-assocs) (get-all-instrument-templates)))))
 
-#;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
-#;(render-svg-time/instrument)
+  ;; ============================================================================
+  (define (render-svg-time/instrument)
+    (let* ((filebase "htdocs/instrument-summary.svg")
+           (url (string-append "/" filebase))
+           (path (build-path %orig-dir% filebase)))
+      (instrument-summary->svg-file (get-music-group-summary) path)
+      `(a ((href "/"))
+          (img ((src ,url)(id "ins-summary")
+                          (class "svg")(name "ins-summary"))))))
+
+  #;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
+  #;(render-svg-time/instrument)
+
+  

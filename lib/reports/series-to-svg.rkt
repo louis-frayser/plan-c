@@ -45,12 +45,12 @@
         ((null? rest-data ) #t)
         (else
          (let* ((mins (cdar rest-data))
-                (hrs (integer (/ mins 60)))
+                (hrs (/ mins 60.0))
                 (scaled (integer (/ mins 2))) ; scale to 2min units
                 (y-adj (+ y (integer (* 1.5 margin)))))
            (use-rect@ (+ margin label-width) y scaled  w  #:horiz? #t)
            (use-text@  ix margin y-adj)
-           (use-text@ (string-append (~a #:min-width 3 hrs) "hrs")
+           (use-text@ (string-append (~a #:width 3 hrs) " hrs")
                       (integer (/ (car canvas-size) 2)) y-adj)
            (loop (+ y dy) (cdr rest-data)
                  (and (pair? (cdr rest-data)) (caadr rest-data)) )))))

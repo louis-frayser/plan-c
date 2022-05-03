@@ -14,8 +14,7 @@
           TEXT/HTML-MIME-TYPE
           (list
            (make-basic-auth-header
-            "Authentication required"
-            ))
+            "Authentication required"))
           void)]
 
         (else 

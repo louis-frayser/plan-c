@@ -1,10 +1,10 @@
 #lang racket
-(require  seq/iso yaml)
-
 
 (provide %auth-db-path% %auth-db-path% %orig-dir% %servlet-path%
          config-nth-activity config-nth-category config-schema-categories
-         config-schema-subcategories)
+         config-schema-subcategories get-all-instrument-templates)
+
+(require  seq/iso yaml)
 
 (define %orig-dir%
   (let*-values
@@ -32,3 +32,7 @@
 (define (config-nth-activity cat-ix  act-ix)
   (nth act-ix (config-schema-subcategories (config-nth-category cat-ix)) ))
 
+(define (get-all-instrument-templates) 
+  (map (lambda(i)(cons (list "Music Practice" i) "0:00"))
+       (config-schema-subcategories "Music Practice")))
+  
