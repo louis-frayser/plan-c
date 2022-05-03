@@ -37,6 +37,8 @@
 ;; ............................................................................
 (define (horizontal-bar-graph series)
   ;; series must be alist of (string . integer), ie: label x minutes
+  ;; scale = canvas-width - label-width - magin(s) / (15 * 60)
+  ;; scale: expecting 15hrs / month per instrument
   (define-values (dy label-width) (values dx 48))
   (define (bar-graph5h)
     (let loop ( (y margin) (rest-data series)
@@ -46,7 +48,7 @@
         (else
          (let* ((mins (cdar rest-data))
                 (hrs (/ mins 60.0))
-                (scaled (integer (/ mins 2))) ; scale to 2min units
+                (scaled (integer (* mins 0.34))) ; scale to fit canvas-width
                 (y-adj (+ y (integer (* 1.5 margin)))))
            (use-rect@ (+ margin label-width) y scaled  w  #:horiz? #t)
            (use-text@  ix margin y-adj)
