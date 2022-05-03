@@ -8,8 +8,8 @@
 (define (authenticated? passwd-file req)
   ; checks if a request has valid credentials:
   (match (request->basic-credentials req)
-    [(cons user pass) (displayln (cons user pass))
-                      (htpasswd-credentials-valid? passwd-file user pass)]
+    [(cons user pass) 
+     (htpasswd-credentials-valid? passwd-file user pass)]
     [else     #f]))
 
 ; HTTP Basic Authentication:
