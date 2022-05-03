@@ -8,7 +8,7 @@
 (require "../db-files.rkt" "../lib.rkt")
 ;;; --------------------------------------------------------------------------
 
-(define canvas-size '(370 . 300 ))
+(define canvas-size '(370 . 330 )) ; 25.384 x Number of instruments
 ;;; ------------------------------------------------------------------------
 (define *sstyle
   (let ([_sstyle (sstyle-new)])
@@ -26,7 +26,7 @@
 (define (use-rect@ x y w h #:horiz? (horiz? #f))
   (let (( rect (svg-def-rect w h))
         [_sstyle (sstyle-new)])
-    (sstyle-set! _sstyle 'fill "green")
+    (sstyle-set! _sstyle 'fill "#3f9f3f")
     (svg-use-shape rect _sstyle #:at?  (cons x  (if horiz? y (- ymax h))))))
 
 (define (use-text@ tx x y)
