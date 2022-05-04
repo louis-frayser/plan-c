@@ -15,7 +15,7 @@
 
 ** FIXME
 *** Critical
-**** PENDING Activities are definitely disappearing from the WWW display
+**** DONE Activities are definitely disappearing from the WWW display
      1. After entry, some previous entries disappear. Mon 10:04:39
      2. In the database, it seems the missing value (time-duration)
         was assigned to  the wrong activity
@@ -30,16 +30,17 @@
 
 
 *** Bad
-**** Redirect/get is not correct--sends the page to nowhere.
-**** Items entered from another client do show
-     I want to redirect back the start page.
+**** TODO Often the  1st vist reports Timeout
+**** TODO Redirect/get is not correct--sends the page to nowhere.
+I want to redirect back the start page.
+**** DONE Items entered from another client don't show
 
 *** Annoying
-**** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
-     Fixed by adding a confirmation dialog.  No posts can happen without consent.
 **** TODO Filter out inputs > 16 hrs in the validation.  Just entered 30:00 instead of 0:30.
 **** DONE Date a top of form is static; need to be updated on refresh (or clock chage)
 **** TODO Needs ability to edit past events (especially the prior day)
+**** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
+     Fixed by adding a confirmation dialog.  No posts can happen without consent.
 
 *** Cosmetic
 **** DONE Make form-label text bold.
