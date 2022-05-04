@@ -1,7 +1,17 @@
-default:
+.PHONY: FORCE
+default: README.md
 
-Attic:
-	mkdir Attic
+README.md: doc/README.org
+	@test -e $@ || ln -sv $^ $@
+
+help:
+	@echo  make clean
+
+Attic: FORCE
+	@find . \( -name compiled -o -name db -o \
+	          -name .git -o -name Attic \) -prune \
+	   -o  -type d -print | while read dir ; do [ -d $$dir/Attic ] || \
+	      mkdir -pv $$dir/Attic;done
 
 clean:  Attic 
 	@find . -maxdepth 1 -name "*~" -exec mv -bv "{}" Attic/ \;
