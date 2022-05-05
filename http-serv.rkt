@@ -27,8 +27,6 @@
 ;;; This starts the servelet with param "start respons/xepr" (above)
 (require web-server/servlet-env)
 (serve/servlet start
-               #:launch-browser? #t
-               #:quit? #f
                #:listen-ip #f
                #:port 8000
                #:extra-files-paths (list %orig-dir%
