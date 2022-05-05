@@ -19,7 +19,7 @@
        (list dbase
              (map (compose read-file (curry build-path %db-base-dir% dbase)) 
                   (second pr))))
-     (get-assoc-paths-by-date)))
+     (get-assoc-paths-by-date #:since (a-month-ago-str))))
 
   ;;; Assocs by date...
   (define assocs-by-date

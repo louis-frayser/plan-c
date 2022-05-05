@@ -34,9 +34,16 @@
                                        (string-split hh:mm-str ":") )))
                  ( (m) (first m0)))
     (+ (* h 60) m)))  
+
 (define (time-string->hrs hh:mm-str)
   (/ (time-string->mins hh:mm-str) 60))
 
+(define (a-month-ago-str)
+  ;; Returns last-month on the cadinal day 1 before today
+  (let*((jdn (current-julian-day))
+        (jmonth-ago (integer (- jdn 30.5)))
+        (month-ago (julian-day->date jmonth-ago)))
+        (date->string month-ago "~Y-~m-~d")))
 ;; .......................................................................
 ;;; Get date string
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))

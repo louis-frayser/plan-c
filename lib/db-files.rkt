@@ -1,4 +1,4 @@
-#lang racket
+#lang debug racket
 ; ====================================================================
 ;;; Disk Database....
 (provide (all-defined-out))
@@ -60,9 +60,11 @@
       ;; Don't use display or print!
       (lambda()(writeln assoc)))))
 ;;; .....................................................................
-(define (get-assoc-paths-by-date)
+(define (get-assoc-paths-by-date #:since (beginning "2022-01-01"))
   ;; ddate/directory
-  (define ddlist (map path->string (directory-list %db-base-dir%)))
+  (define ddlist
+    (filter (curry string<=? beginning)
+            (map path->string (directory-list %db-base-dir%))))
 
   ;; A list of date and associated files
   (map (lambda(d) (list d (directory-list (build-path %db-base-dir% d))))
