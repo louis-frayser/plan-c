@@ -26,9 +26,6 @@ clean:  Attic
 	@find lib/db -name "*~" -delete
 	@echo CLEAN
 
-clobber: clean
-	@rm -frv compiled
-	@echo CLOBBER
 
 install:
 	chgrp wheel scripts
@@ -37,3 +34,8 @@ install:
 	chgrp wheel lib/db
 	chmod g+ws lib/db
 	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
+
+clobber: clean
+	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \; 
+	@echo CLOBBERED
+	
