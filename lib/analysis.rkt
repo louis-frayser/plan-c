@@ -9,17 +9,13 @@
 
 (define svg-basename "music-practice-minutes-daily.svg")
 (define svg-path (build-path %orig-dir% "htdocs" svg-basename))
+
+
 ;; -----------------------------------------------------------------------------
 (define (get-music-minutes-daily)  
-  ;; Replae files with their contents
+  ;; Replace files with their contents
   (define assocs-by-datestr
-    (map
-     (lambda(pr)
-       (define dbase (first pr))
-       (list dbase
-             (map (compose read-file (curry build-path %db-base-dir% dbase)) 
-                  (second pr))))
-     (get-assoc-paths-by-date #:since (a-month-ago-str))))
+    (get-assocs-by-datestr #:since (a-month-ago-str)))
 
   ;;; Assocs by date...
   (define assocs-by-date
@@ -51,13 +47,14 @@
 (define (render-svg-to-file)
   (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
 ;; ..........................................................................
-(define (render-svg-img)
-  (render-svg-to-file)
+(define (render-svg-img) ; Render <img> with a random tag in it's URL
+  (render-svg-to-file)   ; The tageis to force reloading.
   `(a ((href "/"))
-      (img ((id "daily_time" )(class "svg") (name "daly_chart")
-                              (alt "Chart of time practiced per day")
-                              (title "Day and duration of practice")
-                              (src ,(string-append "/" svg-basename))))))
+      (img ((id "daily_time" )
+            (class "svg") (name "daly_chart")
+            (alt "Chart of time practiced per day")
+            (title "Day and duration of practice")
+            (src ,(string-append "/" svg-basename "?" (~a (random))))))))
 ;; -----------------------------------------------------------------------------
 ;;; Get agregate practice-duration by instrument:
 (define (get-music-group-summary)
@@ -90,17 +87,16 @@
        (group-by-instrument
         (append (get-music-assocs) (get-all-instrument-templates)))))
 
-  ;; ============================================================================
-  (define (render-svg-time/instrument)
-    (let* ((filebase "htdocs/instrument-summary.svg")
-           (url (string-append "/" filebase))
-           (path (build-path %orig-dir% filebase)))
-      (instrument-summary->svg-file (get-music-group-summary) path)
-      `(a ((href "/"))
-          (img ((src ,url)(id "ins-summary")
-                          (class "svg")(name "ins-summary"))))))
+;; ============================================================================
+(define (render-svg-time/instrument)
+  (let* ((filebase "htdocs/instrument-summary.svg")
+         (url (string-append "/" filebase))
+         (path (build-path %orig-dir% filebase)))
+    (instrument-summary->svg-file (get-music-group-summary) path)
+    `(a ((href "/"))
+        (img ((src ,url)(id "ins-summary")
+                        (class "svg")(name "ins-summary"))))))
 
-  #;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
-  #;(render-svg-time/instrument)
+#;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
+#;(render-svg-time/instrument)
 
-  

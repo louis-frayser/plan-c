@@ -77,4 +77,13 @@
     (find-files predicate %db-base-dir%
                 #:skip-filtered-directory? #f #:follow-links? #f))
     (map file->assoc (get-assoc-paths)))
-  
+  ;;; .....................................................................
+(define (get-assocs-by-datestr #:since (beginning "2022-01-01"))
+  ;; Return association grouped by date. A starting date can be specified.
+  (map
+   (lambda(pr)
+     (define dbase (first pr))
+     (list dbase
+           (map (compose read-file (curry build-path %db-base-dir% dbase)) 
+                (second pr))))
+   (get-assoc-paths-by-date #:since beginning)))
