@@ -36,12 +36,19 @@
     (append '(table)
             (map (lambda (c)(row-html c (plan-groups a-plan)))
                  (plan-categories a-plan))))
+  
+  (define sum    ; current total duration for todays activities
+    ((lambda()
+      (define groups (filter pair? (plan-groups a-plan)))
+      (define tstrings (map cadr (apply append (map cdr groups))))
+      (apply string-time+ tstrings))))
 
+  (define def-dur ; Default duration for input form
+    (time-elapsed-hmm-str sum))
+  
   (define (summary-html)
-    (define groups (filter pair? (plan-groups a-plan)))
-    (define tstrings (map cadr (apply append (map cdr groups))))
     `(div (p ((id "ttotal"))
-             "Daily total: " ,(apply string-time+ tstrings))))
+             "Daily total: " ,sum)))
 
   ;; HTML starts here ...
   `(html

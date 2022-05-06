@@ -1,4 +1,4 @@
-#lang racket
+#lang debug racket
 
 (provide (all-defined-out))
 (require srfi/1 srfi/19)
@@ -30,20 +30,39 @@
                            #:min-width 2 #:left-pad-string "0" )))))))
 
 (define (time-string->mins hh:mm-str)
-         (let*-values ( ((h m0) (car+cdr (map string->number
+  (let*-values ( ((h m0) (car+cdr (map string->number
                                        (string-split hh:mm-str ":") )))
                  ( (m) (first m0)))
     (+ (* h 60) m)))  
 
 (define (time-string->hrs hh:mm-str)
   (/ (time-string->mins hh:mm-str) 60))
+;; .......................................................................
 
 (define (a-month-ago-str)
   ;; Returns last-month on the cadinal day 1 before today
   (let*((jdn (current-julian-day))
         (jmonth-ago (integer (- jdn 30.5)))
         (month-ago (julian-day->date jmonth-ago)))
-        (date->string month-ago "~Y-~m-~d")))
+    (date->string month-ago "~Y-~m-~d")))
+
+(define (time-elapsed-hmm-str since-hmm)
+  ;; Elapsed time since given time (same day)
+  (define now
+    (let*((d (current-date )) ; local mins since midnight localtime
+          (h (date-hour d))
+          (m (date-minute d)))
+      (+ (* h 60) m))) 
+  (define  then
+    ((lambda()
+      (define hr-min-lst (map string->number (string-split since-hmm ":") ))
+      (let( (hrs (first hr-min-lst)) (mins (second hr-min-lst)) )
+        (+ (* hrs 60) mins)) )))
+  (let*-values ( ((hrs mins ) (quotient/remainder (-  now then) 60)) )
+    (string-join (map number->string `(,hrs ,mins)) ":")
+    (string-append
+     (~a hrs) ":" (~a mins #:width 2 #:align 'right #:left-pad-string "0"))))
+
 ;; .......................................................................
 ;;; Get date string
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))
