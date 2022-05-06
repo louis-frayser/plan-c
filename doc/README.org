@@ -1,11 +1,18 @@
 * Plan C
+
 ** A time accounting webapp (mostly for musicians)
 
-** Introduction
+*** Introduction
+Single-user
+Data input for instrument and time practiced as well as for non musician related events, such as household chore and engineering tasks.
 
-** Installation
-*** Requirements
-*** Procedure
+*** Installation
+**** Requirements
+Racket
 
-** Usage
+**** Procedure
 
+*** Usage
+
+***** Caveats
+Only tested on Linux (mostly Gentoo GNU/linux)
