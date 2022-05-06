@@ -1,8 +1,12 @@
-#lang racket
+#lang web-server
+
+(provide interface-version)
 
 (require web-server/servlet
          "lib/config.rkt" "lib/form-input.rkt" "lib/http-basic-auth.rkt"
          "lib/render.rkt")
+
+(define interface-version 'stateless)
 
 (provide/contract (start (request? . -> . response?)))
 
@@ -28,7 +32,7 @@
 (require web-server/servlet-env)
 (serve/servlet start
                #:listen-ip #f
-               #:port 8000
+               #:port 8008
                #:extra-files-paths (list %orig-dir%
                                          (build-path %orig-dir% "htdocs"))
                #:servlet-path %servlet-path%)
