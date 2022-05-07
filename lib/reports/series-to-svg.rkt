@@ -18,7 +18,7 @@
 ;;; ..........................................................................
 (define margin 5)
 (define w 10)
-(define dx 12)
+(define dx 13)
 (define hmax 270 #; (*4.5 60)); 4-1/2 hrs
 (define xmax (+  margin (* 30.5 dx))) (define ymax (+ hmax margin))
 (define (rand-h) (random 0 hmax))
@@ -47,12 +47,14 @@
         ((null? rest-data ) #t)
         (else
          (let* ((mins (cdar rest-data))
-                (hrs (/ mins 60.0))
+                (hrs (exact->inexact (/ mins 60.0)))
                 (scaled (integer (* mins 0.34))) ; scale to fit canvas-width
                 (y-adj (+ y (integer (* 1.5 margin)))))
            (use-rect@ (+ margin label-width) y scaled  w  #:horiz? #t)
            (use-text@  ix margin y-adj)
-           (use-text@ (string-append (~a #:width 3 hrs) " hrs")
+           (use-text@ (string-append (~r hrs #:precision '(= 1)
+                                         #:min-width 4 #:pad-string "\u2000")
+                                     " hrs")
                       (integer (/ (car canvas-size) 2)) y-adj)
            (loop (+ y dy) (cdr rest-data)
                  (and (pair? (cdr rest-data)) (caadr rest-data)) )))))

@@ -42,7 +42,7 @@
 (define (a-month-ago-str)
   ;; Returns last-month on the cadinal day 1 before today
   (let*((jdn (current-julian-day))
-        (jmonth-ago (integer (- jdn 30.5)))
+        (jmonth-ago (integer (- jdn 30)))
         (month-ago (julian-day->date jmonth-ago)))
     (date->string month-ago "~Y-~m-~d")))
 
