@@ -15,7 +15,7 @@
 (define (get-music-minutes-daily)  
   ;; Replace files with their contents
   (define assocs-by-datestr
-    (get-assocs-by-datestr #:since (a-month-ago-str)))
+    (take-right (get-assocs-by-datestr #:since (a-month-ago-str)) 30 ))
 
   ;;; Assocs by date...
   (define assocs-by-date
@@ -31,8 +31,6 @@
 
   (define music-times-by-date
     (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) music-by-date))
-
-  ;music-times-by-date
 
   (define music-time-series 
     (map
