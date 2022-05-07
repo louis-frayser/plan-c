@@ -2,7 +2,7 @@
 
 (provide handle-input-form process-input-form)
 (require web-server/servlet debug
-         "plan-c-data.rkt" "config.rkt" "lib.rkt" "db-files.rkt")
+         "plan-data.rkt" "config.rkt" "lib.rkt" "db-files.rkt")
 
 ;;; ==============================================================
 ;;;              INPUT FORM
@@ -21,7 +21,7 @@
     (let*-values (( (key) (car new-assoc))
                   ((replace-assocs keep-assocs )
                    (partition (lambda(a) 
-                                (plan-key=? (car a) key)) orig-assocs))
+                                (assoc-key=? (car a) key)) orig-assocs))
                   ((matching-assoc)  ;list of length 0 or 1
                    (if (pair? replace-assocs)
                        (car replace-assocs) (cons key "0:00"))))

@@ -3,7 +3,7 @@
 ;;; Disk Database....
 (provide (all-defined-out))
 
-(require srfi/13 srfi/19 "config.rkt" "lib.rkt" "plan-c-data.rkt")
+(require srfi/19 "config.rkt" "lib.rkt" "plan-data.rkt")
 ;;; ------------------------------------------------------------------
 
 (define (read-file path/string)
@@ -16,30 +16,10 @@
 (define file->assoc read-file)
 ;;; ------------------------------------------------------------------
 
-(define %db-base-dir% (build-path %orig-dir% "lib/db"))
-;;; ..................................................................
 
-(define get-plan-c  ; Get plan from permanent storage
-  (lambda()
-    (define (get-current-plan)
-      (define (get-plan-for-date datestr)
-        (define get-db-dir-for-date
-          (lambda(date) 
-            (build-path %db-base-dir% date)))
-        (define (file-ok? f)(string-suffix-ci? ".scm" (path->string f)))
-        (define (filter-files files )(filter file-ok? files))
-        (let ((ddir (get-db-dir-for-date datestr)))
-          (if (directory-exists? ddir)
-              (let ((dlist (directory-list ddir  #:build? #t)))
-                (if (null? dlist)
-                    (empty-plan)
-                    (let ((assocs
-                           (map (lambda(pth)(with-input-from-file pth read))
-                                (filter-files dlist))))
-                      (plan "C" datestr (plan-list->groups assocs)) )))
-              (empty-plan))))
-      (get-plan-for-date (get-ymd-string)))
-    (or (get-current-plan) (empty-plan))))
+(define (get-current-assoc-groups) ; Get plan from permanent storage
+  (assocs->groups (get-current-assocs)))
+
 ;;; .....................................................................
 
 ;
@@ -92,3 +72,6 @@
            (map (compose read-file (curry build-path %db-base-dir% dbase)) 
                 (second pr))))
    (get-assoc-paths-by-date #:since beginning)))
+
+(define (get-current-assocs)
+  (cadar (get-assocs-by-datestr #:since (get-ymd-string))))

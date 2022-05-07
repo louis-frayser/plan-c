@@ -4,7 +4,7 @@
 
 (require web-server/servlet web-server/templates)
 (require xml srfi/19 (only-in seq/iso drop)
-         "plan-c-data.rkt" "config.rkt" "form-input.rkt"
+         "plan-data.rkt" "config.rkt" "form-input.rkt"
          "generate-js.rkt" "db-files.rkt" "lib.rkt" "analysis.rkt")
 (define *spc*  'nbsp)
 
@@ -21,9 +21,10 @@
   (handle-input-form req render-page))
 
 (define (plan-report embed/url handle-input-form)
-  (report (get-plan-c) embed/url handle-input-form) )
+  (report (get-current-assoc-groups) embed/url handle-input-form) )
+;;; =========================================================================
 
-(define (report a-plan embed/url handle-input-form)
+(define (report assoc-groups embed/url handle-input-form)
   ;; Punch a whole in the form elemet's attributes; insert'(action ,embed/url)
   (define (add-form-action form)
     (let* (( head (first form))
@@ -32,14 +33,14 @@
            (new-atts (cons `(action ,(embed/url handle-input-form)) orig-atts)))
       (append (list head new-atts ) rest)))
 
-  (define (groups-html a-plan) ; Show detail of groups of activity data
+  (define (groups-html) ; Show detail of groups of activity data
     (append '(table)
-            (map (lambda (c)(row-html c (plan-groups a-plan)))
-                 (plan-categories a-plan))))
+            (map (lambda (c)(row-html c assoc-groups))
+                 (assoc-groups->categories assoc-groups))))
   
   (define sum    ; current total duration for todays activities
     ((lambda()
-      (define groups (filter pair? (plan-groups a-plan)))
+      (define groups (filter pair? assoc-groups))
       (define tstrings (map cadr (apply append (map cdr groups))))
       (apply string-time+ tstrings))))
 
@@ -67,7 +68,7 @@
           (div ((id "wrap"))
                "\n"
                (div ((id "left_col"))
-                    ,(groups-html a-plan)  ; Include a table from group data
+                    ,(groups-html)  ; Include a table from group data
                     "\n"
                     ,(summary-html)
                     ,(render-svg-img)
@@ -77,7 +78,9 @@
                       (string->xexpr  ;  to included form
                        (include-template "../files/input-form.html")))))
           "\n")))
-;...............................................................
+
+;;; =========================================================================
+;............................................................................
 ;; For each major category, show  performed actions
 (define (row-html category groups)
   (define (performed act) (and (> (length act) 1)(string>? (car act) "00:00")))

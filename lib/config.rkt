@@ -1,6 +1,6 @@
 #lang racket
 
-(provide %auth-db-path% %auth-db-path% %orig-dir% %servlet-path%
+(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir% %servlet-path%
          config-nth-activity config-nth-category config-schema-categories
          config-schema-subcategories get-all-instrument-templates)
 
@@ -15,6 +15,10 @@
        ((idir _path _ignore) (split-path i-is))
        ((i-parent _i _ig) (split-path idir)))
     i-parent))
+;;; ..................................................................
+
+(define %db-base-dir% (build-path %orig-dir% "lib/db"))
+;;; ..................................................................
 
 (define %servlet-path% "/servlets/PLAN-C")
 (define %auth-db-path% (path->string (build-path  %orig-dir% "config/passwd")))
