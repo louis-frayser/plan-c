@@ -90,10 +90,14 @@
 
 ;; ============================================================================
 (define (render-svg-time/instrument)
+  (define (pair>=? a0 a1)
+    (not (pair<? a0 a1)))
+  (define (pair<? a0 a1)
+    (< (cdr a0) (cdr a1)))
   (let* ((filebase "htdocs/instrument-summary.svg")
          (url (string-append "/" filebase))
          (path (build-path %orig-dir% filebase)))
-    (instrument-summary->svg-file (get-music-group-summary) path)
+    (instrument-summary->svg-file (sort (get-music-group-summary) pair>=?) path)
     `(a ((href "/"))
         (img ((src ,url)(id "ins-summary")
                         (class "svg")(name "ins-summary"))))))
