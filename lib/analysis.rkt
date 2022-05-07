@@ -60,7 +60,8 @@
 (define (get-music-group-summary)
 
   (define (get-music-assocs)
-    (filter (compose (curry string=? "Music Practice") caar) (get-assocs)))
+    (filter (compose (curry string=? "Music Practice") caar) 
+            (get-assocs #:since (a-month-ago-str) )))
 
   (define assoc-activity cadar )
   (define assoc-instrument assoc-activity )

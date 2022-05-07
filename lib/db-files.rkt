@@ -70,14 +70,19 @@
   (map (lambda(d) (list d (directory-list (build-path %db-base-dir% d))))
        ddlist))
 
-(define (get-assocs)
+(define (get-assocs #:since (beginning "2022-01-01"))
   (define (get-assoc-paths)
     (define (predicate pth)
-      (regexp-match #rx"2...-.*/assoc-.*.scm" (path->string pth)))
+      (define pathstr (path->string pth))
+      (define date-part
+        (let (( match (regexp-match #rx"[0-9]...-..-.." pathstr)))
+          (and match (car match))))
+     (and (and date-part (string>=? date-part beginning))
+          (regexp-match #rx"2...-.*/assoc-.*.scm" pathstr)))
     (find-files predicate %db-base-dir%
                 #:skip-filtered-directory? #f #:follow-links? #f))
-    (map file->assoc (get-assoc-paths)))
-  ;;; .....................................................................
+  (map file->assoc (get-assoc-paths)))
+;;; .....................................................................
 (define (get-assocs-by-datestr #:since (beginning "2022-01-01"))
   ;; Return association grouped by date. A starting date can be specified.
   (map
