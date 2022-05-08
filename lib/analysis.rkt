@@ -42,10 +42,11 @@
          music-time-series))
   music-minutes-daily)
 ;; ...........................................................................
-(define (render-svg-to-file)
-  (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
-;; ..........................................................................
+
 (define (render-svg-img) ; Render <img> with a random tag in it's URL
+  (define (render-svg-to-file)
+    (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
+
   (render-svg-to-file)   ; The tageis to force reloading.
   `(a ((href "/"))
       (img ((id "daily_time" )
@@ -85,8 +86,7 @@
   (map group-summary-minutes 
        (group-by-instrument
         (append (get-music-assocs) (get-all-instrument-templates)))))
-
-;; ============================================================================
+;; ----------------------------------------------------------------------------
 (define (render-svg-time/instrument)
   (define (pair>=? a0 a1)
     (not (pair<? a0 a1)))
@@ -98,7 +98,9 @@
     (instrument-summary->svg-file (sort (get-music-group-summary) pair>=?) path)
     `(a ((href "/"))
         (img ((src ,url)(id "ins-summary")
+                        (title "30-day Accumulated time by instrument")
                         (class "svg")(name "ins-summary"))))))
+;; ============================================================================
 
 #;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
 #;(render-svg-time/instrument)
