@@ -74,4 +74,7 @@
    (get-assoc-paths-by-date #:since beginning)))
 
 (define (get-current-assocs)
-  (cadar (get-assocs-by-datestr #:since (get-ymd-string))))
+  (define assocs (get-assocs-by-datestr #:since (get-ymd-string)))
+  (if (pair? assocs)
+      (cadar assocs)
+      null))
