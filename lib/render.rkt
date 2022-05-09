@@ -3,9 +3,13 @@
 (provide plan-report render-page)
 
 (require web-server/servlet web-server/templates)
-(require xml srfi/19 (only-in seq/iso drop)
-         "plan-data.rkt"  "form-input.rkt"
-         "generate-js.rkt" "db-files.rkt" "lib.rkt" "analysis.rkt")
+(require xml (only-in seq/iso drop)
+         "analysis.rkt" "config.rkt"
+         "db-files.rkt"
+         "form-input.rkt"
+         "generate-js.rkt"
+         "lib.rkt"
+         "plan-data.rkt")
 ;;; =========================================================================
 
 (define *spc*  'nbsp)
@@ -42,9 +46,9 @@
   
   (define sum    ; current total duration for todays activities
     ((lambda()
-      (define groups (filter pair? assoc-groups))
-      (define tstrings (map cadr (apply append (map cdr groups))))
-      (apply string-time+ tstrings))))
+       (define groups (filter pair? assoc-groups))
+       (define tstrings (map cadr (apply append (map cdr groups))))
+       (apply string-time+ tstrings))))
 
   (define def-dur ; Default duration for input form
     (time-elapsed-hmm-str sum))
@@ -55,7 +59,7 @@
 
   ;; HTML starts here ...
   `(html
-    (head (title "Plan C") "\n"
+    (head (title ,(string-append "Plan C " %version%)) "\n"
           (meta ((http-equiv "refresh")(content "600; url=/"))) "\n"
           (link ((rel "stylesheet")(href "/files/styles.css")
                                    (type "text/css")))
@@ -64,7 +68,7 @@
     "\n"
     (body ((class "container"))
           "\n"
-          (h1 "Plan C")
+          (h1 ,(if %production% "Plan C" "Plan C (Dev)"))
           "\n"
           ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
           (div ((id "wrap"))
@@ -118,6 +122,6 @@
                           (th ((colspan "2"))
                               ,category))
                      (matching-group-html category groups))))
-;............................................................................
-;;;  ------------------------------------------------------------------------
-;;; =========================================================================
+;;; ...........................................................................
+;;; ---------------------------------------------------------------------------
+;;; ===========================================================================

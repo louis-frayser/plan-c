@@ -1,11 +1,13 @@
 #lang racket
 
-(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir% %servlet-path%
+(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir% %port%
+         %production% %servlet-path% %version%
          config-nth-activity config-nth-category config-schema-categories
          config-schema-subcategories get-all-instrument-templates)
 
-(require  seq/iso yaml)
+(require  seq/iso yaml "../config/plan-c-rc.scm")
 
+;(provide %port%)
 (define %orig-dir%
   (let*-values
       (((i-is) ;https://stackoverflow.com/a/57165702/187122

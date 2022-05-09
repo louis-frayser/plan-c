@@ -31,7 +31,7 @@
 (require web-server/servlet-env)
 (serve/servlet start
                #:listen-ip #f
-               #:port 8000
+               #:port %port%
                #:extra-files-paths (list %orig-dir%
                                          (build-path %orig-dir% "htdocs"))
                #:servlet-path %servlet-path%)
