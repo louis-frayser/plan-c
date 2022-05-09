@@ -2,7 +2,7 @@
 ; ====================================================================
 ;;; Disk Database....
 (provide get-current-assoc-groups get-assocs get-assocs-by-datestr 
-         put-assoc-to-db write-file)
+         put-assoc-to-db read-file write-file)
 
 (require srfi/19 "config.rkt" "lib.rkt" "plan-data.rkt")
 ;;; ------------------------------------------------------------------
