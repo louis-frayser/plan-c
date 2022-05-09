@@ -20,12 +20,11 @@
            (make-basic-auth-header
             "Authentication required"))
           void)]
-
         (else
          (let* ((bindings (request-bindings req)))
            (when (exists-binding? 'change bindings)
              (process-input-form bindings render-page)
-             (redirect/get)))
+             #;(redirect/get)))
          (send/suspend/dispatch render-page))))
 
 ;;; This starts the servelet with param "start respons/xepr" (above)
