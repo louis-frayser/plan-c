@@ -1,6 +1,8 @@
 #lang racket
 
-(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir% %port%
+(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir%
+         %pg_user% %pg_db% %pg_pass%
+         %port%
          %production% %servlet-path% %version%
          config-nth-activity config-nth-category config-schema-categories
          config-schema-subcategories get-all-instrument-templates)

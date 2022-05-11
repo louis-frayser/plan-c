@@ -2,17 +2,15 @@
 ;;;; Read database
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
-(require srfi/19)
-(require "config.rkt" "lib.rkt" "reports/series-to-svg.rkt" "db-files.rkt")
+(require "config.rkt" "db.rkt" "lib.rkt" "reports/series-to-svg.rkt"
+         "db-files.rkt")
 
 (provide render-svg-img render-svg-time/instrument)
 
 (define svg-basename "music-practice-minutes-daily.svg")
 (define svg-path (build-path %orig-dir% "htdocs" svg-basename))
 
-
-;; -----------------------------------------------------------------------------
-(define (get-music-minutes-daily)  
+(define (music-time-series)
   ;; Replace files with their contents
   (define assocs-by-datestr
     (take-right (get-assocs-by-datestr #:since (a-month-ago-str)) 30 ))
@@ -32,14 +30,15 @@
   (define music-times-by-date
     (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) music-by-date))
 
-  (define music-time-series 
-    (map
-     (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
-     music-times-by-date) )
+  (map (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
+       music-times-by-date) )
+;;
+;; -----------------------------------------------------------------------------
+(define (get-music-minutes-daily)  
   (define music-minutes-daily
-    (map (lambda(rec)(cons (car rec)
-                           (time-string->mins (second rec))))
-         music-time-series))
+    (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
+         (or (db-get-music-durations-by-day #:since (a-month-ago-str))
+             (music-time-series))))
   music-minutes-daily)
 ;; ...........................................................................
 
@@ -47,7 +46,7 @@
   (define (render-svg-to-file)
     (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
 
-  (render-svg-to-file)   ; The tageis to force reloading.
+  (render-svg-to-file)   ; The tag is to force reloading.
   `(a ((href "/"))
       (img ((id "daily_time" )
             (class "svg") (name "daly_chart")

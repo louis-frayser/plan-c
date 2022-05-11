@@ -5,7 +5,7 @@
 (require web-server/servlet web-server/templates)
 (require xml (only-in seq/iso drop)
          "analysis.rkt" "config.rkt"
-         "db-files.rkt"
+         "db.rkt" "db-files.rkt"
          "form-input.rkt"
          "generate-js.rkt"
          "lib.rkt"
@@ -27,7 +27,8 @@
   (handle-input-form req render-page))
 
 (define (plan-report embed/url handle-input-form)
-  (report (get-current-assoc-groups) embed/url handle-input-form) )
+  (report (or (db-get-current-assoc-groups)
+              (get-current-assoc-groups)) embed/url handle-input-form) )
 ;;; ...........................................................................
 
 (define (report assoc-groups embed/url handle-input-form)

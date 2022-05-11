@@ -1,6 +1,6 @@
 #lang debug racket
 
-(provide (all-defined-out))
+(provide ~0 (all-defined-out))
 (require srfi/1 srfi/19)
 
 ;; ========================================================================
@@ -9,6 +9,8 @@
 ;(define-syntax-parse-rule (fn x:id rhs:expr) (lambda (x) rhs))
 (define-syntax-parse-rule (info x:id)
   `( ,x x ,(length x)))
+
+(define (~0 n) (~a n  #:align 'right #:min-width 2  #:pad-string "0"))
 
 (define (integer  x)
   (inexact->exact (round x)))
@@ -72,5 +74,14 @@
 (define (->string obj)
   ;; Converts all symbols to strings in a trie of all symbols
   (if (pair? obj) (map ->string obj) (symbol->string obj)))
+;;; ------------------------------------------------------------------------
+;;; DSK File I/O
+(define (read-file path/string)
+  (with-input-from-file path/string (lambda()(read))))
 
+(define (write-file path sexpr)
+  (with-output-to-file path
+    (lambda() (displayln sexpr)) #:exists 'replace))
+
+;;; ------------------------------------------------------------------
 ;;; ========================================================================
