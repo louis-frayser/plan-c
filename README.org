@@ -1,0 +1,44 @@
+* Plan C
+
+** A time accounting web app (mostly for musicians)
+
+*** Introduction
+Data input for instrument and time practiced as well as for non musician related events, such as household chore and engineering tasks.
+** Single-use Mode
+The /main/ branch is a single-user app with storage simple flat files.
+** Multi-user
+The /rdbm/ branch is where multi-user mode has been developed and tested.
+This branch is will soon supersede soon be replace what' in /main/ making
+it multi-user.
+
+*** Installation
+**** Requirements
+PostgreSQL --Plan C uses the user-id of the process that runs racket.
+             that user (probably you) must exist in Postgres with
+	     a default database.  No password is used, but one can be
+	     configured in config/planc-cfg.scm.
+Racket
+
+**** Procedure
+1. Install from the /rdbm/ branch (git clone)
+2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir)
+3. Check the config file: config/planc-cfg.scm
+   Be sure to enable /production/ mode.
+   Run /http-server.rkt (with DrRacket or racket.)
+
+*** Usage
+3. Browse  http://localhost:8008/
+   
+***** Caveats
+As this document is incomplete.  You will have to install several packages to racket.
+Here is a rough list:
+canonicalize-path
+ collections
+ date
+ debug
+ fmt
+ seq 
+ simple-svg
+ yaml
+
+Only tested on Linux (mostly Gentoo GNU/Linux)
