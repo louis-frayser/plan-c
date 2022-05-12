@@ -33,7 +33,7 @@ install:
 	mkdir -p lib/db
 	chgrp wheel lib/db
 	chmod g+ws lib/db
-	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
+	@echo "See config and init scripts for /etc/{init,conf}.d in the scripts and config dirs"
 
 clobber: clean
 	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \; 
