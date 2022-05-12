@@ -7,8 +7,6 @@
 
 (provide render-svg-img render-svg-time/instrument)
 
-(define svg-basename "music-practice-minutes-daily.svg")
-(define svg-path (build-path %orig-dir% "htdocs" svg-basename))
 
 (define (music-time-series)
   ;; Replace files with their contents
@@ -43,9 +41,10 @@
 ;; ...........................................................................
 
 (define (render-svg-img) ; Render <img> with a random tag in it's URL
+  (define svg-basename "music-practice-minutes-daily.svg")
   (define (render-svg-to-file)
+    (define svg-path (build-path %orig-dir% "htdocs" svg-basename))
     (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
-
   (render-svg-to-file)   ; The tag is to force reloading.
   `(a ((href "/"))
       (img ((id "daily_time" )
