@@ -11,7 +11,7 @@
 
 (define (get-assocs #:since (beginning "2022-01-01"))
   (define file->assoc read-file)
-  (map file->assoc (get-assoc-paths)))
+  (map file->assoc (get-assoc-paths #:since beginning)))
 ;;; .....................................................................
 
 (define (get-assocs-by-datestr #:since (beginning "2022-01-01"))
