@@ -1,0 +1,57 @@
+#!/sbin/openrc-run
+# Copyright 2022 Gentoo Authors
+# Distributed under the terms of the GNU General Public License v2
+
+name="plan-c daemon"
+description="Online TODO list"
+command="/usr/bin/racket"
+command_args="${plan_c_args}"
+command_user="${plan_c_user}"
+output_log="${plan_c_log}"
+error_log="${plan_c_error_log}"
+command_background="true"
+required_dirs="$PLAN_C_HOME ${PLAN_C_HOME}/lib/db"
+pidfile="/run/plan-c.pid"
+procname="racket"
+depend() {
+    need net
+}
+
+start(){
+    ebegin "Starting $procname $command_args"
+    { echo 
+      date +"%Y-%m-%d %R: Starting..." 
+    } >> $error_log 
+
+    start-stop-daemon --start \
+        --interpreted --background \
+        --user $command_user --group daemon \
+        --chdir ${PLAN_C_HOME} \
+        --make-pidfile --pidfile $pidfile \
+        --stdout ${output_log} --stderr ${error_log} \
+        --exec $command -- $command_args 
+    eend
+}
+
+stop(){
+    local pid
+    ebegin "Stopping daemon..."
+    start-stop-daemon --stop \
+              --pidfile $pidfile \
+              --interpreted  \
+              --exec racket $command \
+              --group daemon --user $command_user
+    eend
+}
+
+status(){
+    local spid
+    ebegin "Checking $pidfile"
+    read spid < $pidfile
+    if [ -n "$spid" ] && kill -0 "$spid" >& /dev/null
+    then { pstree -p $spid; ps -f -p $spid; }| while read s ; do einfo "$s";done 
+         eend 0
+    else eerror "'$procname $command_args' is dead"
+         eend 1
+    fi
+}
