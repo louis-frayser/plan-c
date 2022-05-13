@@ -41,3 +41,6 @@ clobber: clean
 
 fix:   FORCE
 	@sh  scripts/cktrail.sh
+
+clone-db:
+	echo  'set search_path=plan_c;DELETE FROM assocs_dev; INSERT INTO assocs_dev (SELECT * FROM assocs);' |psql
