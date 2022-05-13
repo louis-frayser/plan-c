@@ -1,11 +1,10 @@
 .PHONY: FORCE
 default: README.md
 
-README.md: doc/README.org
-	@test -e $@ || ln -sv $^ $@
 
 help:
-	@echo  make clean
+	@echo  make 'fix|clean'
+	@echo where fix removes trailing blanks
 
 Attic: FORCE
 	@find . \( -name compiled -o -name db -o \
@@ -13,7 +12,7 @@ Attic: FORCE
 	   -o  -type d -print | while read dir ; do [ -d $$dir/Attic ] || \
 	      mkdir -pv $$dir/Attic;done
 
-clean:  Attic 
+clean:  Attic
 	@find . -maxdepth 1 -name "*~" -exec mv -bv "{}" Attic/ \;
 	@for a in $$(find . -name Attic) ;\
         do d=$${a%/*};\
@@ -36,6 +35,9 @@ install:
 	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
 
 clobber: clean
-	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \; 
+	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \;
 	@echo CLOBBERED
 	
+
+fix:   FORCE
+	@sh  scripts/cktrail.sh
