@@ -11,10 +11,10 @@ Fitness:
 
 Maitenance: 
 - Clean House
-- Instrument Maint.  
-- Kitchen:cook/clean
+- Kitchen:Cooking
 - Laundry
 - Misc
+- Instrument Maint.  
 - SSS
 
 Life: [ "Social Entertainment", "Social Other" ]
@@ -34,6 +34,6 @@ Music Practice:
 - Trumpet/Flgl
 - Voice
 
-PIM: [ Finance, Planning, SysAdm ]
+PIM: [ Finance, Planning ]
 
-Special Interest: [ CM, Engineering, Programming, Testing ]
+Engineering : [ CM, Design, PM, Programming, Study, SysAdm, Testing ]
