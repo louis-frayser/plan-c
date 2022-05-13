@@ -32,7 +32,7 @@
        music-times-by-date) )
 ;;
 ;; -----------------------------------------------------------------------------
-(define (get-music-minutes-daily)  
+(define (get-music-minutes-daily)
   (define music-minutes-daily
     (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
          (or (db-get-music-durations-by-day #:since (a-month-ago-str))
@@ -57,8 +57,9 @@
 (define (get-music-group-summary)
 
   (define (get-music-assocs)
-    (filter (compose (curry string=? "Music Practice") caar) 
-            (get-assocs #:since (a-month-ago-str) )))
+    (filter (compose (curry string=? "Music Practice") caar)
+            (or (db-get-assocs #:since (a-month-ago-str))
+                (get-assocs #:since (a-month-ago-str)))))
 
   (define assoc-activity cadar )
   (define assoc-instrument assoc-activity )
@@ -78,10 +79,10 @@
     (define (_group-summary group-name group-data)
       (cons group-name (time-string->mins (apply string-time+ group-data))))
 
-    (_group-summary (activity-group-name activity-group) 
+    (_group-summary (activity-group-name activity-group)
                     (activity-group-data activity-group)))
 
-  (map group-summary-minutes 
+  (map group-summary-minutes
        (group-by-instrument
         (append (get-music-assocs) (get-all-instrument-templates)))))
 ;; ----------------------------------------------------------------------------

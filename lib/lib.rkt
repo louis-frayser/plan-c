@@ -1,6 +1,7 @@
 #lang debug racket
 
-(provide ~0 (all-defined-out))
+(provide ~0 get-ymd-string (all-defined-out))
+
 (require srfi/1 srfi/19)
 
 ;; ========================================================================
@@ -28,14 +29,14 @@
        (lambda()(quotient/remainder tmins 60))
        (lambda(hrs mins)
          (string-append
-          (~a hrs) ":" (~a mins #:align 'right 
+          (~a hrs) ":" (~a mins #:align 'right
                            #:min-width 2 #:left-pad-string "0" )))))))
 
 (define (time-string->mins hh:mm-str)
   (let*-values ( ((h m0) (car+cdr (map string->number
                                        (string-split hh:mm-str ":") )))
                  ( (m) (first m0)))
-    (+ (* h 60) m)))  
+    (+ (* h 60) m)))
 
 (define (time-string->hrs hh:mm-str)
   (/ (time-string->mins hh:mm-str) 60))
@@ -54,7 +55,7 @@
     (let*((d (current-date )) ; local mins since midnight localtime
           (h (date-hour d))
           (m (date-minute d)))
-      (+ (* h 60) m))) 
+      (+ (* h 60) m)))
   (define  then
     ((lambda()
       (define hr-min-lst (map string->number (string-split since-hmm ":") ))
@@ -66,7 +67,7 @@
      (~a hrs) ":" (~a mins #:width 2 #:align 'right #:left-pad-string "0"))))
 
 ;; .......................................................................
-;;; Get date string
+;;; Get date string for today
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))
 ;
 ;; .......................................................................

@@ -1,6 +1,6 @@
 #lang debug racket
 
-(provide assoc->rdbms db-get-current-assoc-groups db-get-music-durations-by-day)
+(provide assoc->rdbms db-get-assocs db-get-current-assoc-groups db-get-music-durations-by-day)
 
 (require (except-in srfi/19 date->string) db )
 (require "config.rkt"
@@ -71,7 +71,7 @@
 ;;; ............................................................................
 ;;; Get todays records as associations ((category activity) . duration )
 ;;; NOTE:  WE NEED TODAYS DATA in Posetgres -- SEE: #'db-update-from-disk
-(define (db-get-current-assoc-groups)
+(define (db-get-assocs #:since (beginning "2022-01-01"))
   (define (massage data)
     (let*((l (vector->list data) )
           (rest (cdr l))
@@ -82,22 +82,25 @@
           (tsl (map (compose ~0 number->string) (list hrs mns)))
           (ts (string-join tsl ":")))
       (cons key ts)))
- 
-  (define (group-by-category assocs)
-    (define (f  g)
-      (let ((cat (caaar g))
-            (durats (map cdr g))
-            (acts (map cadar g)))
-        (cons cat (map list acts durats))))      
-    (map  f (group-by caar assocs)))
-  ;;; Musical Practice only for dates actually practiced
   (define sql
     (string-append
      "select format('%5s', date_trunc('day', stime))"
      " as day,category,activity,duration"
      " from " %table%
-     " where stime >= date_trunc('day', now());"))
-  (group-by-category (map massage (query-rows pgc sql))))
+     " where stime >= timestamp '" beginning "';"))
+  (map massage (query-rows pgc sql)))
+
+(define (db-get-current-assoc-groups)
+  (define (group-by-category assocs)
+    (define (f  g)
+      (let ((cat (caaar g))
+            (durats (map cdr g))
+            (acts (map cadar g)))
+        (cons cat (map list acts durats))))
+    (map  f (group-by caar assocs)))
+  ;;; Musical Practice only for dates actually practiced
+
+  (group-by-category (db-get-assocs #:since (get-ymd-string))))
 ;;; ----------------------------------------------------------------------------
 
 (define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))
@@ -123,7 +126,7 @@
 ;  #RRR (db-get-music-durations-by-day #:since (a-month-ago-str))
 ;  #R(db-get-current-assoc-groups)
 #;(let ((gs (db-get-current-assoc-groups)))
-  (displayln gs)
-  (displayln (length gs)))
+    (displayln gs)
+    (displayln (length gs)))
 
 ;;; ----------------------------------------------------------------------------
