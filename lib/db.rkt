@@ -1,7 +1,7 @@
 #lang debug racket
 
 (provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
-         db-get-current-assoc-groups db-get-music-durations-by-day)
+         db-get-current-assoc-groups #;db-get-music-durations-by-day)
 
 (require (except-in srfi/19 date->string) db )
 (require "config.rkt"
@@ -53,7 +53,7 @@
 
 ;;; ............................................................................
 
-(define (db-get-music-durations-by-day #:since (beginning "2022-01-01"))
+#;(define (db-get-music-durations-by-day #:since (beginning "2022-01-01"))
   (define (rec->list r)
     (define day (~0 (last (string-split (vector-ref r 0)))))
     (define _t (vector-ref r 1))
