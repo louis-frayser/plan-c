@@ -5,7 +5,7 @@
 (require web-server/servlet web-server/templates)
 (require xml (only-in seq/iso drop)
          "analysis.rkt" "config.rkt"
-         "db.rkt" "db-files.rkt"
+         "db-api.rkt"
          "form-input.rkt"
          "generate-js.rkt"
          "lib.rkt"
@@ -27,8 +27,7 @@
   (handle-input-form req render-page))
 
 (define (plan-report embed/url handle-input-form)
-  (report (or (db-get-current-assoc-groups)
-              (get-current-assoc-groups)) embed/url handle-input-form) )
+  (report (get-current-assoc-groups) embed/url handle-input-form))
 ;;; ...........................................................................
 
 (define (report assoc-groups embed/url handle-input-form)
@@ -44,7 +43,7 @@
     (append '(table)
             (map (lambda (c)(row-html c assoc-groups))
                  (assoc-groups->categories assoc-groups))))
-  
+
   (define sum    ; current total duration for todays activities
     ((lambda()
        (define groups (filter pair? assoc-groups))
@@ -53,7 +52,7 @@
 
   (define def-dur ; Default duration for input form
     (time-elapsed-hmm-str sum))
-  
+
   (define (summary-html)
     `(div (p ((id "ttotal"))
              "Daily total: " ,sum)))
@@ -94,7 +93,7 @@
     (let* ( (cmatch (dict-ref grps cat '()))
             (perfed  (filter performed (map reverse cmatch))))
       (map (lambda(row)  ; row is a triplet
-             (cons 'tr `((td ,(car row)) 
+             (cons 'tr `((td ,(car row))
                          (td ((class "tentry"))
                              ,(cadr row)) (td ,(caddr row)))))
            (map (lambda(d) (cons *spc* (if ( = (length d) 2)

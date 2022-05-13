@@ -2,10 +2,10 @@
 ;;; ====================================================================
 ;;; Simple file-based datase of (key . data) assocs
 
-(provide get-current-assoc-groups get-assocs get-assocs-by-datestr 
+(provide get-current-assoc-groups get-assocs get-assocs-by-datestr
          put-assoc-to-db read-file write-file)
 
-(require srfi/19 "config.rkt"  "db.rkt" "lib.rkt" "plan-data.rkt")
+(require db srfi/19 "config.rkt"  "lib.rkt" "plan-data.rkt")
 
 ;;; ---------------------------------------------------------------------
 
@@ -28,7 +28,7 @@
    (lambda(pr)
      (define dbase (first pr))
      (list dbase
-           (map (compose read-file (curry build-path %db-base-dir% dbase)) 
+           (map (compose read-file (curry build-path %db-base-dir% dbase))
                 (second pr))))
    (get-assoc-paths-by-date #:since beginning)))
 ;;; ------------------------------------------------------------------
@@ -53,7 +53,7 @@
               #:skip-filtered-directory? #f #:follow-links? #f))
 ;;; .....................................................................
 
-(define (put-assoc-to-db assoc user) 
+(define (put-assoc-to-db assoc user)
   (define (put-assoc-to-db-for-date dstr assoc) ;;; WRITE only if RDBM ins fails
     (define (get-assoc-pathname-for ymd-str)
       (build-path
@@ -61,11 +61,10 @@
     (let* ((dest (get-assoc-pathname-for dstr))
            (destdir (call-with-values
                      (lambda()(split-path dest)) (lambda(dir _f _) dir))))
-      (unless (directory-exists? destdir)           
+      (unless (directory-exists? destdir)
         (make-directory destdir))
       (with-output-to-file dest
         ;; Don't use display or print!
         (lambda()(writeln assoc)))))
   ;; put in db-basedir/yyyy-mm-dd
-  (or (assoc->rdbms  assoc user)
-      (put-assoc-to-db-for-date (get-ymd-string) assoc)))
+  (put-assoc-to-db-for-date (get-ymd-string) assoc))

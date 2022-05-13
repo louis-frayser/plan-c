@@ -3,7 +3,7 @@
 (provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir%
          %pg_user% %pg_db% %pg_pass%
          %port%
-         %production% %servlet-path% %version%
+         %production% %servlet-path% %user% %version%
          config-nth-activity config-nth-category config-schema-categories
          config-schema-subcategories get-all-instrument-templates)
 
@@ -35,12 +35,11 @@
 
 (define (config-schema-categories) (sort(hash-keys *config-schema) string<?))
 (define (config-schema-subcategories cat)
-  (hash-ref *config-schema cat)) 
+  (hash-ref *config-schema cat))
 (define (config-nth-category  n) (nth n (config-schema-categories) ))
 (define (config-nth-activity cat-ix  act-ix)
   (nth act-ix (config-schema-subcategories (config-nth-category cat-ix)) ))
 
-(define (get-all-instrument-templates) 
+(define (get-all-instrument-templates)
   (map (lambda(i)(cons (list "Music Practice" i) "0:00"))
        (config-schema-subcategories "Music Practice")))
-  

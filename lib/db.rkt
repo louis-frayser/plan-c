@@ -1,6 +1,7 @@
 #lang debug racket
 
-(provide assoc->rdbms db-get-assocs db-get-current-assoc-groups db-get-music-durations-by-day)
+(provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
+         db-get-current-assoc-groups db-get-music-durations-by-day)
 
 (require (except-in srfi/19 date->string) db )
 (require "config.rkt"
@@ -37,6 +38,9 @@
                         #:database %pg_db%
                         #:password %pg_pass%))
   (query-exec pgc "SET search_path=plan_c,\"$user\",public"))
+
+(define (db-connected?)
+  (connected? pgc))
 ;;; ----------------------------------------------------------------------------
 
 (define (make-rec path user)
@@ -69,8 +73,9 @@
   (fill (map rec->list (query-rows pgc sql))))
 
 ;;; ............................................................................
-;;; Get todays records as associations ((category activity) . duration )
-;;; NOTE:  WE NEED TODAYS DATA in Posetgres -- SEE: #'db-update-from-disk
+;;; Get records as associations ((category activity) . duration )
+;;; NOTE:  Also consider importing any recs writen directly to disk
+;;;; SEE: #'db-update-from-disk (Invoded above everytime the system starts)
 (define (db-get-assocs #:since (beginning "2022-01-01"))
   (define (massage data)
     (let*((l (vector->list data) )
@@ -90,6 +95,8 @@
      " where stime >= timestamp '" beginning "';"))
   (map massage (query-rows pgc sql)))
 
+
+
 (define (db-get-current-assoc-groups)
   (define (group-by-category assocs)
     (define (f  g)
@@ -98,9 +105,43 @@
             (acts (map cadar g)))
         (cons cat (map list acts durats))))
     (map  f (group-by caar assocs)))
-  ;;; Musical Practice only for dates actually practiced
 
   (group-by-category (db-get-assocs #:since (get-ymd-string))))
+;;; ----------------------------------------------------------------------------
+;;; assocs as the CDRs of dates from "stime"
+(define (db-get-sdate+assocs #:since (beginning "2022-01-01")
+                             #:user (user  %user%))
+  (define (massage rcrd)
+    (let*((l (vector->list rcrd) )
+          (stime (car (string-split (car l))))
+          (rest (cdr l))
+          (key (list (first rest) (second rest)))
+          (itv (third rest)) ; duration
+          (hrs (sql-interval-hours itv))
+          (mns (sql-interval-minutes itv))
+          (tsl (map (compose ~0 number->string) (list hrs mns)))
+          (ts (string-join tsl ":"))
+          (r0 (cons key ts)))
+      (list stime r0)))
+  ;;; .........................................................................
+  (define sql
+    (string-append
+     "select format('%5s', date_trunc('day', stime))"
+     " as day,category,activity,duration"
+     " from " %table%
+     " where stime >= timestamp '" beginning "' and usr like '" user "' ;"))
+  (map massage (query-rows pgc sql)))
+
+(define (db-get-assocs-by-datestr  #:since (beginning "2022-01-01")
+                                   #:user (user %user%))
+  (let* ( (date.assocs (db-get-sdate+assocs #:user user #:since beginning))
+          (gs (group-by car date.assocs string=? ))
+          (a-gs (map (lambda(g)
+                       (list (caar g) (map cadr g))) gs))
+          )
+ a-gs
+ ))
+
 ;;; ----------------------------------------------------------------------------
 
 (define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))

@@ -2,8 +2,8 @@
 ;;;; Read database
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
-(require "config.rkt" "db.rkt" "lib.rkt" "reports/series-to-svg.rkt"
-         "db-files.rkt")
+(require "config.rkt" "db-api.rkt"
+         "lib.rkt" "reports/series-to-svg.rkt")
 
 (provide render-svg-img render-svg-time/instrument)
 
@@ -35,7 +35,7 @@
 (define (get-music-minutes-daily)
   (define music-minutes-daily
     (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
-         (or (db-get-music-durations-by-day #:since (a-month-ago-str))
+         (or #;(db-get-music-durations-by-day #:since (a-month-ago-str)) ; seems unneeded
              (music-time-series))))
   music-minutes-daily)
 ;; ...........................................................................
@@ -58,8 +58,7 @@
 
   (define (get-music-assocs)
     (filter (compose (curry string=? "Music Practice") caar)
-            (or (db-get-assocs #:since (a-month-ago-str))
-                (get-assocs #:since (a-month-ago-str)))))
+            (get-assocs #:since (a-month-ago-str))))
 
   (define assoc-activity cadar )
   (define assoc-instrument assoc-activity )
