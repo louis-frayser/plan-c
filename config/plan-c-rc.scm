@@ -2,10 +2,6 @@
 
 (provide (all-defined-out))
 
-(define %production% #t)
-(define %port% (if %production% 8008 8000))
-(define %version% (if %production% "0.0.1 pro" "0.0.1 dev"))
-
 ;; Default user for single-user-mode data
 (define  %user% "frayser")
 

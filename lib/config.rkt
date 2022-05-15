@@ -20,6 +20,12 @@
        ((i-parent _i _ig) (split-path idir)))
     i-parent))
 ;;; ..................................................................
+(define %production% (not (file-exists? (build-path %orig-dir% "devel" ))))
+;;; ..................................................................
+
+(define %port% (if %production% 8008 8000))
+(define %version% (string-append (file->string
+                   (build-path %orig-dir% "files/version")) (if %production% " pro" " dev")))
 
 (define %db-base-dir% (build-path %orig-dir% "lib/db"))
 ;;; ..................................................................
