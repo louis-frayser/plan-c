@@ -11,13 +11,11 @@ Fitness:
 
 Maitenance: 
 - Clean House
-- Kitchen:Cooking
 - Laundry
 - Misc
 - Instrument Maint.  
-- SSS
 
-Life: [ "Social Entertainment", "Social Other" ]
+Life: [ "Cooking", "SSS", "Social Entertainment", "Social Other" ]
 
 Media: [ Movies/AV, News, Social, Study ]
 
