@@ -11,7 +11,7 @@
 (define (music-time-series)
   ;; Replace files with their contents
   (define assocs-by-datestr
-    (take-right (get-assocs-by-datestr #:since (a-month-ago-str)) 30 ))
+    (hs:take-right 30 (get-assocs-by-datestr #:since (a-month-ago-str)) ))
 
   ;;; Assocs by date...
   (define assocs-by-date

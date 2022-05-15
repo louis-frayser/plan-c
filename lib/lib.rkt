@@ -1,11 +1,20 @@
 #lang debug racket
 
-(provide ~0 get-ymd-string (all-defined-out))
+(provide ~0 get-ymd-string hs:take-right (all-defined-out))
 
 (require srfi/1 srfi/19)
 
 ;; ========================================================================
 (require syntax/parse/define)
+;; -------------------------------------------------------------------------
+(define (hs:take-right n list/string)
+  (define is-string (string? list/string))
+  (define l (if is-string (string->list list/string) list/string))
+  (define r0 (if (<= (length l ) n) l (take l n)))
+  (if is-string (list->string r0) r0))
+      
+  
+;; -------------------------------------------------------------------------
 
 ;(define-syntax-parse-rule (fn x:id rhs:expr) (lambda (x) rhs))
 (define-syntax-parse-rule (info x:id)
