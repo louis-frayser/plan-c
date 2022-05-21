@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (provide handle-input-form process-input-form)
 (require web-server/servlet debug
@@ -16,7 +16,6 @@
   ;;; config-schema-categories() and config-schema-subcategories()
   ;;; After decoding  the numbers into to strings, the struct is
   ;;; addressible for "update".
-  (void #RRR bindings)
   ;;; adding in the  time from the original activity
 
   (define(->str sm)(extract-binding/single sm bindings))
@@ -25,6 +24,4 @@
         (timestr (->str 'duration ))
         (new-assoc (cons changed-key timestr)))
     (put-assoc-to-db new-assoc user))
-
   (send/suspend/dispatch render-page))
-

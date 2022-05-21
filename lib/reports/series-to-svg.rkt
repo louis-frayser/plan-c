@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 ;;;; bargraph from a data series
 ;;; ==========================================================================
 (provide minutes-daily->svg-file instrument-summary->svg-file
@@ -98,7 +98,7 @@
      (else
       (lambda(_)
         (error (string-append
-                "bargraph: Got " (format "'~v'! " orient) 
+                "bargraph: Got " (format "'~v'! " orient)
                 "#:orientation must be 'virtical or 'horizontal")))))
    series))
 
@@ -130,4 +130,3 @@
 #;(displayln (minutes-daily->svg-string '(1 2 3 4 5 6 )))
 #;(displayln (instrument-summary->svg-string
               '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
-

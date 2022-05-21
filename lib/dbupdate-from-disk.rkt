@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (provide db-update-from-disk)
 
@@ -29,14 +29,14 @@
     ;; 1. Get time of newest record.
     ;; 2. Find import files newer than newest record.
     ;; 3. Import files as assocs and stuff into %table%.
-    
-    (define last-record-ctime 
+
+    (define last-record-ctime
       (try-query
        query-maybe-value
        pgc
        (string-append "SELECT date_trunc('minute', MAX(ctime)) FROM " %table%)))
 
-    (define d (cond ((sql-null? last-record-ctime) 
+    (define d (cond ((sql-null? last-record-ctime)
                      (make-date 0 0 0 0 1 1 2022 -25200))
                     (else (let* ((t last-record-ctime)
                                  (y (sql-timestamp-year t))
@@ -45,7 +45,7 @@
                                  (h (sql-timestamp-hour t))
                                  (m (sql-timestamp-minute t)))
                             (make-date 0 0 m h d mo y -25200)))))
-    
+
     ;;; Find Files newer than newest RDBM record...
     (define (get-ctime pth)
       (define sb (file-or-directory-stat pth))
@@ -68,11 +68,11 @@
         (and (and date-part (string>=? date-part beginning-ymd))
              (regexp-match #rx"2...-.*/assoc-.*.scm" pathstr)
              (>= (get-ctime pathstr) beginning) pth))
-         
+
       (find-files predicate %db-base-dir%
                   #:skip-filtered-directory? #f #:follow-links? #f))
     (define (stime path) (time-second (date->time-utc (assoc-path->date path))))
-    
+
     (define (get-assocs-since-secs #:since (beginning 0))
       (define (file->assoc p)
         (let*((a   (read-file p))
@@ -83,15 +83,15 @@
     (define(do-insert rec) (query-exec pgc (print-sql rec #:to-string? #t)))
 
     (define ascs (get-assocs-since-secs #:since (date*->seconds d)))
-    (printf "\nDate (~a) and \n\tabs second of last insert: ~a\n" 
+    (printf "\nDate (~a) and \n\tabs second of last insert: ~a\n"
             (date->string d #t) (date*->seconds d ))
 
     (printf "Inserting ~a new records \n\n" (length ascs))
-    
+
     (map do-insert ascs))
   ;;
   (define (create-table pgc)
-    (displayln (string-append "Creating table: " %table%)) 
+    (displayln (string-append "Creating table: " %table%))
     (let* ((base (string-append "create-" %table% ".sql"))
            (path (build-path %orig-dir% "scripts/sql" base ))
            (sqls (string-split (file->string path) ";")))
@@ -105,7 +105,7 @@
     ((lambda()
        (query-exec pg-conn "CREATE SCHEMA IF NOT EXISTS plan_c;")
        (query-exec pg-conn "set search_path = plan_c, public;")
-       (define result (query-rows pg-conn 
+       (define result (query-rows pg-conn
                                   "SELECT true FROM  pg_catalog.pg_tables
             WHERE schemaname = 'plan_c'
             AND   tablename  = $1;" %table%))

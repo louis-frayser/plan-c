@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 ;;; ====================================================================
 ;;; Simple file-based datase of (key . data) assocs
 
@@ -6,7 +6,6 @@
          put-assoc-to-db read-file write-file)
 
 (require db srfi/19 "config.rkt"  "lib.rkt" "plan-data.rkt")
-
 ;;; ---------------------------------------------------------------------
 
 (define (get-assocs #:since (beginning "2022-01-01"))

@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
          db-get-current-assoc-groups #;db-get-music-durations-by-day)
@@ -13,7 +13,6 @@
 
 ;; This is for switching from a simple file db to RDBMS
 (db-update-from-disk) ; Read in any db records written to disk
-
 ;;; ----------------------------------------------------------------------------
 (define (fill sx) ;; Fill in a series to account for missing days
   (let loop ((rest sx) (n (and (pair? sx)
@@ -52,27 +51,6 @@
   (cons (car assoc) (list (cdr assoc ) date user) ))
 
 ;;; ............................................................................
-
-#;(define (db-get-music-durations-by-day #:since (beginning "2022-01-01"))
-  (define (rec->list r)
-    (define day (~0 (last (string-split (vector-ref r 0)))))
-    (define _t (vector-ref r 1))
-    (define tmstr (string-append (~0 (sql-interval-hours _t)) ":"
-                                 (~0 (sql-interval-minutes _t))))
-    (list day tmstr))
-  ;;; Musical Practice only for dates actually practiced
-  (define sql
-    (string-append
-     "SELECT format('%s %s', extract(DOY from stime), extract(day from stime))
-         AS day, sum(duration)
-       FROM " %table%
-              " WHERE category = 'Music Practice'
-        AND stime >= timestamp '" beginning "'"
-                                  " GROUP BY day
-      ORDER BY day;"))
-  (fill (map rec->list (query-rows pgc sql))))
-
-;;; ............................................................................
 ;;; Get records as associations ((category activity) . duration )
 ;;; NOTE:  Also consider importing any recs writen directly to disk
 ;;;; SEE: #'db-update-from-disk (Invoded above everytime the system starts)
@@ -94,7 +72,6 @@
      " from " %table%
      " where stime >= timestamp '" beginning "';"))
   (map massage (query-rows pgc sql)))
-
 
 
 (define (db-get-current-assoc-groups)
@@ -137,10 +114,8 @@
   (let* ( (date.assocs (db-get-sdate+assocs #:user user #:since beginning))
           (gs (group-by car date.assocs string=? ))
           (a-gs (map (lambda(g)
-                       (list (caar g) (map cadr g))) gs))
-          )
- a-gs
- ))
+                       (list (caar g) (map cadr g))) gs)))
+    a-gs))
 
 ;;; ----------------------------------------------------------------------------
 

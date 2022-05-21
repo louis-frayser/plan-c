@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (provide ~0 get-ymd-string hs:take-right (all-defined-out))
 
@@ -12,11 +12,7 @@
   (define l (if is-string (string->list list/string) list/string))
   (define r0 (if (<= (length l ) n) l (take-right l n)))
   (if is-string (list->string r0) r0))
-      
-  
 ;; -------------------------------------------------------------------------
-
-;(define-syntax-parse-rule (fn x:id rhs:expr) (lambda (x) rhs))
 (define-syntax-parse-rule (info x:id)
   `( ,x x ,(length x)))
 
@@ -40,7 +36,7 @@
          (string-append
           (~a hrs) ":" (~a mins #:align 'right
                            #:min-width 2 #:left-pad-string "0" )))))))
-
+;
 (define (time-string->mins hh:mm-str)
   (let*-values ( ((h m0) (car+cdr (map string->number
                                        (string-split hh:mm-str ":") )))
@@ -67,19 +63,17 @@
       (+ (* h 60) m)))
   (define  then
     ((lambda()
-      (define hr-min-lst (map string->number (string-split since-hmm ":") ))
-      (let( (hrs (first hr-min-lst)) (mins (second hr-min-lst)) )
-        (+ (* hrs 60) mins)) )))
+       (define hr-min-lst (map string->number (string-split since-hmm ":") ))
+       (let( (hrs (first hr-min-lst)) (mins (second hr-min-lst)) )
+         (+ (* hrs 60) mins)) )))
   (let*-values ( ((hrs mins ) (quotient/remainder (-  now then) 60)) )
     (string-join (map number->string `(,hrs ,mins)) ":")
     (string-append
      (~a hrs) ":" (~a mins #:width 2 #:align 'right #:left-pad-string "0"))))
-
 ;; .......................................................................
 ;;; Get date string for today
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))
-;
-;; .......................................................................
+;;.......................................................................
 
 (define (->string obj)
   ;; Converts all symbols to strings in a trie of all symbols
@@ -92,6 +86,5 @@
 (define (write-file path sexpr)
   (with-output-to-file path
     (lambda() (displayln sexpr)) #:exists 'replace))
-
 ;;; ------------------------------------------------------------------
 ;;; ========================================================================

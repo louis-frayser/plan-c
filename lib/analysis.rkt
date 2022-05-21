@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 ;;;; Read database
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
@@ -6,7 +6,6 @@
          "lib.rkt" "reports/series-to-svg.rkt")
 
 (provide render-svg-img render-svg-time/instrument)
-
 
 (define (music-time-series)
   ;; Replace files with their contents
