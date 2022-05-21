@@ -10,7 +10,7 @@
 (define (hs:take-right n list/string)
   (define is-string (string? list/string))
   (define l (if is-string (string->list list/string) list/string))
-  (define r0 (if (<= (length l ) n) l (take l n)))
+  (define r0 (if (<= (length l ) n) l (take-right l n)))
   (if is-string (list->string r0) r0))
       
   
