@@ -59,7 +59,7 @@
   ;; HTML starts here ...
   `(html
     (head (title ,(string-append "Plan C " %version%)) "\n"
-          (meta ((http-equiv "refresh")(content "600; url=/"))) "\n"
+          (meta ((http-equiv "refresh")(content "300; url=/"))) "\n"
           (link ((rel "stylesheet")(href "/files/styles.css")
                                    (type "text/css")))
           "\n"
