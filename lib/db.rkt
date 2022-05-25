@@ -6,6 +6,7 @@
 (require (except-in srfi/19 date->string) db )
 (require "config.rkt"
          "db-common.rkt"
+         "db-files.rkt"
          "dbupdate-from-disk.rkt"
          "lib.rkt"
          )
@@ -132,7 +133,7 @@
   (define sql (assoc->rdbms-insert-string assoc user))
   (define (db-fail ex)
     (eprintf "\nTrapped ~a\n for ~a\nWriting assoc to disk instead.\n" ex sql)
-    #f)
+    (put-assoc-to-db assoc user))
   (with-handlers ((exn:fail? db-fail))
     (query pgc sql)))
 

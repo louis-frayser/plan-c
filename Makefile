@@ -43,4 +43,6 @@ fix:   FORCE
 	@sh  scripts/cktrail.sh
 
 clone-db:
-	echo  'set search_path=plan_c;DELETE FROM assocs_dev; INSERT INTO assocs_dev (SELECT * FROM assocs);' |psql
+	echo  "set search_path=plan_c;\
+	       DELETE FROM assocs_dev; INSERT INTO assocs_dev (SELECT * FROM assocs);\
+	       select setval('assocs_dev_id_seq',(select max(id) from assocs_dev));" |psql
