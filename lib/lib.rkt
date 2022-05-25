@@ -1,6 +1,7 @@
 #lang racket
 
-(provide ~0 get-ymd-string hs:take-right (all-defined-out))
+(provide ~0 a-month-ago-str get-ymd-string hs:take-right integer read-file
+         string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
 (require srfi/1 srfi/19)
 
