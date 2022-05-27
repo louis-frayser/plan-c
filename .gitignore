@@ -11,3 +11,4 @@ scripts/options-array.js
 *.swp
 htdocs/*.svg
 config/passwd
+devel
