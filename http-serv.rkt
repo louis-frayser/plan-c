@@ -29,7 +29,7 @@
 ;;; This starts the servelet with param "start respons/xepr" (above)
 (require web-server/servlet-env)
 (serve/servlet start
-               #:command-line? (not %production%)
+               #:command-line?  %production%
                #:listen-ip #f
                #:port %port%
                #:extra-files-paths (list %orig-dir%
