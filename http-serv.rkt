@@ -1,4 +1,4 @@
-#lang web-server
+#lang debug web-server
 
 (provide interface-version)
 
@@ -11,6 +11,11 @@
 (provide/contract (start (request? . -> . response?)))
 
 (define (start req)
+  (define path (path->string (url->path (request-uri req))))
+  #R (request-client-ip req)
+  #R path
+  #R (request-post-data/raw req)
+ 
   (cond [(and %auth-db-path% (not (authenticated? %auth-db-path% req)))
          (response
           401 #"Unauthorized"
