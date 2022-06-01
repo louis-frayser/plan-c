@@ -1,16 +1,17 @@
-#lang racket
+#lang debug racket
 ;;;; Read database
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
-(require "config.rkt" "db-api.rkt"
+(require srfi/43
+         "config.rkt" "db-api.rkt"
          "lib.rkt" "reports/series-to-svg.rkt")
 
 (provide render-svg-img render-svg-time/instrument)
 
-(define (music-time-series)
+(define (music-time-series #:since (sdate (a-month-ago-str)) #:limit (limit 30))
   ;; Replace files with their contents
   (define assocs-by-datestr
-    (hs:take-right 30 (get-assocs-by-datestr #:since (a-month-ago-str)) ))
+    (hs:take-right limit (get-assocs-by-datestr #:since #R sdate)))
 
   ;;; Assocs by date...
   (define assocs-by-date
@@ -31,19 +32,44 @@
        music-times-by-date) )
 ;;
 ;; -----------------------------------------------------------------------------
-(define (get-music-minutes-daily)
-  (define music-minutes-daily
-    (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
-         (or #;(db-get-music-durations-by-day #:since (a-month-ago-str)) ; seems unneeded
-             (music-time-series))))
-  music-minutes-daily)
+(define (get-music-minutes-daily #:since (sdate (a-month-ago-str))
+                                 #:limit (lim 30))
+  (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
+       (music-time-series #:since sdate #:limit lim )))
+;; ...........................................................................
+
+;; SMA for music-time-series 
+;; FIXME: Does not handle cases where there's not enough data
+;;; returns #f in this case
+(define (_music-mins-sma #:n (n 30) )
+  ;; Need 2n-1 = 59 samples
+  (define lim (- (* 2 n) 1))
+  (define working-vec
+    (list->vector
+     (map cdr
+          (get-music-minutes-daily 
+           #:since (days-ago->string (* 2 n)) #:limit lim))))
+  (define sum0 (apply + (vector->list (vector-copy working-vec 0 (- n 1)))))
+  
+  (define (cons-sum i acc val) ;; calculae sum the div result by n
+    (cons (+ (car acc) val (- (vector-ref working-vec i))) acc))
+  
+  (reverse (map (compose integer (curry * (/ 1 n))) 
+                (vector-fold cons-sum
+                             (list sum0)
+                             (vector-copy working-vec (+ n 1) (- (* 2 n) 0))))))
+
+(define (music-mins-sma #:n (n 30) )
+  (with-handlers ( (exn:fail? (lambda(ex) #f)))  (_music-mins-sma #:n n)))
+
 ;; ...........................................................................
 
 (define (render-svg-img) ; Render <img> with a random tag in it's URL
   (define svg-basename "music-practice-minutes-daily.svg")
   (define (render-svg-to-file)
     (define svg-path (build-path %orig-dir% "htdocs" svg-basename))
-    (minutes-daily->svg-file (get-music-minutes-daily) svg-path))
+    (minutes-daily->svg-file (get-music-minutes-daily) svg-path
+                             #:sma (music-mins-sma #:n 30)))
   (render-svg-to-file)   ; The tag is to force reloading.
   `(a ((href "/"))
       (img ((id "daily_time" )
@@ -97,7 +123,9 @@
         (img ((src ,url)(id "ins-summary")
                         (title "30-day Accumulated time by instrument")
                         (class "svg")(name "ins-summary"))))))
+;; ----------------------------------------------------------------------------
 ;; ============================================================================
+#;  (music-mins-sma #:n 30)
 
 #;(displayln (minutes-daily->svg-string (get-music-minutes-daily)))
 #;(render-svg-time/instrument)

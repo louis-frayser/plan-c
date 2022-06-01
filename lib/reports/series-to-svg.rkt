@@ -1,4 +1,4 @@
-#lang racket
+#lang debug racket
 ;;;; bargraph from a data series
 ;;; ==========================================================================
 (provide minutes-daily->svg-file instrument-summary->svg-file
@@ -13,6 +13,12 @@
 (define *sstyle
   (let ([_sstyle (sstyle-new)])
     (sstyle-set! _sstyle 'stroke "green")
+    (sstyle-set! _sstyle 'stroke-width 1)
+    _sstyle))
+
+(define *sstyle-blk
+  (let ([_sstyle (sstyle-new)])
+    (sstyle-set! _sstyle 'stroke "black")
     (sstyle-set! _sstyle 'stroke-width 1)
     _sstyle))
 ;;; ..........................................................................
@@ -62,7 +68,7 @@
   bar-graph5h)
 ;;;............................................................................
 
-(define (virtical-bar-graph series)
+(define (virtical-bar-graph series #:sma (sma-series #f))
   ;; if series is an alist then use car as an index (ix), else count 1,2,3...
   ;;; ix must be string.
   (define _series
@@ -78,6 +84,12 @@
                         (cons (cons (number->string i) (car rest)) acc))
                   (reverse acc))))))
   (define (bar-graph5)
+    ;;; Number (and invert) each SMA value with counter => a series of pairs
+    (define (label-series x0 dx series)
+      (do ( (x x0 (+ x dx)) (vrest series (cdr vrest))
+                            (acc null (cons (cons x (- ymax (car vrest))) acc)))
+        ( (null? vrest) (reverse acc))))
+
     (let loop ( (x margin ) (rest-data _series)
                             (ix (and (pair? _series)(caar _series))))
       (cond
@@ -87,13 +99,19 @@
          (use-text@  ix x (+ (* 2 margin) ymax))
          (loop (+ x dx) (cdr rest-data)
                (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
+    ;; Polyline plot for SMA  
+    (when sma-series
+      (let* ((xs (label-series margin dx sma-series))
+             (polyline (svg-def-polyline xs)))
+        (svg-use-shape polyline *sstyle-blk #:at? '(0 . 0))))
     (svg-show-default))
   bar-graph5)
 ;; ...........................................................................
 
-(define (bar-graph series #:orientation (orient 'virtical))
+(define (bar-graph 
+         series #:orientation (orient 'virtical) #:sma (sma-series #f))
   ((case orient
-     ('virtical   virtical-bar-graph)
+     ('virtical   (lambda(xs)(virtical-bar-graph xs #:sma sma-series)))
      ('horizontal horizontal-bar-graph)
      (else
       (lambda(_)
@@ -104,15 +122,16 @@
 
 ;;; ---------------------------------------------------------------------------
 
-(define (minutes-daily->svg-string series)
-  (svg-out (car canvas-size) (cdr canvas-size) (bar-graph series)))
+(define (minutes-daily->svg-string series #:sma (sma-series #f))
+  (svg-out (car canvas-size) 
+           (cdr canvas-size) (bar-graph series #:sma sma-series)))
 (define (instrument-summary->svg-string series)
   (svg-out (car canvas-size) (integer (/  (cdr canvas-size) 2))
            (bar-graph series #:orientation 'horizontal)))
 
-(define (minutes-daily->svg-file series path)
+(define (minutes-daily->svg-file series path #:sma (sma-series #f))
   (with-output-to-file path
-    (lambda() (displayln (minutes-daily->svg-string series)))
+    (lambda() (displayln (minutes-daily->svg-string series #:sma sma-series)))
     #:exists 'replace))
 
 (define (instrument-summary->svg-file series path)

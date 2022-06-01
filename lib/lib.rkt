@@ -1,6 +1,6 @@
 #lang racket
 
-(provide ~0 a-month-ago-str get-ymd-string hs:take-right integer read-file
+(provide ~0 a-month-ago-str days-ago->string get-ymd-string hs:take-right integer read-file
          string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
 (require srfi/1 srfi/19)
@@ -54,7 +54,15 @@
         (jmonth-ago (integer (- jdn 30)))
         (month-ago (julian-day->date jmonth-ago)))
     (date->string month-ago "~Y-~m-~d")))
+;; ...........................................................................
 
+(define (days-ago->date days-ago)
+  (seconds->date (- (current-seconds)  (* days-ago (* 24 3600)))))
+
+(define (days-ago->string ndays)
+  (date->string (days-ago->date ndays) "~Y-~m-~d"))
+
+;; ...........................................................................
 (define (time-elapsed-hmm-str since-hmm)
   ;; Elapsed time since given time (same day)
   (define now
@@ -87,5 +95,6 @@
 (define (write-file path sexpr)
   (with-output-to-file path
     (lambda() (displayln sexpr)) #:exists 'replace))
-;;; ------------------------------------------------------------------
+;;; -------------------------------------------------------------------------
+
 ;;; ========================================================================
