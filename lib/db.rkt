@@ -107,7 +107,8 @@
      "select format('%5s', date_trunc('day', stime))"
      " as day,category,activity,duration"
      " from " %table%
-     " where stime >= timestamp '" beginning "' and usr like '" user "' ;"))
+     " where stime >= timestamp '" beginning "' and usr like '" user "'"
+     "ORDER by stime; "))
   (map massage (query-rows pgc sql)))
 
 (define (db-get-assocs-by-datestr  #:since (beginning "2022-01-01")
