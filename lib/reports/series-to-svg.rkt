@@ -26,7 +26,8 @@
 (define w 10)
 (define dx 13)
 (define hmax 270 #; (*4.5 60)); 4-1/2 hrs
-(define xmax (+  margin (* 30.5 dx))) (define ymax (+ hmax margin))
+(define xmax (+  margin (* 30.5 dx))) 
+(define ymax (+ hmax margin))
 (define (rand-h) (random 0 hmax))
 
 (define (use-rect@ x y w h #:horiz? (horiz? #f))
@@ -85,9 +86,12 @@
                   (reverse acc))))))
   (define (bar-graph5)
     ;;; Number (and invert) each SMA value with counter => a series of pairs
+    ;;; Shift x +(width/2) to place line vertices in middle of bars
     (define (label-series x0 dx series)
-      (do ( (x x0 (+ x dx)) (vrest series (cdr vrest))
-                            (acc null (cons (cons x (- ymax (car vrest))) acc)))
+      (define (offset x) (integer (+ x (/ w 2))))
+      (do ( (x (offset x0) (+ x dx))
+            (vrest series (cdr vrest))
+            (acc null (cons (cons x (- ymax (car vrest))) acc)))
         ( (null? vrest) (reverse acc))))
 
     (let loop ( (x margin ) (rest-data _series)
@@ -149,3 +153,5 @@
 #;(displayln (minutes-daily->svg-string '(1 2 3 4 5 6 )))
 #;(displayln (instrument-summary->svg-string
               '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
+
+
