@@ -13,7 +13,7 @@ body {
 #right_col { float: right; width: var(--rcolw); }
 
 #daily_time { 
-	      height: 300px; width: var(--lcolw); margin-top: 10px;
+	      margin-top: 10px;
 	      border: 1px dotted; }
 
 .svg { border: 1px dotted; }
@@ -35,7 +35,7 @@ form {
 }
 
 input {width: 60px; }
-a,button,label,select,.button { width: 120px; }
+.form-link,button,label,select,.button { width: 120px; }
 button { background-color: #ffffee; width: 120px; }
 select,input[type="submit"] {
     display: inline-block;
@@ -57,4 +57,12 @@ th { background-color: #d0d0c0; }
     text-align: center;
     font-weight: 500;
    
+}
+
+.big-svg {
+ 
+   width:33%; 
+}
+.text {
+    display: block;
 }
