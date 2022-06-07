@@ -21,12 +21,23 @@
     (sstyle-set! _sstyle 'stroke "black")
     (sstyle-set! _sstyle 'stroke-width 1)
     _sstyle))
+
+(define *sstyle-gry
+  (let ([_sstyle (sstyle-new )])
+    (sstyle-set! _sstyle 'stroke "#999999" )
+    (sstyle-set! _sstyle 'stroke-width 1)
+    (sstyle-set! _sstyle 'stroke-dasharray "4 1")
+                          
+
+    _sstyle))
+
+
 ;;; ..........................................................................
 (define margin 5)
 (define w 10)
 (define dx 13)
 (define hmax 270 #; (*4.5 60)); 4-1/2 hrs
-(define xmax (+  margin (* 30.5 dx))) 
+(define xmax (integer (+  margin (* 30.5 dx))) )
 (define ymax (+ hmax margin))
 (define (rand-h) (random 0 hmax))
 
@@ -93,7 +104,16 @@
             (vrest series (cdr vrest))
             (acc null (cons (cons x (- ymax (car vrest))) acc)))
         ( (null? vrest) (reverse acc))))
-
+    ;;; ........................................................................
+    ;;; Horiz grid lines
+    (define (use-hline y )
+      (let* ((yval (- ymax y))
+             [line (svg-def-line `(0 . ,yval) `(,xmax . ,yval))])
+        (svg-use-shape line *sstyle-gry #:at? '(0 . 0))))
+    (do ( (y 30 (+ y 30)) ) ; 4-1/2 hrs of grid
+      ( (> y ymax) (void))
+      (use-hline y))
+    ;;; ......................................................................
     (let loop ( (x margin ) (rest-data _series)
                             (ix (and (pair? _series)(caar _series))))
       (cond
@@ -124,7 +144,7 @@
                 "#:orientation must be 'virtical or 'horizontal")))))
    series))
 
-;;; ---------------------------------------------------------------------------
+;;; --------------------------------------------------------------------------
 
 (define (minutes-daily->svg-string series #:sma (sma-series #f))
   (svg-out (car canvas-size) 
