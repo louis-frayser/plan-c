@@ -24,7 +24,7 @@
 
 (define *sstyle-gry
   (let ([_sstyle (sstyle-new )])
-    (sstyle-set! _sstyle 'stroke "#999999" )
+    (sstyle-set! _sstyle 'stroke "#aaaaaa" )
     (sstyle-set! _sstyle 'stroke-width 1)
     (sstyle-set! _sstyle 'stroke-dasharray "4 1")
                           
@@ -104,74 +104,83 @@
             (vrest series (cdr vrest))
             (acc null (cons (cons x (- ymax (car vrest))) acc)))
         ( (null? vrest) (reverse acc))))
-    ;;; ........................................................................
     ;;; Horiz grid lines
+    (define lbl-x (integer (- xmax (* 2 w))))
     (define (use-hline y )
       (let* ((yval (- ymax y))
              [line (svg-def-line `(0 . ,yval) `(,xmax . ,yval))])
         (svg-use-shape line *sstyle-gry #:at? '(0 . 0))))
-    (do ( (y 30 (+ y 30)) ) ; 4-1/2 hrs of grid
+    #;(do ( (y 30 (+ y 30)) (n 9/2 (- n 1/2 ))) ; 4-1/2 hrs of grid
       ( (> y ymax) (void))
-      (use-hline y))
-    ;;; ......................................................................
-    (let loop ( (x margin ) (rest-data _series)
-                            (ix (and (pair? _series)(caar _series))))
-      (cond
-        ((null? rest-data ) #t)
-        (else
-         (use-rect@ x margin w (cdar rest-data))
-         (use-text@  ix x (+ (* 2 margin) ymax))
-         (loop (+ x dx) (cdr rest-data)
-               (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
-    ;; Polyline plot for SMA  
-    (when sma-series
-      (let* ((xs (label-series margin dx sma-series))
-             (polyline (svg-def-polyline xs)))
-        (svg-use-shape polyline *sstyle-blk #:at? '(0 . 0))))
-    (svg-show-default))
-  bar-graph5)
-;; ...........................................................................
+      (use-hline y)
+      (when (integer? n)
+        (use-text@  (string-append (number->string n) "h") lbl-x y)))
+      ;;; ..
+      (let loop ( (x margin ) (rest-data _series)
+                              (ix (and (pair? _series)(caar _series))))
+        (cond
+          ((null? rest-data ) #t)
+          (else
+           (use-rect@ x margin w (cdar rest-data))
+           (use-text@  ix x (+ (* 2 margin) ymax))
+           (loop (+ x dx) (cdr rest-data)
+                 (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
+      ;; Polyline plot for SMA  
+      (when sma-series
+        (let* ((xs (label-series margin dx sma-series))
+               (polyline (svg-def-polyline xs)))
+          (svg-use-shape polyline *sstyle-blk #:at? '(0 . 0))))
+    ;; Lables for amplitude
+    (do ( (y 30 (+ y 30)) (n 4 (- n 1/2 ))) ; 4-1/2 hrs of grid
+      ( (> y ymax) (void))
+      (use-hline y)
+      (when (and (integer? n) (> n 0))
+        (use-text@  (string-append (number->string n) "h") lbl-x y)))
+      (svg-show-default))
+    bar-graph5)
+  ;; ...........................................................................
 
-(define (bar-graph 
-         series #:orientation (orient 'virtical) #:sma (sma-series #f))
-  ((case orient
-     ('virtical   (lambda(xs)(virtical-bar-graph xs #:sma sma-series)))
-     ('horizontal horizontal-bar-graph)
-     (else
-      (lambda(_)
-        (error (string-append
-                "bargraph: Got " (format "'~v'! " orient)
-                "#:orientation must be 'virtical or 'horizontal")))))
-   series))
+  (define (bar-graph 
+           series #:orientation (orient 'virtical) #:sma (sma-series #f))
+    ((case orient
+       ('virtical   (lambda(xs)(virtical-bar-graph xs #:sma sma-series)))
+       ('horizontal horizontal-bar-graph)
+       (else
+        (lambda(_)
+          (error (string-append
+                  "bargraph: Got " (format "'~v'! " orient)
+                  "#:orientation must be 'virtical or 'horizontal")))))
+     series))
 
-;;; --------------------------------------------------------------------------
+  ;;; --------------------------------------------------------------------------
 
-(define (minutes-daily->svg-string series #:sma (sma-series #f))
-  (svg-out (car canvas-size) 
-           (cdr canvas-size) (bar-graph series #:sma sma-series)))
-(define (instrument-summary->svg-string series)
-  (svg-out (car canvas-size) (integer (/  (cdr canvas-size) 2))
-           (bar-graph series #:orientation 'horizontal)))
+  (define (minutes-daily->svg-string series #:sma (sma-series #f))
+    (svg-out (car canvas-size) 
+             (cdr canvas-size) (bar-graph series #:sma sma-series)))
+  (define (instrument-summary->svg-string series)
+    (svg-out (car canvas-size) (integer (/  (cdr canvas-size) 2))
+             (bar-graph series #:orientation 'horizontal)))
 
-(define (minutes-daily->svg-file series path #:sma (sma-series #f))
-  (with-output-to-file path
-    (lambda() (displayln (minutes-daily->svg-string series #:sma sma-series)))
-    #:exists 'replace))
+  (define (minutes-daily->svg-file series path #:sma (sma-series #f))
+    (with-output-to-file path
+      (lambda() (displayln (minutes-daily->svg-string series #:sma sma-series)))
+      #:exists 'replace))
 
-(define (instrument-summary->svg-file series path)
-  (write-file path (instrument-summary->svg-string series)))
+  (define (instrument-summary->svg-file series path)
+    (write-file path (instrument-summary->svg-string series)))
 
-;;; ===========================================================================
-#;(begin ; DEMO
-    (define data-series
-      (do ( (i 1 (+ i 1)) (h (rand-h) (rand-h)) (acc '() (cons h acc)))
-        ( (>= i 31) (cons h acc))))
+  ;;; ===========================================================================
+  #;(begin ; DEMO
+      (define data-series
+        (do ( (i 1 (+ i 1)) (h (rand-h) (rand-h)) (acc '() (cons h acc)))
+          ( (>= i 31) (cons h acc))))
 
-    (series->svg-file data-series "/tmp/foo.svg"))
+      (series->svg-file data-series "/tmp/foo.svg"))
 
-#;(displayln (minutes-daily->svg-string '(("ab" . 1) ("bc" . 2) ("dx" . 3))))
-#;(displayln (minutes-daily->svg-string '(1 2 3 4 5 6 )))
-#;(displayln (instrument-summary->svg-string
-              '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
+  #;(displayln (minutes-daily->svg-string '(("ab" . 1) ("bc" . 2) ("dx" . 3))))
+  #;(displayln (minutes-daily->svg-string '(1 2 3 4 5 6 )))
+  #;(displayln (instrument-summary->svg-string
+                '(("ab" . 30) ("bc" . 60) ("dx" . 90))))
 
 
+  
