@@ -68,10 +68,11 @@
       (cons key ts)))
   (define sql
     (string-append
-     "select format('%5s', date_trunc('day', stime))"
-     " as day,category,activity,duration"
-     " from " %table%
-     " where stime >= timestamp '" beginning "';"))
+     "SELECT format('%5s', date_trunc('day', stime))"
+     " AS day,category,activity,duration"
+     " FROM " %table%
+     " WHERE stime >= timestamp '" beginning "' "
+     " ORDER BY stime;"))
   (map massage (query-rows pgc sql)))
 
 
