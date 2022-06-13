@@ -3,13 +3,13 @@
 ** A time accounting web app (mostly for musicians)
 
 *** Introduction
-Data input for instrument and time practiced as well as for non musician related events, such as household chore and engineering tasks.
-** Single-use Mode
-The /main/ branch is a single-user app with storage simple flat files.
+This application tracks time spend on activities by providing data
+input for instrument and time practiced as well as for non musician
+related events, such as household chores and engineering tasks. In the
+case of musical practice entries, graphs are produced.
+
 ** Multi-user
-The /rdbm/ branch is where multi-user mode has been developed and tested.
-This branch is will soon supersede soon be replace what' in /main/ making
-it multi-user.
+The app multi-user and requires users to login.
 
 *** Installation
 **** Requirements
@@ -17,22 +17,21 @@ PostgreSQL --Plan C uses the user-id of the process that runs racket.
              that user (probably you) must exist in Postgres with
 	     a default database.  No password is used, but one can be
 	     configured in config/planc-cfg.scm.
-Racket
+Racket (see /Caveats/ below.)
 
 **** Procedure
-1. Install from the /rdbm/ branch (git clone)
-2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir)
+1. Git clone
+2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir as config/htpasswd)
 3. Check the config file: config/planc-cfg.scm
-   Be sure to enable /production/ mode.
-   Run /http-server.rkt (with DrRacket or racket.)
+   If you wish to run in devel (vs production) mode, create the file "devel".
+   Run the file http-server.rkt (with DrRacket or racket.)
 
 *** Usage
-3. Browse  http://localhost:8008/
+3. Browse  http://localhost:8008/ (production mode). Use port 8000 for /devel/ mode.
    
 ***** Caveats
-As this document is incomplete.  You will have to install several packages to racket.
-Here is a rough list:
-canonicalize-path
+You will have to install the following Racket packages in order to run the app:
+ canonicalize-path
  collections
  date
  debug
@@ -41,4 +40,4 @@ canonicalize-path
  simple-svg
  yaml
 
-Only tested on Linux (mostly Gentoo GNU/Linux)
+Only tested on Gentoo GNU/Linux
