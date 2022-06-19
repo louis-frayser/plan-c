@@ -11,7 +11,7 @@
 (define (music-time-series #:since (sdate (a-month-ago-str)) #:limit (limit 30))
   ;; Replace files with their contents
   (define assocs-by-datestr
-    (hs:take-right limit (get-assocs-by-datestr #:since #R sdate)))
+    (hs:take-right limit (get-assocs-by-datestr #:since sdate)))
 
   ;;; Assocs by date...
   (define assocs-by-date
@@ -51,17 +51,15 @@
            #:since (days-ago->string (* 2 n)) #:limit lim))))
   (define sum0 (apply + (vector->list (vector-copy working-vec 0 (- n 1)))))
   
-  (define (cons-sum i acc val) ;; calculae sum the div result by n
+  (define (cons-sum i acc val) ;; calculae sum, then div result by n
     (cons (+ (car acc) val (- (vector-ref working-vec i))) acc))
-  
   (reverse (map (compose integer (curry * (/ 1 n))) 
                 (vector-fold cons-sum
                              (list sum0)
-                             (vector-copy working-vec (+ n 1) (- (* 2 n) 0))))))
+                             (vector-copy working-vec n (- (* 2 n) 1))))))
 
 (define (music-mins-sma #:n (n 30) )
   (with-handlers ( (exn:fail? (lambda(ex) #f)))  (_music-mins-sma #:n n)))
-
 ;; ...........................................................................
 
 (define (render-svg-img) ; Render <img> with a random tag in it's URL
