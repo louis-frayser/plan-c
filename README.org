@@ -3,21 +3,21 @@
 ** A time accounting web app (mostly for musicians)
 
 *** Introduction
-This application tracks time spend on activities by providing data
-input for instrument and time practiced as well as for non musician
-related events, such as household chores and engineering tasks. In the
-case of musical practice entries, graphs are produced.
+This application tracks time spent on activities by providing data
+input for instrument and time practiced as well as for non musician-related events,
+such as household chores and engineering tasks. In the
+case of musical-practice entries, graphs are produced.
 
 ** Multi-user
 The app multi-user and requires users to login.
 
 *** Installation
 **** Requirements
-PostgreSQL --Plan C uses the user-id of the process that runs racket.
-             that user (probably you) must exist in Postgres with
-	     a default database.  No password is used, but one can be
-	     configured in config/planc-cfg.scm.
-Racket (see /Caveats/ below.)
+- PostgreSQL --Plan C uses the user-id of the process that runs racket.
+            that user (probably you) must exist in Postgres with
+	    a default database.  No password is used, but one can be
+	    configured in config/planc-cfg.scm.
+- Racket (see /Caveats/ below.)
 
 **** Procedure
 1. Git clone
@@ -31,13 +31,13 @@ Racket (see /Caveats/ below.)
    
 ***** Caveats
 You will have to install the following Racket packages in order to run the app:
- canonicalize-path
- collections
- date
- debug
- fmt
- seq 
- simple-svg
- yaml
+- canonicalize-path
+- collections
+- date
+- debug
+- fmt
+- seq 
+- simple-svg
+- yaml
 
 Only tested on Gentoo GNU/Linux
