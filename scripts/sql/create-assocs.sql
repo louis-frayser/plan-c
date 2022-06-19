@@ -9,3 +9,4 @@ duration  interval minute       not null,
    stime  timestamp DEFAULT LOCALTIMESTAMP not null,
     usr  character varying(20) not null
 );
+CREATE INDEX assocs_skey ON assocs USING btree (stime);
