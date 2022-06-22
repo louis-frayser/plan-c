@@ -1,7 +1,8 @@
-#lang racket
+#lang debug racket
 
 (provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
-         db-get-current-assoc-groups #;db-get-music-durations-by-day)
+         db-get-current-assoc-groups db-get-rows 
+         #;db-get-music-durations-by-day)
 
 (require (except-in srfi/19 date->string) db )
 (require "config.rkt"
@@ -14,6 +15,11 @@
 
 ;; This is for switching from a simple file db to RDBMS
 (db-update-from-disk) ; Read in any db records written to disk
+;;; ----------------------------------------------------------------------------
+(define (sql-ts->ymd-string ts)
+  (string-join
+   (map ~0 
+        (list sql-timestamp-year sql-timestamp-month sql-timestamp-day)) "-"))
 ;;; ----------------------------------------------------------------------------
 (define (fill sx) ;; Fill in a series to account for missing days
   (let loop ((rest sx) (n (and (pair? sx)
@@ -119,7 +125,37 @@
           (a-gs (map (lambda(g)
                        (list (caar g) (map cadr g))) gs)))
     a-gs))
+;;; ----------------------------------------------------------------------------
+(define (db-get-rows #:user (user "%") #:for-date (date (get-ymd-string)))
+  (define sql (string-append "SELECT stime, category, activity, duration
+FROM assocs
+WHERE usr like '" user "' 
+ AND stime >= '" date "'
+ AND stime < timestamp '" date "' + '1 day'"))
 
+  (define rows (try-query query-rows  pgc sql ))
+
+  (define (row->rec vec)
+    (define (dur si)
+      (string-append (~0 (sql-interval-hours si))
+                     ":"
+                     (~0 (sql-interval-minutes si))))
+    (define (stime st)
+      (string-append
+       (~0 (sql-timestamp-hour st))
+       ":"
+       (~0 (sql-timestamp-minute st))))
+   
+    (list
+     (stime (vector-ref vec 0))
+     (vector-ref vec 1)
+     (vector-ref vec 2)
+     (dur (vector-ref vec 3))))
+
+  (map row->rec rows))
+
+(define rows (db-get-rows #:for-date "2022-06-19" #:user "frayser"))
+#R rows
 ;;; ----------------------------------------------------------------------------
 
 (define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))

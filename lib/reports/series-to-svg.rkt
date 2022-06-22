@@ -8,7 +8,7 @@
 (require "../db-files.rkt" "../lib.rkt")
 ;;; --------------------------------------------------------------------------
 
-(define canvas-size '(395 . 305 )) ; 25.384 x Number of instruments
+(define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
 ;;; ------------------------------------------------------------------------
 (define *sstyle
   (let ([_sstyle (sstyle-new)])

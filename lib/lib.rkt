@@ -1,12 +1,15 @@
 #lang racket
 
-(provide ~0 a-month-ago-str days-ago->string get-ymd-string hs:take-right integer read-file
+(provide ~0 a-month-ago-str days-ago->string get-ymd-string hs:take-right 
+         integer read-file stderr
          string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
-(require srfi/1 srfi/19)
+(require srfi/1 srfi/19
+         db)
 
 ;; ========================================================================
 (require syntax/parse/define)
+(define stderr (current-error-port))
 ;; -------------------------------------------------------------------------
 (define (hs:take-right n list/string)
   (define is-string (string? list/string))
