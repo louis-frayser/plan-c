@@ -3,6 +3,7 @@
     --rcolw: 305px;
     --wrapw: 700px;
 }
+
 body {
     background-color: #e7e0e0;
 }
@@ -13,8 +14,8 @@ body {
 #right_col { float: right; width: var(--rcolw); }
 
 #daily_time { 
-	      margin-top: 10px;
-	      border: 1px dotted; }
+    margin-top: 10px;
+    border: 1px dotted; }
 
 .svg { border: 1px dotted; }
 #ins_times { margin-top: 20px; }
@@ -25,6 +26,14 @@ table { width: 300px;
 	margin-top: 10px;
 	margin-left: 35px;
       }
+
+#crud-table { width: 33%; }
+
+caption, caption a:visited {
+    background-color: #8f7f00;
+    color: yellow;
+    font-weight: bold;
+}
 
 form {
     border: 1px solid;
@@ -56,12 +65,12 @@ th { background-color: #d0d0c0; }
 #ttotal {
     text-align: center;
     font-weight: 500;
-   
+    
 }
 
 .big-svg {
- 
-   width:33%; 
+    
+    width:33%; 
 }
 .text {
     display: block;

@@ -39,7 +39,8 @@
       (append (list head new-atts ) rest)))
 
   (define (groups-html) ; Show detail of groups of activity data
-    (append '(table)
+    (append `(table
+              (caption (a ((href ,%crud-url%)) "Daily Activity")))
             (map (lambda (c)(row-html c assoc-groups))
                  (assoc-groups->categories assoc-groups))))
 
@@ -53,8 +54,7 @@
     (time-elapsed-hmm-str sum))
 
   (define (summary-html)
-    `(div (p ((id "ttotal"))
-             "Daily total: " ,sum)))
+    `(div (p ((id "ttotal")) "Daily total: " ,sum)))
 
   ;; HTML starts here ...
   `(html

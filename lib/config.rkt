@@ -1,6 +1,6 @@
 #lang racket
 
-(provide %auth-db-path% %auth-db-path% %db-base-dir% %orig-dir%
+(provide %auth-db-path% %auth-db-path% %crud-url% %db-base-dir% %orig-dir%
          %pg_user% %pg_db% %pg_pass%
          %port%
          %production% %servlet-path% %user% %version%
@@ -25,12 +25,14 @@
 
 (define %port% (if %production% 8008 8000))
 (define %version% (string-append (file->string
-                   (build-path %orig-dir% "files/version")) (if %production% " pro" " dev")))
+                   (build-path %orig-dir% "files/version")) 
+                                 (if %production% " pro" " dev")))
 
 (define %db-base-dir% (build-path %orig-dir% "lib/db"))
 ;;; ..................................................................
 
 (define %servlet-path% "/servlets/PLAN-C")
+(define %crud-url% (string-append %servlet-path% "/crud"))
 (define %auth-db-path% (path->string (build-path  %orig-dir% "config/passwd")))
 ;; --------------------------------------------------------------------
 (define *config-schema
