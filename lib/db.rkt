@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 
 (provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
          db-get-current-assoc-groups db-get-rows 
@@ -154,8 +154,6 @@ WHERE usr like '" user "'
 
   (map row->rec rows))
 
-(define rows (db-get-rows #:for-date "2022-06-19" #:user "frayser"))
-#R rows
 ;;; ----------------------------------------------------------------------------
 
 (define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))

@@ -1,4 +1,4 @@
-#lang debug racket
+#lang racket
 (provide crud)
 
 (require web-server/servlet)
@@ -15,12 +15,14 @@
                             (td ,(second rdata)) 
                             (td ,(third rdata))  
                             (td ,(last rdata))))
-  `(table ((id "crud-table")) (caption (a ((href ,%servlet-path%)) ,ymd))
+  `(table ((id "crud-table"))
+          (caption (a ((href ,%servlet-path%)(title "Go back to main form")) ,ymd))
           (tr (th "Start")
               (th ((id "cat-col")) "Category")
-              (th "Activity") (th "Duration")) "\n"
+              (th "Activity")
+              (th "Duration"))
+          "\n"
           ,@(add-between (map gen-row tdata) "\n") "\n"))
-#R (gen-table)
 ;;; ----------------------------------------------------------------------------
 (define (crud bindings req)
   (response/xexpr

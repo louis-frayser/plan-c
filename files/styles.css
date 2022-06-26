@@ -27,7 +27,7 @@ table { width: 300px;
 	margin-left: 35px;
       }
 
-#crud-table { width: 33%; }
+#crud-table { margin-left: 0px; width: 33%; }
 
 caption, caption a:visited {
     background-color: #8f7f00;
