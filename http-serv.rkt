@@ -4,7 +4,7 @@
 
 (require web-server/servlet
          "lib/config.rkt" "lib/form-input.rkt" "lib/http-basic-auth.rkt"
-         "lib/lib.rkt" "lib/render.rkt" "lib/views/crud.rkt")
+         "lib/lib.rkt" "lib/views/render.rkt" "lib/views/crud.rkt")
 
 (define interface-version 'stateless)
 

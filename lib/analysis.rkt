@@ -4,7 +4,7 @@
 ;;;;
 (require srfi/43
          "config.rkt" "db/db-api.rkt"
-         "lib.rkt" "reports/series-to-svg.rkt")
+         "lib.rkt" "views/series-to-svg.rkt")
 
 (provide render-svg-img render-svg-time/instrument)
 

@@ -4,12 +4,12 @@
 
 (require web-server/servlet web-server/templates)
 (require xml (only-in seq/iso drop)
-         "analysis.rkt" "config.rkt"
-         "db/db-api.rkt"
-         "form-input.rkt"
-         "generate-js.rkt"
-         "lib.rkt"
-         "db/plan-data.rkt")
+         "../analysis.rkt" "../config.rkt"
+         "../db/db-api.rkt"
+         "../form-input.rkt"
+         "../generate-js.rkt"
+         "../lib.rkt"
+         "../db/plan-data.rkt")
 ;;; =========================================================================
 (define *spc*  'nbsp)
 
@@ -69,7 +69,7 @@
           "\n"
           (h1 ,(if %production% "Plan C" "Plan C (Dev)"))
           "\n"
-          ,(string->xexpr (include-template "../files/time-frame.html"))"\n"
+          ,(string->xexpr (include-template "../../files/time-frame.html"))"\n"
           (div ((id "wrap"))
                "\n"
                (div ((id "left_col"))
@@ -81,7 +81,7 @@
                (div ((id "right_col"))
                     ,(add-form-action ; Add 'action' attribute
                       (string->xexpr  ;  to included form
-                       (include-template "../files/input-form.html")))))
+                       (include-template "../../files/input-form.html")))))
           "\n")))
 ;............................................................................
 
