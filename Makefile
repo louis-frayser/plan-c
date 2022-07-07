@@ -1,4 +1,5 @@
 .PHONY: FORCE
+DBTOP=files
 default: README.md
 
 
@@ -20,18 +21,18 @@ clean:  Attic
 	  do if test -e "$$k"; then  mv -v "$$k" $$d/Attic;fi ;\
 	  done; \
 	done
-	@find lib/db \( -name Attic -prune \) \
+	@find ${DBTOP}/db \( -name Attic -prune \) \
 	   -o -name "*~" -print |cpio -pvdm Attic
-	@find lib/db -name "*~" -delete
+	@find ${DBTOP}/db -name "*~" -delete
 	@echo CLEAN
 
 
 install:
 	chgrp wheel scripts
 	chgrp +ws scripts
-	mkdir -p lib/db
-	chgrp wheel lib/db
-	chmod g+ws lib/db
+	mkdir -p ${DBTOP}/db
+	chgrp wheel ${DBTOP}/db
+	chmod g+ws ${DBTOP}/db
 	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
 
 clobber: clean

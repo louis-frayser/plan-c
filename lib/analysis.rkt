@@ -3,7 +3,7 @@
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
 (require srfi/43
-         "config.rkt" "db-api.rkt"
+         "config.rkt" "db/db-api.rkt"
          "lib.rkt" "reports/series-to-svg.rkt")
 
 (provide render-svg-img render-svg-time/instrument)

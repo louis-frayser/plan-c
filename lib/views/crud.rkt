@@ -3,7 +3,7 @@
 
 (require web-server/servlet)
 (require "../config.rkt"
-         "../db.rkt"
+         "../db/db.rkt"
          "../lib.rkt")
 ;;; ============================================================================
 (define (gen-table #:for-date (ymd  (get-ymd-string)))

@@ -3,7 +3,7 @@
 (provide %table%)
 (provide assoc-path->date print-sql print-sql-string try-query )
 
-(require "config.rkt" "lib.rkt" )
+(require "../config.rkt" "../lib.rkt" )
 (require srfi/19)
 (require db)
 

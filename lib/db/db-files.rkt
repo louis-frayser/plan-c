@@ -5,7 +5,7 @@
 (provide get-current-assoc-groups get-assocs get-assocs-by-datestr
          put-assoc-to-db read-file write-file)
 
-(require db srfi/19 "config.rkt"  "lib.rkt" "plan-data.rkt")
+(require db srfi/19 "../config.rkt"  "../lib.rkt" "plan-data.rkt")
 ;;; ---------------------------------------------------------------------
 
 (define (get-assocs #:since (beginning "2022-01-01"))

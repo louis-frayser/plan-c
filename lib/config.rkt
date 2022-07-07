@@ -28,7 +28,7 @@
                    (build-path %orig-dir% "files/version")) 
                                  (if %production% " pro" " dev")))
 
-(define %db-base-dir% (build-path %orig-dir% "lib/db"))
+(define %db-base-dir% (build-path %orig-dir% "files/db"))
 ;;; ..................................................................
 
 (define %servlet-path% "/servlets/PLAN-C")

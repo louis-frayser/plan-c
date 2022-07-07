@@ -5,7 +5,7 @@
          #;minutes-daily->svg-string)
 (require srfi/13)
 (require simple-svg)
-(require "../db-files.rkt" "../lib.rkt")
+(require "../db/db-files.rkt" "../lib.rkt")
 ;;; --------------------------------------------------------------------------
 
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments

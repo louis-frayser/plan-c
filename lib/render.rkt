@@ -5,11 +5,11 @@
 (require web-server/servlet web-server/templates)
 (require xml (only-in seq/iso drop)
          "analysis.rkt" "config.rkt"
-         "db-api.rkt"
+         "db/db-api.rkt"
          "form-input.rkt"
          "generate-js.rkt"
          "lib.rkt"
-         "plan-data.rkt")
+         "db/plan-data.rkt")
 ;;; =========================================================================
 (define *spc*  'nbsp)
 

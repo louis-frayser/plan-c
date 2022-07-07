@@ -3,7 +3,7 @@
 (provide db-update-from-disk)
 
 (require (except-in srfi/19 date->string))
-(require "config.rkt" "db-common.rkt" "lib.rkt")
+(require "../config.rkt" "db-common.rkt" "../lib.rkt")
 (require (only-in racket/date date-display-format date*->seconds
                   date->string ))
 (require db)

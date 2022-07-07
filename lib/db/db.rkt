@@ -5,11 +5,11 @@
          #;db-get-music-durations-by-day)
 
 (require (except-in srfi/19 date->string) db )
-(require "config.rkt"
+(require "../config.rkt"
          "db-common.rkt"
          "db-files.rkt"
          "dbupdate-from-disk.rkt"
-         "lib.rkt"
+         "../lib.rkt"
          )
 (require (only-in racket/date date*->seconds date->string date-display-format))
 
