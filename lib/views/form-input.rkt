@@ -2,7 +2,7 @@
 
 (provide handle-input-form process-input-form)
 (require web-server/servlet debug
-         "db/plan-data.rkt" "config.rkt" "lib.rkt" "db/db-api.rkt")
+         "../db/plan-data.rkt" "../config.rkt" "../lib.rkt" "../db/db-api.rkt")
 
 ;;; ==============================================================
 ;;;              INPUT FORM

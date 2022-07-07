@@ -6,7 +6,7 @@
 (require xml (only-in seq/iso drop)
          "../analysis.rkt" "../config.rkt"
          "../db/db-api.rkt"
-         "../form-input.rkt"
+         "form-input.rkt"
          "../generate-js.rkt"
          "../lib.rkt"
          "../db/plan-data.rkt")
