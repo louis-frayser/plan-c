@@ -3,8 +3,7 @@ Attic
 compiled
 test.rkt
 tmp.rkt
-lib/db/planc-data-*
-lib/db/20*
+files/db
 */#*#
 .#*
 scripts/options-array.js
