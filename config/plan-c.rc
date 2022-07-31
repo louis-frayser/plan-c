@@ -18,10 +18,10 @@ depend() {
 }
 
 start(){
-    ebegin "Starting $procname $command_args"
-    { echo 
-      date +"%Y-%m-%d %R: Starting..." 
-    } >> $error_log 
+    local msg="Starting"
+    ebegin "$msg $procname $command_args"
+
+    logger -s -t "Plan C" "$msg" 2>> ${error_log}
 
     start-stop-daemon --start \
         --interpreted --background \
@@ -35,7 +35,9 @@ start(){
 
 stop(){
     local pid
-    ebegin "Stopping daemon..."
+    local msg="Stopping daemon"
+    ebegin "$msg..."
+    logger -s -t "Plan C" "$msg" 2>> ${error_log}
     start-stop-daemon --stop \
               --pidfile $pidfile \
               --interpreted  \
