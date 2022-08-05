@@ -8,6 +8,13 @@
     <select name="category" id="category" required="true"></select>
     <label for="activity">Activity:</label>
     <select name="activity" id="activity" required="true"> </select>
+    
+    <label for="stime">Start Time:</label> 
+    <input type="datetime-local"
+	   class="datetime" id="stime" name="stime" value="@def-stime" require='true'
+	   title="A timestamp YY-MM-DD HH:MM, or HH:MM (leading 0 optional on hrs)"	   
+	   min="2022-01-01 00:00" max="2155-12-31 23:59"/>
+    
     <label for="duration">Duration:</label> 
     <input id="duration" name="duration" value="@def-dur"
 	   title="A duration H:MM, or HH:MM from 0:01 up to 16:00 hrs"

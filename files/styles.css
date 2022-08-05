@@ -1,7 +1,8 @@
 :root{
     --lcolw: 395px;
-    --rcolw: 305px;
-    --wrapw: 700px;
+    --rcolw: 380px;
+    --wrapw: 775px; /* Max is 960px for 2 columns HD */
+    --cntrlw: 160px;
 }
 
 body {
@@ -44,7 +45,9 @@ form {
 }
 
 input {width: 60px; }
-.form-link,button,label,select,.button { width: 120px; }
+input .local-time { width: 120px;}
+
+#stime,.form-link,button,label,select,.button { width: var(--cntrlw); }
 button { background-color: #ffffee; width: 120px; }
 select,input[type="submit"] {
     display: inline-block;
