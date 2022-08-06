@@ -1,8 +1,8 @@
 #lang racket
 
 (provide handle-input-form process-input-form)
-(require web-server/servlet debug
-         "../db/plan-data.rkt" "../config.rkt" "../lib.rkt" "../db/db-api.rkt")
+(require web-server/servlet srfi/19
+         "../db/db-api.rkt")
 
 ;;; ==============================================================
 ;;;              INPUT FORM
@@ -19,9 +19,12 @@
   ;;; adding in the  time from the original activity
 
   (define(->str sm)(extract-binding/single sm bindings))
+  (define stime (if (exists-binding? 'stime bindings)
+                    (string->date (->str 'stime) "~Y-~m-~dT~H:~M")
+                    (current-date)))
   ;
   (let*((changed-key (map ->str (list 'category 'activity)))
         (timestr (->str 'duration ))
         (new-assoc (cons changed-key timestr)))
-    (put-assoc-to-db new-assoc user))
+    (put-assoc-to-db new-assoc user #:tstamp stime))
   (send/suspend/dispatch render-page))

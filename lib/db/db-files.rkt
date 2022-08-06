@@ -52,7 +52,7 @@
               #:skip-filtered-directory? #f #:follow-links? #f))
 ;;; .....................................................................
 
-(define (put-assoc-to-db assoc user)
+(define (put-assoc-to-db assoc user #:tstamp _ignored) ; Ignore start time
   (define (put-assoc-to-db-for-date dstr assoc) ;;; WRITE only if RDBM ins fails
     (define (get-assoc-pathname-for ymd-str)
       (build-path

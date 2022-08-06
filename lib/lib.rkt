@@ -1,6 +1,6 @@
 #lang racket
 
-(provide ~0 a-month-ago-str days-ago->string get-ymd-string hs:take-right 
+(provide ~0 a-month-ago-str days-ago->string elapsed->start-time-str get-ymd-string hs:take-right 
          integer read-file stderr
          string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
@@ -82,6 +82,14 @@
     (string-join (map number->string `(,hrs ,mins)) ":")
     (string-append
      (~a hrs) ":" (~a mins #:width 2 #:align 'right #:left-pad-string "0"))))
+;; .......................................................................
+
+(define (elapsed->start-time-str elapsed-str); Calculate start from elapsed time
+  (let* ((e-h+m (map string->number (string-split elapsed-str ":")))
+          (esecs (+ (* 3600 (car e-h+m)) (* 60 (cadr e-h+m)) ))
+          (ssecs (- (current-seconds) esecs))
+          (stime (seconds->date ssecs)))
+    (date->string stime "~Y-~m-~dT~H:~M")))
 ;; .......................................................................
 ;;; Get date string for today
 (define get-ymd-string (lambda() (date->string (current-date) "~1")))

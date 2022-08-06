@@ -166,7 +166,7 @@ WHERE usr like '" user "'
 ;;; ----------------------------------------------------------------------------
 
 (define (assoc->rdbms assoc user #:tstamp (tstamp (current-date)))
-  (define sql (assoc->rdbms-insert-string assoc user))
+  (define sql (assoc->rdbms-insert-string assoc user  #:tstamp tstamp))
   (define (db-fail ex)
     (eprintf "\nTrapped ~a\n for ~a\nWriting assoc to disk instead.\n" ex sql)
     (put-assoc-to-db assoc user))
