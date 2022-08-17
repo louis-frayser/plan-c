@@ -1,11 +1,10 @@
 #lang debug racket
 ;;;; bargraph from a data series
 ;;; ==========================================================================
-(provide minutes-daily->svg-file instrument-summary->svg-file
-         #;minutes-daily->svg-string)
+(provide minutes-daily->svg-file instrument-summary->svg-file)
 (require srfi/13)
 (require simple-svg)
-(require "../db/db-files.rkt" "../lib.rkt")
+(require "../db/db-files.rkt" "../lib.rkt" "../config.rkt")
 ;;; --------------------------------------------------------------------------
 
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
@@ -133,7 +132,7 @@
         (svg-use-shape polyline *sstyle-blk #:at? '(0 . 0))))
     ;; Lables for amplitude
     (use-hline 0) ;lowest value (0)
-    (use-hline  150 #:style %sstyle-red) ; target
+    (use-hline  %practice-target-mins% #:style %sstyle-red) ; target
     (do ( (y 30 (+ y 30)) (n 4 (- n 1/2 ))) ; 4-1/2 hrs of grid
       ( (> y ymax) (void))
       (use-hline y)

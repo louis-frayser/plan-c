@@ -2,6 +2,7 @@
 
 (provide %auth-db-path% %auth-db-path% %crud-url% %db-base-dir% %orig-dir%
          %pg_user% %pg_db% %pg_pass%
+         %practice-target-mins%
          %port%
          %production% %servlet-path% %user% %version%
          config-nth-activity config-nth-category config-schema-categories

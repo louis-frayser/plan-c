@@ -7,3 +7,5 @@
 
 ;; Database login credentials
 (define-values ( %pg_user%  %pg_db% %pg_pass%) (values "frayser" "frayser" ""))
+
+(define %practice-target-mins% 150)
