@@ -33,7 +33,7 @@
   (let ([_sstyle (sstyle-new )])
     (sstyle-set! _sstyle 'stroke "red" )
     (sstyle-set! _sstyle 'stroke-width 1)
-    (sstyle-set! _sstyle 'stroke-dasharray "4 1")
+    (sstyle-set! _sstyle 'stroke-dasharray "0")
     _sstyle))               
 
 ;;; ..........................................................................
@@ -138,7 +138,7 @@
       ( (> y ymax) (void))
       (use-hline y)
       (when (and (integer? n) (> n 0)) ; verticle axis labels
-        (use-text@  (string-append (number->string n) "h") lbl-x y)))
+        (use-text@  (string-append (number->string n) "h") lbl-x (+ y 4))))
     (svg-show-default))
   bar-graph5)
 ;; ...........................................................................
