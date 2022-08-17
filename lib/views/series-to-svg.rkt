@@ -27,13 +27,17 @@
     (sstyle-set! _sstyle 'stroke "#aaaaaa" )
     (sstyle-set! _sstyle 'stroke-width 1)
     (sstyle-set! _sstyle 'stroke-dasharray "4 1")
-                          
-
     _sstyle))
 
+(define %sstyle-red
+  (let ([_sstyle (sstyle-new )])
+    (sstyle-set! _sstyle 'stroke "red" )
+    (sstyle-set! _sstyle 'stroke-width 1)
+    (sstyle-set! _sstyle 'stroke-dasharray "4 1")
+    _sstyle))               
 
 ;;; ..........................................................................
-(define margin 5)
+(define-values (margin xmargin bot_margin) (values 5 5 5 ))
 (define w 10)
 (define dx 13)
 (define hmax 270 #; (*4.5 60)); 4-1/2 hrs
@@ -44,9 +48,9 @@
 (define (use-rect@ x y w h #:horiz? (horiz? #f))
   (let (( rect (svg-def-rect w (min h hmax)))
         [_sstyle (sstyle-new)]
-        (h-adj (if (> h hmax ) 0 (- hmax h)))) ; avoid: h > hmax
+        (y_adj (if (> (+ h y) hmax ) hmax (- hmax h (- y bot_margin))))) ; limit h to hmax
     (sstyle-set! _sstyle 'fill "#3f9f3f")
-    (svg-use-shape rect _sstyle #:at?  (cons x  (if horiz? y h-adj)))))
+    (svg-use-shape rect _sstyle #:at?  (cons x  (if horiz? y y_adj  )))))
 
 (define (use-text@ tx x y)
   (let ([text (svg-def-text tx #:font-size? 11)]
@@ -107,10 +111,10 @@
         ( (null? vrest) (reverse acc))))
     ;;; Horiz grid lines
     (define lbl-x (integer (- xmax (* 2 w))))
-    (define (use-hline y )
+    (define (use-hline y #:style (style *sstyle-gry))
       (let* ((yval (- ymax y))
              [line (svg-def-line `(0 . ,yval) `(,xmax . ,yval))])
-        (svg-use-shape line *sstyle-gry #:at? '(0 . 0))))
+        (svg-use-shape line style #:at? '(0 . 0))))
     
     ;;; ..
     (let loop ( (x margin ) (rest-data _series)
@@ -118,8 +122,8 @@
       (cond
         ((null? rest-data ) #t)
         (else 
-         (use-rect@ x margin w (cdar rest-data))
-         (use-text@  ix x (+ (* 2 margin) ymax))
+         (use-rect@ x 0 w (cdar rest-data)) ; vertical bar
+         (use-text@  ix x (+ (* 2 margin) (+ ymax 2))) ; horiz axis label
          (loop (+ x dx) (cdr rest-data)
                (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
     ;; Polyline plot for SMA  
@@ -128,10 +132,12 @@
              (polyline (svg-def-polyline xs)))
         (svg-use-shape polyline *sstyle-blk #:at? '(0 . 0))))
     ;; Lables for amplitude
+    (use-hline 0) ;lowest value (0)
+    (use-hline  150 #:style %sstyle-red) ; target
     (do ( (y 30 (+ y 30)) (n 4 (- n 1/2 ))) ; 4-1/2 hrs of grid
       ( (> y ymax) (void))
       (use-hline y)
-      (when (and (integer? n) (> n 0))
+      (when (and (integer? n) (> n 0)) ; verticle axis labels
         (use-text@  (string-append (number->string n) "h") lbl-x y)))
     (svg-show-default))
   bar-graph5)
