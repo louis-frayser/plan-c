@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head><title>Date &amp; Time Now in Black </title>
+    <style>
+      p {
+	  color: red;
+	  font-size: 50%;
+	  background-color: blue;
+	  text-align: center;
+      }
+      /* body { background-color: white; } */
+      table { border: 1px dotted #c0c0b0; }
+      
+    </style>
+    <script src="/scripts/js/clock.js">
+    </script>
+  </head>
+
+  <body onload="run_clock()" >
+    <table border id="clock_tbl">
+    <caption id="txcap"></caption>
+      <tr><th>Elapsed</th>  <td id="txt"></td></tr>
+      <tr><th>Remaining</th><td id="tx2"></td></tr>
+    </table>
+  </body>
+</html>
