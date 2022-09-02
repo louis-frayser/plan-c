@@ -15,7 +15,7 @@ function Now(){
     var h = zeroPad(h0), 
 	m = zeroPad(m0), 
 	s = zeroPad(s0);
-    var tl=[24-h, 60 - m, 60 - s]; /* time left in day*/
+    var tl=[23-h, 59 - m, 60 - s]; /* time left in day*/
     var sep="&nbsp;";
     
     var date_str= Now.days[dow] + sep + ymd;
