@@ -29,7 +29,7 @@
           void)]
         [(regexp-match "/crud" path) (crud bindings req)] 
         [(exists-binding? 'change bindings)
-         (process-input-form bindings render-page)]
+         (handle-input-form req render-page)]
         [else (send/suspend/dispatch render-page)]))
 
 ;;; This starts the servelet with param "start respons/xepr" (above)
