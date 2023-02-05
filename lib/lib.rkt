@@ -17,7 +17,7 @@
   (define r0 (if (<= (length l ) n) l (take-right l n)))
   (if is-string (list->string r0) r0))
 ;; -------------------------------------------------------------------------
-(define-syntax-parse-rule (info x:id)
+#;(define-syntax-parse-rule (info x:id)
   `( ,x x ,(length x)))
 
 (define (~0 n) (~a n  #:align 'right #:min-width 2  #:pad-string "0"))
