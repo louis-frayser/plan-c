@@ -71,10 +71,8 @@ th { background-color: #d0d0c0; }
     
 }
 
-.big-svg {
-    
-    width:33%; 
-}
+.big-svg    { width: 33%; }
+.bigger-svg { width: 80%; }
 .text {
     display: block;
 }

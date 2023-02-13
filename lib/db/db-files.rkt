@@ -52,8 +52,9 @@
               #:skip-filtered-directory? #f #:follow-links? #f))
 ;;; .....................................................................
 
-(define (put-assoc-to-db assoc user #:tstamp _ignored) ; Ignore start time
-  (define (put-assoc-to-db-for-date dstr assoc) ;;; WRITE only if RDBM ins fails
+(define (put-assoc-to-db assoc user #:tstamp ( _ignored #f) ) ; Ignore start time
+  ;;; Call only if RDBMS INSERT failed or is impossible
+  (define (put-assoc-to-db-for-date dstr assoc)
     (define (get-assoc-pathname-for ymd-str)
       (build-path
        %db-base-dir% (date->string (current-date) "~1/assoc-~T.scm")))
