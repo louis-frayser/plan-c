@@ -3,11 +3,12 @@
     --rcolw: 380px;
     --wrapw: 775px; /* Max is 960px for 2 columns HD */
     --cntrlw: 160px;
+    _bgcolor: #e7e0e0;
+    _textcolor: black;
 }
 
-body {
-    background-color: #e7e0e0;
-}
+body { background-color: #e7e0e0; }
+#big-charts { background-color: var(_bgcolor); color: var(_tetxcolor) ;}
 
 /* These 3 lines set layout */
 #wrap { width: var(--wrapw); }
