@@ -7,5 +7,7 @@ begin
 -- stored procedure body
 TRUNCATE TABLE assocs_dev;
 INSERT INTO assocs_dev (SELECT * from assocs);
-PERFORM setval('assocs_dev_id_seq',(SELECT MAX(id) FROM assocs_dev),false);
+PERFORM setval('assocs_dev_id_seq',
+   COALESCE((SELECT MAX(id)+1 FROM assocs_dev),1),
+   false);
 end; $$
