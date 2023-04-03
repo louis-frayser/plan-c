@@ -32,8 +32,6 @@ The app multi-user and requires users to login.
 ***** Caveats
 You will have to install the following Racket packages in order to run the app:
 - canonicalize-path
-- collections
-- date
 - debug
 - fmt
 - seq 
