@@ -1,4 +1,5 @@
 * The Plan
+NOTE:  Most if these items are in _DONE_ status.  The markup just isn't rendered properly at GitHub.  The few items remaining will be moved to bug tracking system on GitHub.
 
 ** Current design, repair and enhancement strategies
 *** DONE Save form data to disk after aggregating changes.
@@ -15,13 +16,13 @@
 
 ** FIXME
 *** Critical
-**** DONE Entering a {duration} of 12:00 (instead of 0:12) for and activity, Cello practice, caused the system to crashe, processing the plots.
+**** DONE Entering a {duration} of 12:00 (instead of 0:12) for and activity, Cello practice, caused the system to crash, processing the plots.
 
 **** DONE Activities are definitely disappearing from the WWW display
      1. After entry, some previous entries disappear. Mon 10:04:39
      2. In the database, it seems the missing value (time-duration)
         was assigned to  the wrong activity
-**** DONE Crashes if ':' is missing from input timesring.
+**** DONE Crashes if ':' is missing from input time-string.
      1. Also fails on '::' - to many colons.
      2. (note: add validation 1st to the server, then to the client)
          validation need to occur before storage.
@@ -32,7 +33,7 @@
 
 
 *** Bad
-**** TODO Often the  1st vist reports Timeout
+**** TODO Often the  1st visit reports Timeout
 **** DONE Redirect/get is not correct--sends the page to nowhere.
 I want to redirect back the start page.
 **** DONE Items entered from another client don't show
@@ -43,7 +44,7 @@ I want to redirect back the start page.
      ==========
      Mon Apr 03 05:23:55 PDT 2023
      17:00 is still accepted.
-**** DONE Date a top of form is static; need to be updated on refresh (or clock chage)
+**** DONE Date a top of form is static; need to be updated on refresh (or clock charge)
 **** TODO Needs ability to edit past events (especially the prior day)
 **** DONE Often it seems that WWW-form input is not excepted and needs to be repeated.
      Fixed by adding a confirmation dialog.  No posts can happen without consent.
@@ -66,7 +67,7 @@ I want to redirect back the start page.
 **** DONE Add time of day to page 
 **** DONE Add total time to page
 **** TODO Add a Notes field to Activity
-**** DONE Expand the mutiple-instrument fields in music practice
+**** DONE Expand the multiple-instrument fields in music practice
 **** Add Historical 'Edit/Add/Delete' to plan
 
 
