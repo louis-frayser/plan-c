@@ -9,7 +9,7 @@ such as household chores and engineering tasks. In the
 case of musical-practice entries, graphs are produced.
 
 ** Multi-user
-The app multi-user and requires users to login.
+The app is multi-user and requires users to login.
 
 *** Installation
 **** Requirements
@@ -20,10 +20,10 @@ The app multi-user and requires users to login.
 - Racket (see /Caveats/ below.)
 
 **** Procedure
-1. Git clone
+1. Git clone this package.
 2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir as config/htpasswd)
 3. Check the config file: config/planc-cfg.scm
-   If you wish to run in devel (vs production) mode, create the file "devel".
+   If you wish to run in devel (vs production) mode, create the file "devel" in the main directory.
    Run the file http-server.rkt (with DrRacket or racket.)
 
 *** Usage
