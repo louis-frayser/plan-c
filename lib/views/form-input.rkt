@@ -2,7 +2,7 @@
 
 (provide handle-input-form process-input-form)
 (require web-server/servlet srfi/19
-         "../db/db-api.rkt")
+         "../config.rkt" "../db/db-api.rkt")
 
 ;;; ==============================================================
 ;;;              INPUT FORM
@@ -27,4 +27,4 @@
         (timestr (->str 'duration ))
         (new-assoc (cons changed-key timestr)))
     (put-assoc-to-db new-assoc user #:tstamp stime))
-  (send/suspend/dispatch render-page))
+  (redirect-to %servlet-path%))

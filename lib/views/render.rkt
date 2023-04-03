@@ -18,7 +18,7 @@
 (generate-js)
 ;;;  ------------------------------------------------------------------------
 ;;;               REPORT/DISPLAY
-(define (render-page embed/url)
+(define (render-page (embed/url (lambda(f)%servlet-path%))) 
   (response/xexpr #:preamble #"<!DOCTYPE html>\n"
                   (plan-report embed/url handle-input-form-thunk)))
 
