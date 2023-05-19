@@ -15,6 +15,7 @@ pidfile="/run/plan-c.pid"
 procname="racket"
 depend() {
     need net
+    after postgresql
 }
 
 start(){
