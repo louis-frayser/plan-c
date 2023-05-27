@@ -1,4 +1,4 @@
-#lang debug web-server
+#lang debug web-server ;; http-serv.rkt
 
 (provide interface-version)
 
@@ -32,7 +32,7 @@
          (handle-input-form req render-page)]
         [else (send/back (render-page))]))
 ;;; This starts the servelet with param "start respons/xepr" (above)
-(require web-server/servlet-env)
+(require (only-in web-server/servlet-env serve/servlet))
 (serve/servlet start
                #:command-line?  %production%
                #:listen-ip #f

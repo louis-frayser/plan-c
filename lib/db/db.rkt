@@ -127,7 +127,7 @@
     a-gs))
 ;;; ----------------------------------------------------------------------------
 (define (db-get-rows #:user (user "%") #:for-date (date (get-ymd-string)))
-  (define sql (string-append "SELECT stime, category, activity, duration
+  (define sql (string-append "SELECT id, stime, category, activity, duration
 FROM assocs
 WHERE usr like '" user "' 
  AND stime >= '" date "'
@@ -147,10 +147,11 @@ WHERE usr like '" user "'
        (~0 (sql-timestamp-minute st))))
    
     (list
-     (stime (vector-ref vec 0))
-     (vector-ref vec 1)
+     (vector-ref vec 0)
+     (stime (vector-ref vec 1))
      (vector-ref vec 2)
-     (dur (vector-ref vec 3))))
+     (vector-ref vec 3)
+     (dur (vector-ref vec 4))))
 
   (map row->rec rows))
 

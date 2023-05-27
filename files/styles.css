@@ -29,7 +29,7 @@ table { width: 300px;
 	margin-left: 35px;
       }
 
-#crud-table { margin-left: 0px; width: 33%; }
+#crud-table { margin-left: 0px; width: 20el; }
 
 caption, caption a:visited {
     background-color: #8f7f00;
@@ -44,12 +44,14 @@ form {
     margin-left:15px;
     padding: 10px;
 }
-
+#crud_form { width: 26em; }
 input {width: 60px; }
 input .local-time { width: 120px;}
-
+input[type=date] {
+    width: 10em; background-color: #ffffee;
+}
 #stime,.form-link,button,label,select,.button { width: var(--cntrlw); }
-button { background-color: #ffffee; width: 120px; }
+button { background-color: #cec792; width: 120px; }
 select,input[type="submit"] {
     display: inline-block;
     background-color: #c7c0b0;
