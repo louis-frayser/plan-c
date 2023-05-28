@@ -27,27 +27,31 @@
 
 ;;; -------------------------------------------------------------------------
 (define (gen-table #:for-date (ymd  (get-ymd-string)))
-  (define tdata (db-get-rows
-                 #:for-date  ymd  #:user "frayser"))
+  (define tdata (db-get-rows #:for-date  ymd  #:user "frayser"))
+
+  (define (gen-new-button) '(button ((type "button")(id "add_button"))"Add"))
 
   (define (gen-row rdata)
     (let ((id (~s (car rdata))))
-    `(tr
-      (td (input ((type "radio") (id ,id) (value ,id) (name "sel"))))
-      (td ,(second rdata))
-      (td ,(third rdata))
-      (td ,(fourth rdata))
-      (td ,(last rdata)))))
+      `(tr
+        (td (input ((type "radio") (class "sel_col") (id, id) (rowid ,id) (value ,id) (name "sel"))))
+        (td ,(second rdata))
+        (td ,(third rdata))
+        (td ,(fourth rdata))
+        (td ((class "duration")),(last rdata)))))
   
   `(table ((id "crud_table"))
-          (caption (a ((href ,%servlet-path%)
+          (caption ,(gen-new-button) 
+                   (a ((href ,%servlet-path%)
                        (title "Go back to main form"))
                       (input ((id "crud_date")(name "req_date")(type "date") (value ,ymd)))))
-          (tr (th "Select")
-              (th "Start")
-              (th ((id "cat-col")) "Category")
-              (th "Activity")
-              (th "Duration"))
+          ;(col ((id "sel_col"))) (col ((id "start_col"))) (col ((id "cat_col"))) (col ((id "act_col")))(col)
+          (thead
+           (tr (th ((id "thsel"))"Select")
+               (th "Start")
+               (th ((id "thcat")) "Category")
+               (th "Activity")
+               (th ((class "duration"))"Duration")))
           "\n"
-          ,@(add-between (map gen-row #R tdata) "\n") "\n"))
+          ,@(add-between (map gen-row tdata) "\n") "\n"))
 ;;; -------------------------------------------------------------------------

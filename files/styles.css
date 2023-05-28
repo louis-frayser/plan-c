@@ -2,13 +2,13 @@
     --lcolw: 395px;
     --rcolw: 380px;
     --wrapw: 775px; /* Max is 960px for 2 columns HD */
-    --cntrlw: 160px;
-    _bgcolor: #e7e0e0;
-    _textcolor: black;
+    --cntrlw: 8em;
+    --bgcolor: #e7e0e0;
+    --textcolor: black;
 }
 
-body { background-color: #e7e0e0; }
-#big-charts { background-color: var(_bgcolor); color: var(_tetxcolor) ;}
+body { background-color: var(--bgcolor); }
+#big-charts { background-color: var(--bgcolor); color: var(--textcolor) ;}
 
 /* These 3 lines set layout */
 #wrap { width: var(--wrapw); }
@@ -29,7 +29,7 @@ table { width: 300px;
 	margin-left: 35px;
       }
 
-#crud-table { margin-left: 0px; width: 20el; }
+
 
 caption, caption a:visited {
     background-color: #8f7f00;
@@ -44,13 +44,25 @@ form {
     margin-left:15px;
     padding: 10px;
 }
-#crud_form { width: 26em; }
+/* -------------- Crud form -----------------------------*/
+#crud_table { margin-left: 0px; width: 30em; layout: fixed; }
+#crud_form { width: 30em; }
+#add_button { width: 3em; position: relative; right: 4em;}
+/* #dur,#start,#cat,#act { width:7em; } */
+#thesel,.sel_col, #save { width: 4em; column-width: 4em;  }
+#start_col,#dur_col,.duration { column-width: 25px; width: 4em; }
+#thcat { column-width: 8em; } #cat { width: 8em; }
+#act_col { column-width: 12em; }
+/* */
+
 input {width: 60px; }
 input .local-time { width: 120px;}
 input[type=date] {
     width: 10em; background-color: #ffffee;
 }
-#stime,.form-link,button,label,select,.button { width: var(--cntrlw); }
+#stime,.form-link,button,label,select,.button {
+    margin-right: 15px;
+    width: var(--cntrlw); }
 button { background-color: #cec792; width: 120px; }
 select,input[type="submit"] {
     display: inline-block;
@@ -65,7 +77,7 @@ label { border: 1px insert;    margin-top: 8px;
 	text-align: right;
       }
 
-th,td { border: 1px inset; }
+th,td { border: 1px inset; vertical-align:bottom; }
 th { background-color: #d0d0c0; }
 
 #ttotal {
