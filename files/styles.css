@@ -53,6 +53,8 @@ form {
 #start_col,#dur_col,.duration { column-width: 25px; width: 4em; }
 #thcat { column-width: 8em; } #cat { width: 8em; }
 #act_col { column-width: 12em; }
+
+#crud_table caption a { margin-right: 15px; float: right; }
 /* */
 
 input {width: 60px; }

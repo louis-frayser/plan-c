@@ -42,10 +42,9 @@
   
   `(table ((id "crud_table"))
           (caption ,(gen-new-button) 
-                   (a ((href ,%servlet-path%)
-                       (title "Go back to main form"))
-                      (input ((id "crud_date")(name "req_date")(type "date") (value ,ymd)))))
-          ;(col ((id "sel_col"))) (col ((id "start_col"))) (col ((id "cat_col"))) (col ((id "act_col")))(col)
+                   (input ((id "crud_date")(name "req_date")(type "date") (value ,ymd)))
+                   (a (id "ida_ret")((href ,%servlet-path%)(title "Go back to main form"))
+                      "Plan-C"))
           (thead
            (tr (th ((id "thsel"))"Select")
                (th "Start")
