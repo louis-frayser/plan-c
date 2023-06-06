@@ -1,6 +1,6 @@
 .PHONY: FORCE
 DBTOP=files
-default: README.md
+default: README.org
 
 
 help:
