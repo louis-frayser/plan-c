@@ -1,12 +1,11 @@
 #lang racket
 
-(provide ~0 a-month-ago-str days-ago->string elapsed->start-time-str get-ymd-string hs:take-right 
-         integer read-file stderr
+(provide ~0 days-ago->string elapsed->start-time-str get-ymd-string hs:take-right 
+          read-file stderr
          string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
 (require srfi/1 srfi/19
          db)
-
 ;; ========================================================================
 (require syntax/parse/define)
 (define stderr (current-error-port))
@@ -22,8 +21,7 @@
 
 (define (~0 n) (~a n  #:align 'right #:min-width 2  #:pad-string "0"))
 
-(define (integer  x)
-  (inexact->exact (round x)))
+
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings
 (define (string-time+ .  strings)
@@ -49,14 +47,7 @@
 
 (define (time-string->hrs hh:mm-str)
   (/ (time-string->mins hh:mm-str) 60))
-;; .......................................................................
 
-(define (a-month-ago-str)
-  ;; Returns last-month on the cadinal day 1 before today
-  (let*((jdn (current-julian-day))
-        (jmonth-ago (integer (- jdn 30)))
-        (month-ago (julian-day->date jmonth-ago)))
-    (date->string month-ago "~Y-~m-~d")))
 ;; ...........................................................................
 
 (define (days-ago->date days-ago)

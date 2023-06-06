@@ -4,12 +4,13 @@
 (provide minutes-daily->svg-file instrument-summary->svg-file)
 (require srfi/13)
 (require simple-svg)
+(require (only-in racket-hacks integer))
 (require "../db/db-files.rkt" "../lib.rkt" "../config.rkt")
 ;;; --------------------------------------------------------------------------
 
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
 ;;; ------------------------------------------------------------------------
-(define *sstyle
+#;(define *sstyle
   (let ([_sstyle (sstyle-new)])
     (sstyle-set! _sstyle 'stroke "green")
     (sstyle-set! _sstyle 'stroke-width 1)

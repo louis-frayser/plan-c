@@ -5,9 +5,10 @@
 (require srfi/43
          "config.rkt" "db/db-api.rkt"
          "lib.rkt" "views/series-to-svg.rkt")
+(require (only-in racket-hacks a-month-ago-str integer fill-missing-dates))
 
 (provide render-svg-img render-svg-time/instrument)
-
+;; -----------------------------------------------------------------------------------------------
 (define (music-time-series #:since (sdate (a-month-ago-str)) #:limit (limit 30))
   ;; Replace files with their contents
   (define assocs-by-datestr
@@ -28,21 +29,21 @@
   (define music-times-by-date
     (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) music-by-date))
 
-  (map (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
-       music-times-by-date) )
+  (fill-missing-dates (map (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
+                           music-times-by-date) '("0:00")) )
 ;;
 ;; -----------------------------------------------------------------------------
 (define (get-music-minutes-daily #:since (sdate (a-month-ago-str))
                                  #:limit (lim 30))
-  (map (lambda(rec)(cons (car rec) (time-string->mins (second rec))))
+  (map (lambda(rec) (cons (car rec) (time-string->mins (second rec))))
        (music-time-series #:since sdate #:limit lim )))
+(get-music-minutes-daily)
 ;; ...........................................................................
-
 ;; SMA for music-time-series 
 ;; FIXME: Does not handle cases where there's not enough data
 ;;; returns #f in this case
 (define (_music-mins-sma #:n (n 30) )
-  ;; Need 2n-1 = 59 samples
+  ;; Need 2n-1 = 59 samples for a good SMA
   (define lim (- (* 2 n) 1))
   (define working-vec
     (list->vector
