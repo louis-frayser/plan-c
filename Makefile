@@ -29,7 +29,7 @@ clean:  Attic
 
 install:
 	chgrp wheel scripts
-	chgrp +ws scripts
+	chmod +ws scripts
 	mkdir -p ${DBTOP}/db
 	chgrp wheel ${DBTOP}/db
 	chmod g+ws ${DBTOP}/db
