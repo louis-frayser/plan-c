@@ -14,7 +14,7 @@ function theDomHasLoaded(e) {
 function pageFullyLoaded(e) {
     // Update any data dependant on the form values
     current_date=crud_date.value;
-    
+
 }
 
 function get_data_for_date(){
@@ -30,26 +30,32 @@ function local_insert(){
 	row.insertCell(i);
     // The submit button
     row.cells[0].innerHTML='<button id="save" type="Submit"  name="req_action" value="insert">Save</button>';
+
     var spec = [row.cells[0]
-		, {type : "hidden", id : "recid", value: "-1",             name : "rec_id" }
 		,{ type : "text",   id : "start", value: "09:00",          name : "stime" }
 		,{ type : "text",   id : "cat",   value: "Music Practice", name : "category" }
 		,{ type : "text",   id : "act",   value:  "Cello",        name : "activity" }
-		,{ type : "text",   id : "dur",    value: "00:30",         name : "duration" }];
+		,{ type : "text",   id : "dur",    value: "00:30",         name : "duration" }
+		, {type : "hidden", id : "recid", value: "-1",             name : "rec_id" }
+	       ];
 
-    for (i=1; i <= 4; i++) {
-	row.cells[i].innerHTML=s=
-	    '<input '
+    function make_row(i){
+  	var s=  '<input '
 	    + ' type="' + spec[i].type
 	    + '" id="'  + spec[i].id
     	    + '" value="'  + spec[i].value
     	    + '" name="'  + spec[i].name
 	    + '">';
 	console.log(s);
+	return s;
+    }
 
+    for (i=1; i <= 4; i++) {
+	row.cells[i].innerHTML=make_row(i);
 	console.log(row.cells[i].innerHTML);
     }
-    // save.onclick=crud_form.submit;                               
     Mode=modes.Adding;
 }
+// save.onclick=crud_form.submit;
+
 

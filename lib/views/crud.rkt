@@ -17,12 +17,13 @@
            (link ((rel "stylesheet")(href "/files/styles.css")))
            (script ((src "/scripts/js/crud.js")#;(type "module")))
            )
-                                                   
-     (body 
+
+     (body
       (h1 "CRUD") "\n"
       (h2 "Create, Read, Update, Delete") "\n"
       (form ((id "crud_form")(action ,%crud-url%) (method "get"))"\n"
-            ,(gen-table #:for-date #R  date) "\n") "\n" )
+            ,(gen-table #:for-date #R  date) "\n"
+            (div ((id "hidden_vars")))) "\n" )
      )))
 
 ;;; -------------------------------------------------------------------------
@@ -39,9 +40,9 @@
         (td ,(third rdata))
         (td ,(fourth rdata))
         (td ((class "duration")),(last rdata)))))
-  
+
   `(table ((id "crud_table"))
-          (caption ,(gen-new-button) 
+          (caption ,(gen-new-button)
                    (input ((id "crud_date")(name "req_date")(type "date") (value ,ymd)))
                    (a ((id "ida_ret")(href ,%servlet-path%)(title "Go back to main form"))
                       "Plan-C"))
