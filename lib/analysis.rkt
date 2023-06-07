@@ -1,4 +1,4 @@
-#lang debug racket
+#lang debug racket ; analysis.rkt
 ;;;; Read database
 ;;;; Convert data in 'Music category into a time series date -vs time practiced
 ;;;;
@@ -29,16 +29,18 @@
   (define music-times-by-date
     (map (lambda(mbd)(list (car mbd ) (map cdr (second mbd)))) music-by-date))
 
-  (fill-missing-dates (map (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
-                           music-times-by-date) '("0:00")) )
+    (fill-missing-dates  (map (lambda(ctbd)( list (first ctbd) (apply string-time+ (second ctbd))))
+                           music-times-by-date) '("0:00")
+                                                #:start sdate #:end (get-ymd-string)) )
 ;;
 ;; -----------------------------------------------------------------------------
+
 (define (get-music-minutes-daily #:since (sdate (a-month-ago-str))
                                  #:limit (lim 30))
   (map (lambda(rec) (cons (car rec) (time-string->mins (second rec))))
-       (music-time-series #:since sdate #:limit lim )))
-(get-music-minutes-daily)
+        (music-time-series #:since sdate #:limit lim )))
 ;; ...........................................................................
+
 ;; SMA for music-time-series 
 ;; FIXME: Does not handle cases where there's not enough data
 ;;; returns #f in this case

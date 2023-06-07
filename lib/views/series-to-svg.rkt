@@ -11,10 +11,10 @@
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
 ;;; ------------------------------------------------------------------------
 #;(define *sstyle
-  (let ([_sstyle (sstyle-new)])
-    (sstyle-set! _sstyle 'stroke "green")
-    (sstyle-set! _sstyle 'stroke-width 1)
-    _sstyle))
+    (let ([_sstyle (sstyle-new)])
+      (sstyle-set! _sstyle 'stroke "green")
+      (sstyle-set! _sstyle 'stroke-width 1)
+      _sstyle))
 
 (define *sstyle-blk
   (let ([_sstyle (sstyle-new)])
@@ -88,18 +88,23 @@
 (define (virtical-bar-graph series #:sma (sma-series #f))
   ;; if series is an alist then use car as an index (ix), else count 1,2,3...
   ;;; ix must be string.
+  ;;; NOTE: If series is > 30 elements the plot is truncated due to imgae size, so
+  ;;; we limit _series to 30.
   (define _series
-    (cond
-      ( (and (pair? series) (pair? (car series)) (pair? (cdar series)))
-        (error "assoc list series must be a list of dotted pairs!"))
-      ((and (pair? series) (pair? (car series)))
-       (map (lambda(pr)(cons (string-take-right (car pr) 2) (cdr pr)))
-            series))
-      (else (let loop ( (rest series) (i 1) (acc '()))
-              (if (pair? rest)
-                  (loop (cdr rest) (+ i 1)
-                        (cons (cons (number->string i) (car rest)) acc))
-                  (reverse acc))))))
+    (take-right 
+     (cond
+       ( (and (pair? series) (pair? (car series)) (pair? (cdar series)))
+         (error "assoc list series must be a list of dotted pairs!"))
+       ((and (pair? series) (pair? (car series)))
+        (map (lambda(pr)(cons (string-take-right (car pr) 2) (cdr pr)))
+             series))
+       (else (let loop ( (rest series) (i 1) (acc '()))
+               (if (pair? rest)
+                   (loop (cdr rest) (+ i 1)
+                         (cons (cons (number->string i) (car rest)) acc))
+                   (reverse acc)))))
+     30))
+  
   (define (bar-graph5)
     ;;; Number (and invert) each SMA value with counter => a series of pairs
     ;;; Shift x +(width/2) to place line vertices in middle of bars
