@@ -26,9 +26,11 @@ clean:  Attic
 	@find ${DBTOP}/db -name "*~" -delete
 	@echo CLEAN
 
+config/passwd: config/passwd.guest
+	@[ -e "$@" ] || cp -bv $< $@
+	@echo "USER: guest, PASSWORD: guest (Use 'htpasswd -s config/passwd user' to change )"
 
-
-install ${DBTOP}/db:
+install ${DBTOP}/db: config/passwd
 	chgrp wheel scripts
 	chmod +ws scripts
 	mkdir -p ${DBTOP}/db
