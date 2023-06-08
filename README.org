@@ -10,6 +10,8 @@ case of musical-practice entries, graphs are produced.
 
 ** Multi-user
 The app is multi-user and requires users to login.
+Clear any interfering login from the browser's password manger if there's trouble 
+with the entered login being overwritten with another user/password pair.
 
 *** Installation
 **** Requirements
@@ -17,23 +19,33 @@ The app is multi-user and requires users to login.
             that user (probably you) must exist in Postgres with
 	    a default database.  No password is used, but one can be
 	    configured in config/planc-cfg.scm.
+1. If you need a new user, to create a database user, 
+  log in as the database administrator (postgres on my machine) and run the script createuser --interactive <username>.
+1.1 The user needs create-database permission.
+2. Run psql as the new user but to the postgres database. "psql -U <username> postgres."
+2.2 Now create the Plan C database.  "CREATE DATABASE plan_c;", the exit "\q".
+
 - Racket (see /Caveats/ below.)
 
-**** Procedure
+**** Procedure (production mode)
 1. Git clone this package.
 2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir as config/htpasswd)
+2.2. You may user the passwd.guest file whee "guest" is bother the password and the userid.
 3. Check the config file: config/planc-cfg.scm
    If you wish to run in devel (vs production) mode, create the file "devel" in the main directory.
    Run the file http-server.rkt (with DrRacket or racket.)
+4. Run "make install" to create a data directory and fix up a few permissions.
+5. Run make run to start Plan C.
+
+***** Developer Mode
+1. After the plan_c database is created in Postgresql, use Dr. Racket to run http-serv.rkt.
 
 *** Usage
-3. Browse  http://localhost:8008/ (production mode). Use port 8000 for /devel/ mode.
+Browse  http://localhost:8008/ (production mode). Use port 8000 for /devel/ mode.
    
 ***** Caveats
 You will have to install the following Racket packages in order to run the app:
-- canonicalize-path
 - debug
-- fmt
 - seq 
 - simple-svg
 - yaml
