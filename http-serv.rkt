@@ -33,7 +33,7 @@
         [(regex-match-path "/crud") (crud bindings req)]
         [(exists-binding? 'change bindings)
          (handle-input-form req render-page)]
-        [else (send/back (render-page))]))
+        [else (send/back (render-page #:user (request->user req)))]))
 ;;; This starts the servelet with param "start respons/xepr" (above)
 (require (only-in web-server/servlet-env serve/servlet))
 (serve/servlet start

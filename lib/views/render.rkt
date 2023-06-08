@@ -18,18 +18,18 @@
 (generate-js)
 ;;;  ------------------------------------------------------------------------
 ;;;               REPORT/DISPLAY
-(define (render-page (embed/url (lambda(f)%servlet-path%))) 
+(define (render-page (embed/url (lambda(f)%servlet-path%)) #:user user) 
   (response/xexpr #:preamble #"<!DOCTYPE html>\n"
-                  (plan-report embed/url handle-input-form-thunk)))
+                  (plan-report embed/url handle-input-form-thunk #:user user)))
 
 (define (handle-input-form-thunk req)
   (handle-input-form req render-page))
 
-(define (plan-report embed/url handle-input-form)
-  (report (get-current-assoc-groups) embed/url handle-input-form))
+(define (plan-report embed/url handle-input-form #:user user)
+  (report (get-current-assoc-groups #:for-user user) embed/url handle-input-form #:user user))
 ;;; ...........................................................................
 
-(define (report assoc-groups embed/url handle-input-form)
+(define (report assoc-groups embed/url handle-input-form #:user user)
   ;; Punch a whole in the form elemet's attributes; insert'(action ,embed/url)
   (define (add-form-action form)
     (let* (( head (first form))
@@ -78,8 +78,8 @@
                     ,(groups-html)  ; Include a table made from group data
                     "\n"
                     ,(summary-html)
-                    ,(render-svg-img)
-                    ,(render-svg-time/instrument)); Link to graph
+                    ,(render-svg-img #:user user)
+                    ,(render-svg-time/instrument #:for-user user)); Link to graph
                (div ((id "right_col"))
                     ,(add-form-action ; Add 'action' attribute
                       (string->xexpr  ;  to included form

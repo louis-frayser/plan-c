@@ -1,4 +1,4 @@
-#lang racket
+#lang debug racket
 
 (provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
          db-get-current-assoc-groups db-get-rows 
@@ -60,8 +60,8 @@
 ;;; ............................................................................
 ;;; Get records as associations ((category activity) . duration )
 ;;; NOTE:  Also consider importing any recs writen directly to disk
-;;;; SEE: #'db-update-from-disk (Invoked above everytime the system starts)
-(define (db-get-assocs #:since (beginning "2022-01-01"))
+;;;; SEE: #'db-update-from-disk (Invoded above everytime the system starts)
+(define (db-get-assocs #:for-user user #:since (beginning "2022-01-01"))
   (define (massage data)
     (let*((l (vector->list data) )
           (rest (cdr l))
@@ -78,11 +78,12 @@
      " AS day,category,activity,duration"
      " FROM " %table%
      " WHERE stime >= timestamp '" beginning "' "
+     " AND usr ='" user "'"
      " ORDER BY stime;"))
   (map massage (query-rows pgc sql)))
 
 
-(define (db-get-current-assoc-groups)
+(define (db-get-current-assoc-groups #:for-user user)
   (define (group-by-category assocs)
     (define (f  g)
       (let ((cat (caaar g))
@@ -91,12 +92,12 @@
         (cons cat (map list acts durats))))
     (map  f (group-by caar assocs)))
 
-  (group-by-category (db-get-assocs #:since (get-ymd-string))))
+  (group-by-category (db-get-assocs #:for-user user #:since (get-ymd-string))))
 ;;; ----------------------------------------------------------------------------
 ;;; assocs as the CDRs of dates from "stime"
 ;;; Curently user is hardcoded in planc-rc.scm, but could be stored in the assoc
 (define (db-get-sdate+assocs #:since (beginning "2022-01-01")
-                             #:user (user  %user%))
+                             #:user user)
   (define (massage rcrd)
     (let*((l (vector->list rcrd) )
           (stime (car (string-split (car l))))
@@ -115,22 +116,23 @@
      "select format('%5s', date_trunc('day', stime))"
      " as day,category,activity,duration"
      " from " %table%
-     " where stime >= timestamp '" beginning "' and usr like '" user "'"
-     "ORDER by stime; "))
-  (map massage (query-rows pgc sql)))
+     " where stime >= timestamp '" beginning "' and usr = '" user "'"
+     " ORDER by stime; "))
+  (map massage (query-rows pgc #RR sql)))
+;;; ............................................................................
 
 (define (db-get-assocs-by-datestr  #:since (beginning "2022-01-01")
-                                   #:user (user %user%))
+                                   #:user user )
   (let* ( (date.assocs (db-get-sdate+assocs #:user user #:since beginning))
           (gs (group-by car date.assocs string=? ))
           (a-gs (map (lambda(g)
                        (list (caar g) (map cadr g))) gs)))
     a-gs))
 ;;; ----------------------------------------------------------------------------
-(define (db-get-rows #:user (user %user%) #:for-date (date (get-ymd-string)))
+(define (db-get-rows #:user user #:for-date (date (get-ymd-string)))
   (define sql (string-append "SELECT id, stime, category, activity, duration
-FROM assocs
-WHERE usr = '" user "' 
+FROM " %table% " "
+"WHERE usr = '" user "' 
  AND stime >= '" date "'
  AND stime < timestamp '" date "' + '1 day'"))
 
@@ -179,8 +181,8 @@ WHERE usr = '" user "'
 ;;; DEMOS (requires  "#lang demo racket" )
 ;;; Music for time studied per instrument past 30-days
 ;  #RRR (db-get-music-durations-by-day #:since (a-month-ago-str))
-;  #R(db-get-current-assoc-groups)
-#;(let ((gs (db-get-current-assoc-groups)))
+;  #R(db-get-current-assoc-groups #:for-user "guest")
+#;(let ((gs (db-get-current-assoc-groups #:for-user "guest")))
     (displayln gs)
     (displayln (length gs)))
 

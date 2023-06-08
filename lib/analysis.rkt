@@ -9,10 +9,11 @@
 
 (provide render-svg-img render-svg-time/instrument)
 ;; -----------------------------------------------------------------------------------------------
-(define (music-time-series #:since (sdate (a-month-ago-str)) #:limit (limit 30))
+
+(define (music-time-series #:user user #:since (sdate (a-month-ago-str)) #:limit (limit 30))
   ;; Replace files with their contents
   (define assocs-by-datestr
-    (hs:take-right limit (get-assocs-by-datestr #:since sdate)))
+    (hs:take-right limit (get-assocs-by-datestr #:since sdate #:user user)))
 
   ;;; Assocs by date...
   (define assocs-by-date
@@ -35,22 +36,22 @@
 ;;
 ;; -----------------------------------------------------------------------------
 
-(define (get-music-minutes-daily #:since (sdate (a-month-ago-str))
+(define (get-music-minutes-daily #:user user #:since (sdate (a-month-ago-str))
                                  #:limit (lim 30))
   (map (lambda(rec) (cons (car rec) (time-string->mins (second rec))))
-        (music-time-series #:since sdate #:limit lim )))
+        (music-time-series #:user user #:since sdate #:limit lim )))
 ;; ...........................................................................
 
 ;; SMA for music-time-series 
 ;; FIXME: Does not handle cases where there's not enough data
 ;;; returns #f in this case
-(define (_music-mins-sma #:n (n 30) )
+(define (_music-mins-sma #:user user #:n (n 30) )
   ;; Need 2n-1 = 59 samples for a good SMA
   (define lim (- (* 2 n) 1))
   (define working-vec
     (list->vector
      (map cdr
-          (get-music-minutes-daily 
+          (get-music-minutes-daily #:user user 
            #:since (days-ago->string (* 2 n)) #:limit lim))))
   (define sum0 (apply + (vector->list (vector-copy working-vec 0 (- n 1)))))
   
@@ -61,16 +62,16 @@
                              (list sum0)
                              (vector-copy working-vec n (- (* 2 n) 1))))))
 
-(define (music-mins-sma #:n (n 30) )
-  (with-handlers ( (exn:fail? (lambda(ex) #f)))  (_music-mins-sma #:n n)))
+(define (music-mins-sma #:n (n 30) #:user user )
+  (with-handlers ( (exn:fail? (lambda(ex) #f)))  (_music-mins-sma #:n n #:user user)))
 ;; ...........................................................................
 
-(define (render-svg-img) ; Render <img> with a random tag in it's URL
+(define (render-svg-img #:user user) ; Render <img> with a random tag in it's URL
   (define svg-basename "music-practice-minutes-daily.svg")
   (define (render-svg-to-file)
     (define svg-path (build-path %orig-dir% "htdocs" svg-basename))
-    (minutes-daily->svg-file (get-music-minutes-daily) svg-path
-                             #:sma (music-mins-sma #:n 30)))
+    (minutes-daily->svg-file (get-music-minutes-daily #:user user) svg-path
+                             #:sma (music-mins-sma #:n 30 #:user user)))
   (render-svg-to-file)   ; The tag is to force reloading.
   `(a ((href "/"))
       (img ((id "daily_time" )
@@ -80,12 +81,10 @@
             (src ,(string-append "/" svg-basename "?" (~a (random))))))))
 ;; -----------------------------------------------------------------------------
 ;;; Get agregate practice-duration by instrument:
-(define (get-music-group-summary)
-
+(define (get-music-group-summary #:for-user user)
   (define (get-music-assocs)
     (filter (compose (curry string=? "Music Practice") caar)
-            (get-assocs #:since (a-month-ago-str))))
-
+            (get-assocs #:for-user user #:since (a-month-ago-str))))
   (define assoc-activity cadar )
   (define assoc-instrument assoc-activity )
 
@@ -111,7 +110,7 @@
        (group-by-instrument
         (append (get-music-assocs) (get-all-instrument-templates)))))
 ;; ----------------------------------------------------------------------------
-(define (render-svg-time/instrument)
+(define (render-svg-time/instrument #:for-user user)
   (define (pair>=? a0 a1)
     (not (pair<? a0 a1)))
   (define (pair<? a0 a1)
@@ -119,7 +118,7 @@
   (let* ((filebase "htdocs/instrument-summary.svg")
          (url (string-append "/" filebase))
          (path (build-path %orig-dir% filebase)))
-    (instrument-summary->svg-file (sort (get-music-group-summary) pair>=?) path)
+    (instrument-summary->svg-file (sort (get-music-group-summary #:for-user user) pair>=?) path)
     `(a ((href "/"))
         (img ((src ,url)(id "ins-summary")
                         (title "30-day Accumulated time by instrument")
