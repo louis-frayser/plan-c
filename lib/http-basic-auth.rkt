@@ -3,7 +3,12 @@
 (require web-server/servlet)
 (require file/sha1 net/base64)
 
-(provide htpasswd-credentials-valid? authenticated?)
+(provide htpasswd-credentials-valid? authenticated? request->user)
+
+(define (request->user req)
+  (match (request->basic-credentials req)
+    [(cons user pass) (bytes->string/utf-8 user)]
+    [else #f]))
 
 (define (authenticated? passwd-file req)
   ; checks if a request has valid credentials:

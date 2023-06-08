@@ -7,7 +7,7 @@
 ;;; ==============================================================
 ;;;              INPUT FORM
 (define (handle-input-form req render-page)
-  (define user (car (request->basic-credentials req)))
+  (define user (request->user req))
   (process-input-form (request-bindings req) user render-page))
 
 (define (process-input-form bindings user render-page)

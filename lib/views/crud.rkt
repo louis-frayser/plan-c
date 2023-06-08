@@ -3,6 +3,7 @@
 
 (require web-server/servlet)
 (require "../config.rkt"
+         "../http-basic-auth.rkt"
          (only-in "../db/db.rkt" db-get-rows)
          "../lib.rkt")
 ;;;;; ============================================================================
@@ -22,13 +23,13 @@
       (h1 "CRUD") "\n"
       (h2 "Create, Read, Update, Delete") "\n"
       (form ((id "crud_form")(action ,%crud-url%) (method "get"))"\n"
-            ,(gen-table #:for-date #R  date) "\n"
+            ,(gen-table #:for-date date #:for-user (request->user req)) "\n"
             (div ((id "hidden_vars")))) "\n" )
      )))
 
 ;;; -------------------------------------------------------------------------
-(define (gen-table #:for-date (ymd  (get-ymd-string)))
-  (define tdata (db-get-rows #:for-date  ymd  #:user "frayser"))
+(define (gen-table #:for-date (ymd  (get-ymd-string)) #:for-user user)
+  (define tdata (db-get-rows #:for-date  ymd  #:user user))
 
   (define (gen-new-button) '(button ((type "button")(id "add_button"))"Add"))
 
