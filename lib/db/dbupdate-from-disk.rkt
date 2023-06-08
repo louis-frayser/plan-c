@@ -77,7 +77,7 @@
       (define (file->assoc p)
         (let*((a   (read-file p))
               (d (cdr a)))
-          (cons (car a) (list d (seconds->date (stime p)) "frayser"))))
+          (cons (car a) (list d (seconds->date (stime p)) %user%))))
       (map file->assoc (get-assoc-paths-since-secs #:since beginning)))
 
     (define(do-insert rec) (query-exec pgc (print-sql rec #:to-string? #t)))
