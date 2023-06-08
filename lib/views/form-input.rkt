@@ -2,7 +2,7 @@
 
 (provide handle-input-form process-input-form)
 (require web-server/servlet srfi/19
-         "../config.rkt" "../db/db-api.rkt")
+         "../config.rkt" "../db/db-api.rkt" "../http-basic-auth.rkt")
 
 ;;; ==============================================================
 ;;;              INPUT FORM
