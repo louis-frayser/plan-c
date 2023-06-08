@@ -60,7 +60,7 @@
 ;;; ............................................................................
 ;;; Get records as associations ((category activity) . duration )
 ;;; NOTE:  Also consider importing any recs writen directly to disk
-;;;; SEE: #'db-update-from-disk (Invoded above everytime the system starts)
+;;;; SEE: #'db-update-from-disk (Invoked above everytime the system starts)
 (define (db-get-assocs #:since (beginning "2022-01-01"))
   (define (massage data)
     (let*((l (vector->list data) )
@@ -94,6 +94,7 @@
   (group-by-category (db-get-assocs #:since (get-ymd-string))))
 ;;; ----------------------------------------------------------------------------
 ;;; assocs as the CDRs of dates from "stime"
+;;; Curently user is hardcoded in planc-rc.scm, but could be stored in the assoc
 (define (db-get-sdate+assocs #:since (beginning "2022-01-01")
                              #:user (user  %user%))
   (define (massage rcrd)
@@ -126,10 +127,10 @@
                        (list (caar g) (map cadr g))) gs)))
     a-gs))
 ;;; ----------------------------------------------------------------------------
-(define (db-get-rows #:user (user "%") #:for-date (date (get-ymd-string)))
+(define (db-get-rows #:user (user %user%) #:for-date (date (get-ymd-string)))
   (define sql (string-append "SELECT id, stime, category, activity, duration
 FROM assocs
-WHERE usr like '" user "' 
+WHERE usr = '" user "' 
  AND stime >= '" date "'
  AND stime < timestamp '" date "' + '1 day'"))
 
