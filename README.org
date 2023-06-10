@@ -23,9 +23,10 @@ configured in config/planc-cfg.scm.
 1. If you need a new user, to create a database user, 
    log in as the database administrator (postgres on my machine) and run the script createuser --interactive <username>.
 1.1 The user needs create-database permission.
+
 1.2. Run psql as the new user but connect to the *postgres* database.
 #+BEGIN_SRC sh
-  "psql -U <username> postgres."
+  psql -U <username> postgres
 #+END_SRC
 
 2.2 Now create the Plan C database, then exit.
