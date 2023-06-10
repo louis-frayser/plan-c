@@ -15,22 +15,32 @@ with the entered login being overwritten with another user/password pair.
 
 *** Installation
 **** Requirements
-- PostgreSQL --Plan C uses the user-id of the process that runs racket.
-            that user (probably you) must exist in Postgres with
-	    a default database.  No password is used, but one can be
-	    configured in config/planc-cfg.scm.
+- PostgreSQL
+-- Plan C uses the user-id of the process that runs racket.
+that user (probably you) must exist in Postgres with
+a default database.  No password is used, but one can be
+configured in config/planc-cfg.scm.
 1. If you need a new user, to create a database user, 
-  log in as the database administrator (postgres on my machine) and run the script createuser --interactive <username>.
+   log in as the database administrator (postgres on my machine) and run the script createuser --interactive <username>.
 1.1 The user needs create-database permission.
-2. Run psql as the new user but to the postgres database. "psql -U <username> postgres."
-2.2 Now create the Plan C database.  "CREATE DATABASE plan_c;", the exit "\q".
+1.2. Run psql as the new user but connect to the *postgres* database.
+#+BEGIN_SRC sh
+  "psql -U <username> postgres."
+#+END_SRC
+
+2.2 Now create the Plan C database, then exit.
+#+BEGIN_SRC sql
+  CREATE DATABASE plan_c;
+  \q
+#+END_SRC
+
 
 - Racket (see /Caveats/ below.)
 
 **** Procedure (production mode)
 1. Git clone this package.
 2. Use htpasswd (from Apache) to add a user to the password file (currently in the config dir as config/htpasswd)
-2.2. You may user the passwd.guest file whee "guest" is bother the password and the userid.
+2.2. You may user the passwd.guest file where "guest" is both the password and the userid.
 3. Check the config file: config/planc-cfg.scm
    If you wish to run in devel (vs production) mode, create the file "devel" in the main directory.
    Run the file http-server.rkt (with DrRacket or racket.)
