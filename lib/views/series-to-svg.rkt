@@ -1,20 +1,15 @@
-#lang debug racket
+#lang debug racket ;; series-to-svg.rkt
 ;;;; bargraph from a data series
 ;;; ==========================================================================
 (provide minutes-daily->svg-file instrument-summary->svg-file)
 (require srfi/13)
 (require simple-svg)
-(require (only-in racket-hacks integer))
+(require (only-in racket-hacks integer take-end))
 (require "../db/db-files.rkt" "../lib.rkt" "../config.rkt")
 ;;; --------------------------------------------------------------------------
 
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
 ;;; ------------------------------------------------------------------------
-#;(define *sstyle
-    (let ([_sstyle (sstyle-new)])
-      (sstyle-set! _sstyle 'stroke "green")
-      (sstyle-set! _sstyle 'stroke-width 1)
-      _sstyle))
 
 (define *sstyle-blk
   (let ([_sstyle (sstyle-new)])
@@ -85,13 +80,14 @@
   bar-graph5h)
 ;;;............................................................................
 
-(define (virtical-bar-graph series #:sma (sma-series #f))
+(define (vertical-bar-graph series #:sma (sma-series #f))
   ;; if series is an alist then use car as an index (ix), else count 1,2,3...
   ;;; ix must be string.
   ;;; NOTE: If series is > 30 elements the plot is truncated due to imgae size, so
   ;;; we limit _series to 30.
   (define _series
-    (take-right 
+    (take-end
+     30
      (cond
        ( (and (pair? series) (pair? (car series)) (pair? (cdar series)))
          (error "assoc list series must be a list of dotted pairs!"))
@@ -102,9 +98,9 @@
                (if (pair? rest)
                    (loop (cdr rest) (+ i 1)
                          (cons (cons (number->string i) (car rest)) acc))
-                   (reverse acc)))))
-     30))
-  
+                   (reverse acc)))))))
+
+
   (define (bar-graph5)
     ;;; Number (and invert) each SMA value with counter => a series of pairs
     ;;; Shift x +(width/2) to place line vertices in middle of bars
@@ -149,15 +145,15 @@
 ;; ...........................................................................
 
 (define (bar-graph 
-         series #:orientation (orient 'virtical) #:sma (sma-series #f))
+         series #:orientation (orient 'vertical) #:sma (sma-series #f))
   ((case orient
-     ('virtical   (lambda(xs)(virtical-bar-graph xs #:sma sma-series)))
+     ('vertical   (lambda(xs)(vertical-bar-graph xs #:sma sma-series)))
      ('horizontal horizontal-bar-graph)
      (else
       (lambda(_)
         (error (string-append
                 "bargraph: Got " (format "'~v'! " orient)
-                "#:orientation must be 'virtical or 'horizontal")))))
+                "#:orientation must be 'vertical or 'horizontal")))))
    series))
 
 ;;; --------------------------------------------------------------------------
