@@ -1,3 +1,4 @@
+
 :root{
     --lcolw: 395px;
     --rcolw: 380px;
@@ -15,6 +16,9 @@ body { background-color: var(--bgcolor); }
 #left_col  { float: left;  width: var(--lcolw); }
 #right_col { float: right; width: var(--rcolw); }
 
+#username {
+    text-align: center;
+}
 #daily_time { 
     margin-top: 10px;
     border: 1px dotted; }
