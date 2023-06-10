@@ -72,6 +72,7 @@
           (h1 ,(if %production% "Plan C" "Plan C (Dev)"))
           "\n"
           ,(string->xexpr (include-template "../../files/time-frame.html"))"\n"
+           (div ((id "username")),user) "\n"
           (div ((id "wrap"))
                "\n"
                (div ((id "left_col"))
@@ -81,7 +82,7 @@
                     ,(render-svg-img #:user user)
                     ,(render-svg-time/instrument #:for-user user)); Link to graph
                (div ((id "right_col"))
-                    (h2 ((id "username")),user) "\n"
+                   
                     ,(add-form-action ; Add 'action' attribute
                       (string->xexpr  ;  to included form
                        (include-template "../../files/input-form.html")))))
