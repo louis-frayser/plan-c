@@ -6,6 +6,7 @@
     --cntrlw: 8em;
     --bgcolor: #e7e0e0;
     --textcolor: black;
+    --iframew: 271px;
 }
 
 body { background-color: var(--bgcolor); }
@@ -24,7 +25,7 @@ body { background-color: var(--bgcolor); }
     /* border: 1px */
     vertical-align: top;
     margin-top: 0px;
-    margin-left: var(--lcolw); 
+    margin-left: calc(var(--lcolw) - var(--iframew)); 
     text-align: center;
     width: var(--rcolw);
     height: 22px;
