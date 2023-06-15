@@ -7,8 +7,9 @@ description="Online TODO list"
 command="/usr/bin/racket"
 command_args="${plan_c_args}"
 command_user="${plan_c_user}"
-output_log="${plan_c_log}"
 error_log="${plan_c_error_log}"
+log=${plan_c_log}
+
 command_background="true"
 required_dirs="$PLAN_C_HOME ${PLAN_C_HOME}/lib/db"
 pidfile="/run/plan-c.pid"
@@ -18,18 +19,25 @@ depend() {
     after postgresql
 }
 
+init_logs(){
+    local logs="${error_log} ${log}"
+    touch $logs
+    chown $command_user:daemon $logs
+}
+[ -e ${log} -a -e ${error_log} ] || init_logs
+
 start(){
     local msg="Starting"
     ebegin "$msg $procname $command_args"
 
-    logger -s -t "Plan C" "$msg" 2>> ${error_log}
+    logger -s -t "Plan C" "$msg" &>> ${log}
 
     start-stop-daemon --start \
         --interpreted --background \
         --user $command_user --group daemon \
         --chdir ${PLAN_C_HOME} \
         --make-pidfile --pidfile $pidfile \
-        --stdout ${output_log} --stderr ${error_log} \
+        --stdout ${log} --stderr ${error_log} \
         --exec $command -- $command_args 
     eend
 }
@@ -38,7 +46,7 @@ stop(){
     local pid
     local msg="Stopping daemon"
     ebegin "$msg..."
-    logger -s -t "Plan C" "$msg" 2>> ${error_log}
+    logger -s -t "Plan C" "$msg" &>> ${log}
     start-stop-daemon --stop \
               --pidfile $pidfile \
               --interpreted  \
