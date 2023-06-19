@@ -1,7 +1,7 @@
 #lang debug racket ; crud.rkt
 (provide crud)
 
-(require web-server/servlet)
+(require web-server/servlet web-server/templates xml)
 (require "../config.rkt"
          "../http-basic-auth.rkt"
          (only-in "../db/db.rkt" db-get-rows)
@@ -21,6 +21,7 @@
 
      (body
       (h1 "CRUD") "\n"
+      ,(string->xexpr (include-template "../../files/time-frame.html"))"\n"
       (h2 "Create, Read, Update, Delete") "\n"
       (form ((id "crud_form")(action ,%crud-url%) (method "get"))"\n"
             ,(gen-table #:for-date date #:for-user (request->user req)) "\n"
