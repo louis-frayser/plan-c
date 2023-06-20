@@ -40,17 +40,16 @@
 ;;; ----------------------------------------------------------------------------
 ;;; Set up a persistant PostgreSQL connection
 (begin
-  (define pgc
+  (define %pgc
     (postgresql-connect #:user     %pg_user%
                         #:database %pg_db%
                         #:password %pg_pass%))
-  (query-exec pgc "SET search_path=plan_c,\"$user\",public"))
+  (query-exec %pgc "SET search_path=plan_c,\"$user\",public"))
 
 (define (db-connected?)
-  (connected? pgc))
+  (connected? %pgc))
 
-(define (db-exec sql)
-  (try-query query-exec pgc sql))
+(define (db-exec sql) (try-query query-exec %pgc sql))
 ;;; ----------------------------------------------------------------------------
 
 (define (make-rec path user)
@@ -84,7 +83,7 @@
      " WHERE stime >= timestamp '" beginning "' "
      " AND usr ='" user "'"
      " ORDER BY stime;"))
-  (map massage (query-rows pgc sql)))
+  (map massage (query-rows %pgc sql)))
 
 
 (define (db-get-current-assoc-groups #:for-user user)
@@ -122,7 +121,7 @@
      " from " %table%
      " where stime >= timestamp '" beginning "' and usr = '" user "'"
      " ORDER by stime; "))
-  (map massage (query-rows pgc sql)))
+  (map massage (query-rows %pgc sql)))
 ;;; ............................................................................
 
 (define (db-get-assocs-by-datestr  #:since (beginning "2022-01-01")
@@ -140,7 +139,7 @@ FROM " %table% " "
  AND stime >= '" date "'
  AND stime < timestamp '" date "' + '1 day'"))
 
-  (define rows (try-query query-rows  pgc sql ))
+  (define rows (try-query query-rows  %pgc sql ))
 
   (define (row->rec vec)
     (define (dur si)
@@ -179,7 +178,7 @@ FROM " %table% " "
     (eprintf "\nTrapped ~a\n for ~a\nWriting assoc to disk instead.\n" ex sql)
     (put-assoc-to-db assoc user))
   (with-handlers ((exn:fail? db-fail))
-    (query pgc sql)))
+    (query %pgc sql)))
 
 ;;; ============================================================================
 ;;; DEMOS (requires  "#lang demo racket" )
