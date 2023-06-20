@@ -58,6 +58,14 @@
   (define (summary-html)
     `(div (p ((id "ttotal")) "Daily total: " ,sum)))
 
+  (define input-form
+    (add-form-action ; Add FORM ACTION  attribute
+     (string->xexpr  ; xexpr FORM from string (from #'include)
+      (let ((hlink-dev-data-update
+             (if %production%
+                 "<!-- @hlink-data-update  -->"
+                 "<a href='/servlets/PLAN-C/refresh_devdb'>Update DB</a>")))
+        (include-template "../../files/input-form.html")))))
   ;; HTML starts here ...
   `(html
     (head (title ,(string-append "Plan C " %version%)) "\n"
@@ -72,7 +80,7 @@
           (h1 ,(if %production% "Plan C" "Plan C (Dev)"))
           "\n"
           ,(string->xexpr (include-template "../../files/time-frame.html"))"\n"
-           (div ((id "username")),user) "\n"
+          (div ((id "username")),user) "\n"
           (div ((id "wrap"))
                "\n"
                (div ((id "left_col"))
@@ -82,11 +90,8 @@
                     ,(render-svg-img #:user user)
                     ,(render-svg-time/instrument #:for-user user)); Link to graph
                (div ((id "right_col"))
-                   
-                    ,(add-form-action ; Add 'action' attribute
-                      (string->xexpr  ;  to included form
-                       (include-template "../../files/input-form.html")))))
-          "\n")))
+                    ,input-form                   
+                    )) "\n")))
 ;............................................................................
 
 ;; For each major category, show  performed actions

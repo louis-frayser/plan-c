@@ -1,6 +1,7 @@
 #lang debug racket
 
-(provide assoc->rdbms db-connected? db-get-assocs db-get-assocs-by-datestr
+(provide assoc->rdbms db-connected? db-exec
+         db-get-assocs db-get-assocs-by-datestr
          db-get-current-assoc-groups db-get-rows 
          #;db-get-music-durations-by-day)
 
@@ -47,6 +48,9 @@
 
 (define (db-connected?)
   (connected? pgc))
+
+(define (db-exec sql)
+  (try-query query-exec pgc sql))
 ;;; ----------------------------------------------------------------------------
 
 (define (make-rec path user)

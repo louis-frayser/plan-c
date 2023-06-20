@@ -1,6 +1,7 @@
 #lang racket
 
-(provide %auth-db-path% %auth-db-path% %crud-url% %db-base-dir% %orig-dir%
+(provide %auth-db-path% %auth-db-path% %crud-url% %db-base-dir% %dev%
+         %orig-dir%
          %pg_user% %pg_db% %pg_pass%
          %practice-target-mins%
          %port%
@@ -21,7 +22,8 @@
        ((i-parent _i _ig) (split-path idir)))
     i-parent))
 ;;; ..................................................................
-(define %production% (not (file-exists? (build-path %orig-dir% "devel" ))))
+(define %dev% (file-exists? (build-path %orig-dir% "devel" )))
+(define %production% (not %dev%))
 ;;; ..................................................................
 
 (define %port% (if %production% 8008 8000))

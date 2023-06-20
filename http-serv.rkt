@@ -4,7 +4,7 @@
 
 (require web-server/servlet
          "lib/config.rkt" "lib/views/form-input.rkt" "lib/http-basic-auth.rkt"
-         "lib/lib.rkt" "lib/views/render.rkt" "lib/views/crud.rkt")
+         "lib/lib.rkt" "lib/views/render.rkt" "lib/views/crud.rkt" "lib/dev.rkt")
 
 (define interface-version 'stateless)
 
@@ -31,6 +31,9 @@
              "Authentication required"))
            void)]
         [(regex-match-path "/crud") (crud bindings req)]
+        [(and %dev% (regex-match-path "/refresh_devdb"))
+         (do_reload_assocs_dev)
+         (send/back (render-page #:user (request->user req)))]
         [(exists-binding? 'change bindings)
          (handle-input-form req render-page)]
         [else (send/back (render-page #:user (request->user req)))]))

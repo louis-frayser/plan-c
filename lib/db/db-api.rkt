@@ -4,7 +4,8 @@
 ;; In order to avoid accidents, we keep the  old names but sus it out
 ;; here where flat-file functions are referred to as "raw:get-xx"
 ;; Hopefully by only importing db-api.rkt, conflicts as be avoided.
-(provide get-assocs get-assocs-by-datestr get-current-assoc-groups
+(provide db-exec
+         get-assocs get-assocs-by-datestr get-current-assoc-groups
          put-assoc-to-db)
 
 (require db "db.rkt" (prefix-in raw: "db-files.rkt"))
