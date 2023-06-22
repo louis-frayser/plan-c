@@ -1,6 +1,8 @@
 #lang debug racket ; crud.rkt
+
 (provide crud)
 
+(require (only-in srfi/13 string-take))
 (require web-server/servlet web-server/templates xml)
 (require "../config.rkt"
          "../http-basic-auth.rkt"
@@ -8,9 +10,13 @@
          "../lib.rkt")
 ;;;;; ============================================================================
 (define (crud bindings req)
-  (define date (if (exists-binding? 'req_date bindings)
-                   (extract-binding/single 'req_date bindings)
-                   (get-ymd-string)))
+  ;; Use the date from 'req_date or 'stime in the bindings or default to now()
+  (define date (cond ((exists-binding? 'req_date bindings)
+                      (extract-binding/single 'req_date bindings))
+                     ((exists-binding? 'stime bindings)
+                      (string-take (extract-binding/single 'stime bindings) 10))
+                     (else 
+                      (get-ymd-string))))
   (define-values (def-stime def-dur hlink-dev-data-update)
     (values (now-str) "00:20" "<!-- -->"))
   (response/xexpr

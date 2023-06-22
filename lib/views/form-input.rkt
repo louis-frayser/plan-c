@@ -1,7 +1,8 @@
 #lang racket
 
 (provide crud/update handle-input-form process-input-form)
-(require web-server/servlet srfi/19
+
+(require web-server/servlet srfi/19 (only-in srfi/13 string-take)
          "../config.rkt" "../db/db-api.rkt" "../http-basic-auth.rkt")
 
 ;;; ==============================================================
@@ -30,9 +31,8 @@
   (redirect-to %servlet-path%))
 ;; .........................................................................................
 
-3;(define (string-intercalate d s) (list->string (intercalate (string->list d) (string->list s))))
 (define (crud/update bindings req)
   ;; Bings has all the data necessary for an update
   (update-assoc-from-bindings bindings)
   (redirect-to
-   (string-append %crud-url% "?req_dat=" (extract-binding/single 'req_date bindings))))
+   (string-append %crud-url% "?req_dat=" (string-take (extract-binding/single 'stime bindings) 10))))

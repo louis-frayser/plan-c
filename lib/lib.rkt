@@ -9,6 +9,7 @@
 (require (only-in racket-hacks drop))
 ;; ========================================================================
 (require syntax/parse/define)
+;; -------------------------------------------------------------------------
 (define stderr (current-error-port))
 ;; -------------------------------------------------------------------------
 (define (hs:take-right n list/string)
@@ -21,7 +22,9 @@
   `( ,x x ,(length x)))
 
 (define (~0 n) (~a n  #:align 'right #:min-width 2  #:pad-string "0"))
-
+;; -------------------------------------------------------------------------`
+(define-syntax-parse-rule (deflocal symbol:id)
+  (define symbol (extract-binding symbol bindings)))
 
 ;; -------------------------------------------------------------------------
 ;;; Add time-duration strings

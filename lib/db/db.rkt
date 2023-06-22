@@ -5,7 +5,9 @@
          db-get-current-assoc-groups db-get-rows 
          db-update-assoc-from-bindings)
 
-(require (except-in srfi/19 date->string) db )
+(require (except-in srfi/19 date->string)
+         web-server/http/bindings
+         db)
 (require "../config.rkt"
          "db-common.rkt"
          "db-files.rkt"
@@ -183,10 +185,26 @@ FROM " %table% " "
 ;;; ----------------------------------------------------------------------------
 (define (db-update-assoc-from-bindings bindings)
   ;; Extract fields from binding and update assocs/assocs_dev or recno
+  ;; Note user (usr) is ignored: Validation shold check user-vs-recno, and
+  ;;   format and data of other values.
   #RRR bindings
-  (define statement (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" %table%))
+  (define statement
+    (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" 
+            %table%))
+  (define pst  (prepare %pgc statement))
+
+  (let ((rowno (extract-binding/single 'rowno bindings))
+        (category (extract-binding/single 'category bindings))
+        (activity (extract-binding/single 'activity bindings))
+        (stime (extract-binding/single 'stime bindings))
+        (duration (extract-binding/single 'duration bindings))
+        (change   (extract-binding/single 'change bindings)))
+    (let ((bds (bind-prepared-statement statement (list category activity stime duration rowno))))
+      (db-exec bds)))
+  ;; Maybe send-back .../crud?req-date=(string-take stime 10)
+  ;; NOTE:  The caller crud/update is handling the return value
+  )
   
-  #f)
 ;;; ============================================================================
 ;;; DEMOS (requires  "#lang demo racket" )
 ;;; Music for time studied per instrument past 30-days
