@@ -1,14 +1,28 @@
 document.addEventListener("DOMContentLoaded", theDomHasLoaded, false);
 window.addEventListener("load", pageFullyLoaded, false);
-const modes = { None : 0, Reading : 1, Creating: 2, Adding: 3, Inserting: 4, Updating: 5, Deleting: 6 };
+import { putOptions } from "../plan.js";
+let i=0;
+const modes = { None : i++,  Selecting: i++, Reading :i++, Creating: i++, Adding: i++, Inserting: i++,
+		Editing: i++, Updating: i++, Deleting: i++ };
+var Mode=modes.None;
 var current_date;
-var Mode;
+var sels;
+
 function theDomHasLoaded(e) {
     // finish generating DOM
     // Configure DOM
     crud_date.onchange=get_data_for_date;
-    add_button.onclick=local_insert;
-    Mode=modes.None;
+    IDB_ADD.onclick=local_insert;
+    IDB_DEL.onclick=not_implemented;
+    IDB_EDIT.disabled=true;
+
+    // Set sel radio buttons to switch into selecting mode
+    sels = document.getElementsByName("sel");
+    function set_sel_mode(el){ Mode = modes.Selecting; IDB_EDIT.onclick=do_edit; IDB_EDIT.disabled=false;
+ } 
+    function do_sel (el){ el.addEventListener('change', set_sel_mode); }
+    sels.forEach (do_sel);
+
 }
 
 function pageFullyLoaded(e) {
@@ -24,7 +38,7 @@ function get_data_for_date(){
 }
 
 function local_insert(){
-    mode=modes.Creating;
+    Mode=modes.Creating;
     var  row=crud_table.insertRow(-1);
     for (i=0; i <=4; i++)
 	row.insertCell(i);
@@ -56,6 +70,39 @@ function local_insert(){
     }
     Mode=modes.Adding;
 }
+
+
+function do_edit(){
+    function edit(){
+	Mode=modes.Editing;
+	IDB_ADD.disabled=true;
+	maybe_cancel.innerHTML='<button type="button" id="cancel">Cancel</button>';
+	links.hidden=true;
+	let rowno=crud_form.elements["sel"].value;
+	let els=assoc_form.elements;
+	function getval(pfx){ return document.getElementById(pfx + rowno).innerHTML; }
+	els.stime.value=crud_date.value + "T" + getval("IDSTIME");
+	els.category.value=getval("IDCAT");
+	putOptions();
+	els.activity.value=getval("IDACT");
+	els.duration.value=getval("IDDUR");
+	assoc_form.rowno.value=rowno;
+	crud_dlg.show();
+    }
+
+    if (Mode == modes.Selecting){
+	edit();
+    } else {
+	return false;
+    }
+}
+
+
+function not_implemented() {
+    alert("[Del], [Add], [Edit]: Not yet fully implented!");
+}
+
+
 // save.onclick=crud_form.submit;
 
 

@@ -1,6 +1,6 @@
 // 1. Update Ativities control when Categories is changed
 // 2. Connect form validation
-import { c, a, s } from "./controls.js"
+import { c, a, s } from "./controls.js";
 import { Categories, ActionsByCatIx } from "./options-array.js";
 import { validateSubmit } from "./on-submit.js";
 
@@ -15,7 +15,7 @@ function populate(sel, items){
     }
 }
 
-function putOptions(){
+export function putOptions(){
     let csix = c.selectedIndex;
     let items = ActionsByCatIx[csix];
     populate(a, items);  

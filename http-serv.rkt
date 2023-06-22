@@ -31,6 +31,7 @@
              "Authentication required"))
            void)]
         [(regex-match-path "/crud") (crud bindings req)]
+        [(regex-match-path "/crud/update") (crud/update bindings req)]
         [(and %dev% (regex-match-path "/refresh_devdb"))
          (do_reload_assocs_dev)
          (send/back (render-page #:user (request->user req)))]

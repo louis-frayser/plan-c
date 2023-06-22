@@ -1,8 +1,9 @@
- <!-- Data entry for Category, Activity and Duration. 
+<!-- Data entry for Category, Activity and Duration. 
      The attibute 'action="http://xxx"' is added by the server:
      see ../plan-c.rkt.  Styles are in ../files/styles.css       -->
 <form id="assoc_form" name="assoc_form"
       title="Associate a Category, Activity pair with a Duration">
+  <input type='number' name='rowno' value='-1' hidden='true'/>
   <div>
     <label for="category">Category:</label>
     <select name="category" id="category" required="true"></select>
@@ -22,9 +23,12 @@
   </div>
 
   <div>
-    <input type="submit" value="Submit" class="metalic button" id="change" name="change"/> &nbsp;
-    <a href="/servlets/PLAN-C" title="To get more time" class="form-link">Reload</a>
-    <a href="/" title="To main page" class="form-link">Home</a>
-    @hlink-dev-data-update
+    <input type="submit" value="Submit" class="metalic button" id="change" name="change"/>&nbsp;
+    <span id="maybe_cancel"></span>
+    <span id="links">
+      <a id="main_link" href="/servlets/PLAN-C" title="To get more time" class="form-link">Reload</a>
+      <a id="home_link"  href="/" title="To main page" class="form-link">Home</a>
+      @hlink-dev-data-update
+    </span>
   </div>
 </form>

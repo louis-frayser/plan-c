@@ -68,7 +68,7 @@ form {
 /* -------------- Crud form -----------------------------*/
 #crud_table { margin-left: 0px; width: 30em; layout: fixed; }
 #crud_form { width: 30em; }
-#add_button { width: 3em; position: relative; right: 4em;}
+.crud_butt { width: 3em; position: relative; right: 4em;}
 /* #dur,#start,#cat,#act { width:7em; } */
 #thesel,.sel_col, #save { width: 4em; column-width: 4em;  }
 #start_col,#dur_col,.duration { column-width: 25px; width: 4em; }
@@ -86,7 +86,7 @@ input[type=date] {
 #stime,.form-link,button,label,select,.button {
     margin-right: 15px;
     width: var(--cntrlw); }
-button { background-color: #cec792; width: 120px; }
+button { background-color: #cec792; width: 6em; }
 select,input[type="submit"] {
     display: inline-block;
     background-color: #c7c0b0;
@@ -113,4 +113,8 @@ th { background-color: #d0d0c0; }
 .bigger-svg { width: 64%; }
 .text {
     display: block;
+}
+
+#crud_dlg {
+    width: var(--rcolw);
 }

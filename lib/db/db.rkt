@@ -3,7 +3,7 @@
 (provide assoc->rdbms db-connected? db-exec
          db-get-assocs db-get-assocs-by-datestr
          db-get-current-assoc-groups db-get-rows 
-         #;db-get-music-durations-by-day)
+         db-update-assoc-from-bindings)
 
 (require (except-in srfi/19 date->string) db )
 (require "../config.rkt"
@@ -17,7 +17,7 @@
 ;; This is for switching from a simple file db to RDBMS
 (db-update-from-disk) ; Read in any db records written to disk
 ;;; ----------------------------------------------------------------------------
-(define (sql-ts->ymd-string ts)
+#;(define (sql-ts->ymd-string ts)
   (string-join
    (map ~0 
         (list sql-timestamp-year sql-timestamp-month sql-timestamp-day)) "-"))
@@ -180,6 +180,13 @@ FROM " %table% " "
   (with-handlers ((exn:fail? db-fail))
     (query %pgc sql)))
 
+;;; ----------------------------------------------------------------------------
+(define (db-update-assoc-from-bindings bindings)
+  ;; Extract fields from binding and update assocs/assocs_dev or recno
+  #RRR bindings
+  (define statement (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" %table%))
+  
+  #f)
 ;;; ============================================================================
 ;;; DEMOS (requires  "#lang demo racket" )
 ;;; Music for time studied per instrument past 30-days

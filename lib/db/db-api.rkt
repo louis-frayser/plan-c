@@ -4,23 +4,27 @@
 ;; In order to avoid accidents, we keep the  old names but sus it out
 ;; here where flat-file functions are referred to as "raw:get-xx"
 ;; Hopefully by only importing db-api.rkt, conflicts as be avoided.
-(provide db-exec get-assocs get-assocs-by-datestr get-current-assoc-groups
-         put-assoc-to-db)
+(provide db-exec  get-assocs get-assocs-by-datestr get-current-assoc-groups
+         put-assoc-to-db update-assoc-from-bindings)
 
 (require db "db.rkt" (prefix-in raw: "db-files.rkt"))
 
 (define-values (get-assocs-by-datestr     
                 get-assocs
                 put-assoc-to-db
-                get-current-assoc-groups)
+                get-current-assoc-groups
+                update-assoc-from-bindings)
 
   (if (db-connected?) 
       (values   db-get-assocs-by-datestr
                 db-get-assocs    
                 assoc->rdbms
-                db-get-current-assoc-groups)
+                db-get-current-assoc-groups
+                db-update-assoc-from-bindings)
 
       (values  raw:get-assocs-by-datestr
                raw:get-assocs
                raw:put-assoc-to-db  
-               raw:get-current-assoc-groups)))
+               raw:get-current-assoc-groups
+               #f  ; Not flat-file based alternative
+               )))

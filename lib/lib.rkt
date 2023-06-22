@@ -1,11 +1,12 @@
 #lang racket ;lib.rkt
 
-(provide ~0 days-ago->string elapsed->start-time-str get-ymd-string hs:take-right 
-          read-file stderr
-         string-time+  time-elapsed-hmm-str time-string->mins write-file )
+(provide ~0 add-form-action days-ago->string elapsed->start-time-str 
+         get-ymd-string hs:take-right read-file stderr
+        now-hh-mm-str now-str string-time+  time-elapsed-hmm-str time-string->mins write-file )
 
-(require srfi/1 srfi/19
+(require (except-in srfi/1 drop) srfi/19
          db)
+(require (only-in racket-hacks drop))
 ;; ========================================================================
 (require syntax/parse/define)
 (define stderr (current-error-port))
@@ -57,7 +58,7 @@
   (date->string (days-ago->date ndays) "~Y-~m-~d"))
 
 ;; ...........................................................................
-(define (time-elapsed-hmm-str since-hmm)
+(define (time-elapsed-hmm-str (since-hmm "00:00"))
   ;; Elapsed time since given time (same day)
   (define now
     (let*((d (current-date )) ; local mins since midnight localtime
@@ -73,6 +74,7 @@
     (string-join (map number->string `(,hrs ,mins)) ":")
     (string-append
      (~a hrs) ":" (~a mins #:width 2 #:align 'right #:left-pad-string "0"))))
+(define (now-hh-mm-str) (time-elapsed-hmm-str "00:00"))
 ;; .......................................................................
 
 (define (elapsed->start-time-str elapsed-str); Calculate start from elapsed time
@@ -89,6 +91,8 @@
 (define (->string obj)
   ;; Converts all symbols to strings in a trie of all symbols
   (if (pair? obj) (map ->string obj) (symbol->string obj)))
+
+(define (now-str)  (string-append (get-ymd-string) "T" (now-hh-mm-str)))
 ;;; ------------------------------------------------------------------------
 ;;; DSK File I/O
 (define (read-file path/string)
@@ -98,5 +102,12 @@
   (with-output-to-file path
     (lambda() (displayln sexpr)) #:exists 'replace))
 ;;; -------------------------------------------------------------------------
+(define (add-form-action form action-url)
+  ;; form is sxml
+    (let* (( head (first form))
+           (orig-atts (second form))
+           (rest (drop  2 form ))
+           (new-atts (cons `(action ,action-url) orig-atts)))
+      (append (list head new-atts ) rest)))
 
 ;;; ========================================================================

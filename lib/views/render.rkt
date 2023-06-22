@@ -31,13 +31,13 @@
 
 (define (report assoc-groups embed/url handle-input-form #:user user)
   ;; Punch a whole in the form elemet's attributes; insert'(action ,embed/url)
-  (define (add-form-action form)
+  #;(define (add-form-action form)
     (let* (( head (first form))
            (orig-atts (second form))
            (rest (drop  2 form ))
            (new-atts (cons `(action ,(embed/url handle-input-form)) orig-atts)))
       (append (list head new-atts ) rest)))
-
+  (define action (embed/url handle-input-form))
   (define (groups-html) ; Show detail of groups of activity data
     (append `(table
               (caption (a ((href ,%crud-url%)) "Daily Activity")))
@@ -65,7 +65,8 @@
              (if %production%
                  "<!-- @hlink-data-update  -->"
                  "<a href='/servlets/PLAN-C/refresh_devdb'>Update DB</a>")))
-        (include-template "../../files/input-form.html")))))
+        (include-template "../../files/input-form.html")))
+     action))
   ;; HTML starts here ...
   `(html
     (head (title ,(string-append "Plan C " %version%)) "\n"
