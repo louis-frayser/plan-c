@@ -35,4 +35,4 @@
   ;; Bings has all the data necessary for an update
   (update-assoc-from-bindings bindings)
   (redirect-to
-   (string-append %crud-url% "?req_dat=" (string-take (extract-binding/single 'stime bindings) 10))))
+   (string-append %crud-url% "?req_date=" (string-take (extract-binding/single 'stime bindings) 10))))

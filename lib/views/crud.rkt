@@ -48,8 +48,11 @@
 
 ;;; -------------------------------------------------------------------------
 (define (gen-table #:for-date (ymd  (get-ymd-string)) #:for-user user)
-  (define tdata (db-get-rows #:for-date  ymd  #:user user))
-
+  (define tdata (sort
+                 (db-get-rows #:for-date  ymd  #:user user)
+                 string<?
+                 #:key second ))
+#RRR tdata
   (define (gen-new-button)    '(button ((type "button")(class "crud_butt")(id "IDB_ADD"))"Add"))
   (define (gen-del-button)    '(button ((type "button")(class "crud_butt")(id "IDB_DEL"))"Del"))
   (define (gen-edit-button) '(button ((type "button")(class "crud_butt")(id "IDB_EDIT"))"Edit"))

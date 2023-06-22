@@ -15,7 +15,7 @@
          "../lib.rkt"
          )
 (require (only-in racket/date date*->seconds date->string date-display-format))
-
+(require (only-in racket-hacks string->sql-interval string->sql-timestamp)) 
 ;; This is for switching from a simple file db to RDBMS
 (db-update-from-disk) ; Read in any db records written to disk
 ;;; ----------------------------------------------------------------------------
@@ -187,24 +187,27 @@ FROM " %table% " "
   ;; Extract fields from binding and update assocs/assocs_dev or recno
   ;; Note user (usr) is ignored: Validation shold check user-vs-recno, and
   ;;   format and data of other values.
-  #RRR bindings
+ 
   (define statement
     (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" 
             %table%))
   (define pst  (prepare %pgc statement))
-
+  #RRR (prepared-statement-parameter-types pst)
   (let ((rowno (extract-binding/single 'rowno bindings))
         (category (extract-binding/single 'category bindings))
         (activity (extract-binding/single 'activity bindings))
         (stime (extract-binding/single 'stime bindings))
         (duration (extract-binding/single 'duration bindings))
         (change   (extract-binding/single 'change bindings)))
-    (let ((bds (bind-prepared-statement statement (list category activity stime duration rowno))))
+    (let ((bds (bind-prepared-statement pst (list category activity
+                                                  (string->sql-timestamp stime)
+                                                  (string->sql-interval duration)
+                                                  (string->number rowno)))))
       (db-exec bds)))
   ;; Maybe send-back .../crud?req-date=(string-take stime 10)
   ;; NOTE:  The caller crud/update is handling the return value
   )
-  
+ ;; (db-update-assoc-from-bindings #f)
 ;;; ============================================================================
 ;;; DEMOS (requires  "#lang demo racket" )
 ;;; Music for time studied per instrument past 30-days
