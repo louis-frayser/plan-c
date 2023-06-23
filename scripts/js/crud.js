@@ -11,15 +11,14 @@ var sels;
 function theDomHasLoaded(e) {
     // finish generating DOM
     // Configure DOM
-    crud_date.onchange=get_data_for_date;
+    crud_date.onchange=crud_date.onblur=get_data_for_date; // Blur is for Brave on Android
     IDB_ADD.onclick=local_insert;
     IDB_DEL.onclick=not_implemented;
     IDB_EDIT.disabled=true;
 
     // Set sel radio buttons to switch into selecting mode
     sels = document.getElementsByName("sel");
-    function set_sel_mode(el){ Mode = modes.Selecting; IDB_EDIT.onclick=do_edit; IDB_EDIT.disabled=false;
- } 
+    function set_sel_mode(el){ Mode = modes.Selecting; IDB_EDIT.onclick=do_edit; IDB_EDIT.disabled=false; } 
     function do_sel (el){ el.addEventListener('change', set_sel_mode); }
     sels.forEach (do_sel);
 
