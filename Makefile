@@ -13,16 +13,19 @@ Attic: FORCE
 	   -o  -type d -print | while read dir ; do [ -d $$dir/Attic ] || \
 	      mkdir -pv $$dir/Attic;done
 
+### Clain top level
+### Clean any directory thtat contains Attic
+### Clean the db/ directory
 clean:  Attic
-	@find . -maxdepth 1 -name "*~" -exec mv -bv "{}" Attic/ \;
+	@find . -maxdepth 1 \( -name "*~" -o -name "*.bak"  \) -exec mv -bv "{}" Attic/ \;
 	@for a in $$(find . -name Attic) ;\
         do d=$${a%/*};\
-	  for k in $$d/*~ $$d/#* $$d/.#*;\
+	  for k in $$d/*.bak $$d/*~ $$d/#* $$d/.#*;\
 	  do if test -e "$$k"; then  mv -v "$$k" $$d/Attic;fi ;\
 	  done; \
 	done
 	@find ${DBTOP}/db \( -name Attic -prune \) \
-	   -o -name "*~" -print |cpio -pvdm Attic
+	   -o -name "*~" -print |cpio --quiet -pvdm Attic
 	@find ${DBTOP}/db -name "*~" -delete
 	@echo CLEAN
 
