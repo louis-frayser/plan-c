@@ -1,8 +1,8 @@
 
 :root{
-    --lcolw: 395px;
-    --rcolw: 380px;
-    --wrapw: 775px; /* Max is 960px for 2 columns HD */
+    --wrapw: 800px; /* Max is 960px for 2 columns HD */
+    --lcolw: 400px;
+    --rcolw: 395px;
     --cntrlw: 8em;
     --bgcolor: #e7e0e0;
     --textcolor: black;
@@ -13,12 +13,12 @@ body { background-color: var(--bgcolor); }
 #big-charts { background-color: var(--bgcolor); color: var(--textcolor) ;}
 
 /* These 3 lines set layout */
-#wrap { width: var(--wrapw); /* border: 1px dotted;*/ height: 1080px; }
-#left_col  { float: left;  width: var(--lcolw); }
-#right_col { float: right; width: var(--rcolw);
+#wrap { width: var(--wrapw); /**/ border: 1px dotted; height: 1080px; }
+#left_col  { float: left;  width: var(--lcolw); /* outline: 1px solid;*/ }
+#right_col { float: left; width: var(--rcolw);
 	     display: inline-block;
 	     vertical-align: top;
-	     /* outline: 1px dotted; */
+	     /* outline: 1px solid; */
 	   }
 
 #username {
@@ -49,8 +49,6 @@ table { width: 300px;
 	margin-left: 35px;
       }
 
-
-
 caption, caption a:visited {
     background-color: #8f7f00;
     color: yellow;
@@ -59,12 +57,13 @@ caption, caption a:visited {
 
 form {
     /* border: 1px dotted var(--bgcolor); */
-    border: 1px solid ;/* var(--bgcolor); */
+    border: 1px dotted ;/* var(--bgcolor); */
     /*  background-color: #e7e0e0; */
     margin-top: 10px;
-    margin-left:15px;
-    padding: 10px;
+    margin-left:8px;
+    padding: 5px;
 }
+#assoc_form { float: left;margin-left: 4px; }
 /* -------------- Crud form -----------------------------*/
 #crud_table { margin-left: 0px; width: 30em; layout: fixed; }
 #crud_form { width: 30em; }
@@ -81,9 +80,10 @@ form {
 input {width: 60px; }
 input .local-time { width: 120px;}
 input[type=date] {
-    width: 10em; background-color: #ffffee;
+    width: 9em; background-color: #ffffee;
 }
-#stime,.form-link,button,label,select,.button {
+input[type=datetime-local]{ width: 16em;}
+.form-link,button,label,select,.button {
     margin-right: 15px;
     width: var(--cntrlw); }
 button { background-color: #cec792; width: 6em; }
