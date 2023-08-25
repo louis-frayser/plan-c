@@ -1,0 +1,28 @@
+#! /bin/sh
+
+#### The purpose of this script is to start Plan C in the
+#### it's home directory, no matter where it's called from.
+
+## This could chage for pre-compiled code
+MAIN=http-serv.rkt
+
+usage(){ echo "usage $0 [-g]" 1>&2 ;}
+
+while getopts "g" opt
+do case $opt in
+       g) prefix=dr;;
+       *) usage; exit 1;;
+   esac
+done
+
+## Figure out where we are. Racket is to
+## messy at this...
+THIS=$(realpath $0)
+PCHOME=${THIS%/*}
+CMD="${prefix}racket ${MAIN}"
+
+cd ${PCHOME}
+echo 1>&2
+echo -e "$THIS, \n   runnig $MAIN from \n\t$PWD."; echo 1>&2
+echo -e "   $CMD"
+exec $CMD

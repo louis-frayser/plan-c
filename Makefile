@@ -34,6 +34,7 @@ config/passwd: config/passwd.guest
 	@echo "USER: guest, PASSWORD: guest (Use 'htpasswd -s config/passwd user' to change )"
 
 install ${DBTOP}/db: config/passwd
+        chmod a+rx plan-c
 	chgrp wheel scripts
 	chmod +ws scripts
 	mkdir -p ${DBTOP}/db
