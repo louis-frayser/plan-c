@@ -52,7 +52,9 @@ configured in config/planc-cfg.scm.
 1. After the plan_c database is created in Postgresql, use Dr. Racket to run http-serv.rkt.
 
 *** Usage
-Browse  http://localhost:8008/ (production mode). Use port 8000 for /devel/ mode.
+Run: make install.
+Start the program with: plan-c, (or plan-c -g for the IDE)
+Browse: http://localhost:8008/ (production mode). Use port 8000 for /devel/ mode.
    
 ***** Caveats
 You will have to install the following Racket packages in order to run the app:
