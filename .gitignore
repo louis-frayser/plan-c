@@ -11,3 +11,5 @@ scripts/options-array.js
 htdocs/*.svg
 config/passwd
 devel
+dist
+plan-c.bin
