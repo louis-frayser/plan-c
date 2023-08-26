@@ -34,7 +34,7 @@ config/passwd: config/passwd.guest
 	@echo "USER: guest, PASSWORD: guest (Use 'htpasswd -s config/passwd user' to change )"
 
 install ${DBTOP}/db: config/passwd
-        chmod a+rx plan-c
+	 a+rx plan-c
 	chgrp wheel scripts
 	chmod +ws scripts
 	mkdir -p ${DBTOP}/db
@@ -45,7 +45,6 @@ install ${DBTOP}/db: config/passwd
 clobber: clean
 	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \;
 	@echo CLOBBERED
-	
 
 fix:   FORCE
 	@sh  scripts/cktrail.sh
@@ -55,5 +54,12 @@ clone-db:
 	       DELETE FROM assocs_dev; INSERT INTO assocs_dev (SELECT * FROM assocs);\
 	       select setval('assocs_dev_id_seq',(select max(id) from assocs_dev));" |psql
 
-run: ${DBTOP}/db
-	racket http-serv.rkt
+run: ${DBTOP}/db plan-c
+	./plan-c -gs
+
+plan-c: ${SRCS}
+	raco exe -o $@ http-serv.rkt
+
+dist: plan-c
+	mkdir -p dist
+	raco distribute $@ $^

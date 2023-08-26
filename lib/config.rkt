@@ -12,16 +12,9 @@
 (require  seq/iso yaml "../config/plan-c-rc.scm")
 
 ;(provide %port%)
-(define %orig-dir%
-  (let*-values
-      (((i-is) ;https://stackoverflow.com/a/57165702/187122
-        (resolved-module-path-name
-         (variable-reference->resolved-module-path
-          (#%variable-reference))))
-       ((idir _path _ignore) (split-path i-is))
-       ((i-parent _i _ig) (split-path idir)))
-    i-parent))
-;;; ..................................................................
+
+(define %orig-dir% (current-directory)) ;NOTE: this must run from the program's home
+  ;;; ..................................................................
 (define %dev% (file-exists? (build-path %orig-dir% "devel" )))
 (define %production% (not %dev%))
 ;;; ..................................................................
