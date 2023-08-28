@@ -43,7 +43,7 @@ install ${DBTOP}/db: config/passwd
 	@echo "See config and init scripts for /etc/{init,rc}.d in the scripts and config dirs"
 
 clobber: clean
-	@find . \( -name  Attic -o -name compiled \) -exec rm -f {}/* \;
+	@find . \( -name  Attic -o -name compiled \) -delete -print 
 	@echo CLOBBERED
 
 fix:   FORCE
