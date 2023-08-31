@@ -13,15 +13,17 @@
 
 ;(provide %port%)
 
-(define %orig-dir% (current-directory)) ;NOTE: this must run from the program's home
-  ;;; ..................................................................
+;;;NOTE: this must run from the program's home: see plan-c, the shell script.
+(define %orig-dir% (current-directory)) 
+;;; ..................................................................
+
 (define %dev% (file-exists? (build-path %orig-dir% "devel" )))
 (define %production% (not %dev%))
 ;;; ..................................................................
 
 (define %port% (if %production% 8008 8000))
 (define %version% (string-append (file->string
-                   (build-path %orig-dir% "files/version")) 
+                                  (build-path %orig-dir% "files/version")) 
                                  (if %production% " pro" " dev")))
 
 (define %db-base-dir% (build-path %orig-dir% "files/db"))
