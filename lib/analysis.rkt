@@ -116,7 +116,7 @@
   (define (pair<? a0 a1)
     (< (cdr a0) (cdr a1)))
   (let* ((filebase "htdocs/instrument-summary.svg")
-         (url (string-append "/" filebase))
+         (url (string-append "/" filebase "?random=" (~a (random))))
          (path (build-path %orig-dir% filebase)))
     (instrument-summary->svg-file (sort (get-music-group-summary #:for-user user) pair>=?) path)
     `(a ((href "/"))
