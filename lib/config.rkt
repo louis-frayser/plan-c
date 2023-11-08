@@ -14,7 +14,13 @@
 ;(provide %port%)
 
 ;;;NOTE: this must run from the program's home: see plan-c, the shell script.
-(define %orig-dir% (current-directory)) 
+(define %orig-dir%
+  (begin
+    (cond ((directory-exists? "../../htdocs")
+           (current-directory "../.."))
+          ((directory-exists? "../htdocs")
+           (current-directory "..")))
+    (current-directory)))
 ;;; ..................................................................
 
 (define %dev% (file-exists? (build-path %orig-dir% "devel" )))
