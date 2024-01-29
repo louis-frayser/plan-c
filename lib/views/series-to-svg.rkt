@@ -100,7 +100,6 @@
                          (cons (cons (number->string i) (car rest)) acc))
                    (reverse acc)))))))
 
-
   (define (bar-graph5)
     ;;; Number (and invert) each SMA value with counter => a series of pairs
     ;;; Shift x +(width/2) to place line vertices in middle of bars
@@ -123,7 +122,7 @@
       (cond
         ((null? rest-data ) #t)
         (else 
-         (use-rect@ x 0 w (cdar rest-data)) ; vertical bar
+         (use-rect@ x 0 w (min (cdar rest-data) hmax)) ; vertical bar; hmax is 4.5hr data clip
          (use-text@  ix x (+ (* 2 margin) (+ ymax 2))) ; horiz axis label
          (loop (+ x dx) (cdr rest-data)
                (and (pair? (cdr rest-data)) (caadr rest-data)) ))))
