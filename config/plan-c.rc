@@ -15,8 +15,7 @@ required_dirs="$PLAN_C_HOME ${PLAN_C_HOME}/lib/db"
 pidfile="/run/plan-c.pid"
 procname="racket"
 depend() {
-    need net
-    after postgresql
+    need net postgresql
 }
 
 init_logs(){
