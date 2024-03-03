@@ -6,6 +6,38 @@
 (require simple-svg)
 (require (only-in racket-hacks integer take-end))
 (require "../db/db-files.rkt" "../lib.rkt" "../config.rkt")
+
+(define (sstyle-set! style attr val)
+  ;; this function seems to have been removed
+  ;;FIXME: this should be a macro
+  (define setter
+    (case attr
+      ((stroke) set-SSTYLE-stroke!)
+      ((stroke-width) set-SSTYLE-stroke-width!)
+      ((stroke-dasharray) set-SSTYLE-stroke-dasharray!)
+      ((fill) set-SSTYLE-fill!)
+      (else error (format "sstyle-set!: Internal error; no handler for '~v'" attr))))
+  (setter style val))
+
+(define (svg-def-line origin extent)
+  (svg-def-shape (new-line origin extent)))
+
+(define (svg-def-polyline points)
+  (svg-def-shape (new-polyline points)))
+
+(define (svg-def-rect w h)
+  ;; Seemes to have been depricated
+  ;; FIXME: make this a macro
+  (svg-def-shape (new-rect w h)))
+
+ (define (svg-def-text tx #:font-size? (font-size 11))
+   (svg-def-shape (new-text tx #:font-size font-size)))
+
+(define (svg-use-shape shape-id sstyle #:at? (a-point '(0 . 0)))
+      (svg-place-widget shape-id #:style sstyle #:at a-point))
+
+;; Does nothing -- this seems to have been removed from thwe ne (2.0) w protocol
+(define svg-show-default void)
 ;;; --------------------------------------------------------------------------
 
 (define canvas-size '(395 . 333 )) ; 25.384 x Number of instruments
