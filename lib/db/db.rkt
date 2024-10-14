@@ -177,62 +177,62 @@ FROM " %table% " "
              (d (sql-timestamp-day t))
              (h (sql-timestamp-hour t))
              (m (sql-timestamp-minute t)))
-        (format "~a-~a-~a ~a:~a" y mo d h m))))
+        (format "~a-~a-~a ~a:~a"
+                (~0 y)  (~0 mo) (~0 d )  (~0 h )  (~0 m)))))
                  
 
-        ;;; ----------------------------------------------------------------------------
+;;; ----------------------------------------------------------------------------
 
-        (define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))
-          (define key (car assoc))
-          (define val (cdr assoc))
-          (define date tstamp)
-          (define rec (cons key (list val date user)))
-          (define sql (print-sql rec #:to-string? #t))
-          sql)
-        ;;; ----------------------------------------------------------------------------
+(define (assoc->rdbms-insert-string assoc user #:tstamp (tstamp (current-date)))
+  (define key (car assoc))
+  (define val (cdr assoc))
+  (define date tstamp)
+  (define rec (cons key (list val date user)))
+  (define sql (print-sql rec #:to-string? #t))
+  sql)
+;;; ----------------------------------------------------------------------------
 
-        (define (assoc->rdbms assoc user #:tstamp (tstamp (current-date)))
-          (define sql (assoc->rdbms-insert-string assoc user  #:tstamp tstamp))
-          (define (db-fail ex)
-            (eprintf "\nTrapped ~a\n for ~a\nWriting assoc to disk instead.\n" ex sql)
-            (put-assoc-to-db assoc user))
-          (with-handlers ((exn:fail? db-fail))
-            (query %pgc sql)))
+(define (assoc->rdbms assoc user #:tstamp (tstamp (current-date)))
+  (define sql (assoc->rdbms-insert-string assoc user  #:tstamp tstamp))
+  (define (db-fail ex)
+    (eprintf "\nTrapped ~a\n for ~a\nWriting assoc to disk instead.\n" ex sql)
+    (put-assoc-to-db assoc user))
+  (with-handlers ((exn:fail? db-fail))
+    (query %pgc sql)))
 
-        ;;; ----------------------------------------------------------------------------
-        (define (db-update-assoc-from-bindings bindings)
-          ;; Extract fields from binding and update assocs/assocs_dev or recno
-          ;; Note user (usr) is ignored: Validation shold check user-vs-recno, and
-          ;;   format and data of other values.
+;;; ----------------------------------------------------------------------------
+(define (db-update-assoc-from-bindings bindings)
+  ;; Extract fields from binding and update assocs/assocs_dev or recno
+  ;; Note user (usr) is ignored: Validation shold check user-vs-recno, and
+  ;;   format and data of other values.
  
-          (define statement
-            (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" 
-                    %table%))
-          (define pst  (prepare %pgc statement))
-          #RRR (prepared-statement-parameter-types pst)
-          (let ((rowno (extract-binding/single 'rowno bindings))
-                (category (extract-binding/single 'category bindings))
-                (activity (extract-binding/single 'activity bindings))
-                (stime (extract-binding/single 'stime bindings))
-                (duration (extract-binding/single 'duration bindings))
-                (change   (extract-binding/single 'change bindings)))
-            (let ((bds (bind-prepared-statement pst (list category activity
-                                                          (string->sql-timestamp stime)
-                                                          (string->sql-interval duration)
-                                                          (string->number rowno)))))
-              (db-exec bds)))
-          ;; Maybe send-back .../crud?req-date=(string-take stime 10)
-          ;; NOTE:  The caller crud/update is handling the return value
-          )
-        ;; (db-update-assoc-from-bindings #f)
-        ;;; ============================================================================
-        ;;; DEMOS (requires  "#lang demo racket" )
-        ;;; Music for time studied per instrument past 30-days
-        ;  #RRR (db-get-music-durations-by-day #:since (a-month-ago-str))
-        ;  #R(db-get-current-assoc-groups #:for-user "guest")
-        #;(let ((gs (db-get-current-assoc-groups #:for-user "guest")))
-            (displayln gs)
-            (displayln (length gs)))
+  (define statement
+    (format "UPDATE ~s SET category=$1, activity=$2, stime=$3, duration=$4 WHERE id=$5" 
+            %table%))
+  (define pst  (prepare %pgc statement))
+  #RRR (prepared-statement-parameter-types pst)
+  (let ((rowno (extract-binding/single 'rowno bindings))
+        (category (extract-binding/single 'category bindings))
+        (activity (extract-binding/single 'activity bindings))
+        (stime (extract-binding/single 'stime bindings))
+        (duration (extract-binding/single 'duration bindings))
+        (change   (extract-binding/single 'change bindings)))
+    (let ((bds (bind-prepared-statement pst (list category activity
+                                                  (string->sql-timestamp stime)
+                                                  (string->sql-interval duration)
+                                                  (string->number rowno)))))
+      (db-exec bds)))
+  ;; Maybe send-back .../crud?req-date=(string-take stime 10)
+  ;; NOTE:  The caller crud/update is handling the return value
+  )
+;; (db-update-assoc-from-bindings #f)
+;;; ============================================================================
+;;; DEMOS (requires  "#lang demo racket" )
+;;; Music for time studied per instrument past 30-days
+;  #RRR (db-get-music-durations-by-day #:since (a-month-ago-str))
+;  #R(db-get-current-assoc-groups #:for-user "guest")
+#;(let ((gs (db-get-current-assoc-groups #:for-user "guest")))
+    (displayln gs)
+    (displayln (length gs)))
 
-        ;;; ----------------------------------------------------------------------------
-        
+;;; ----------------------------------------------------------------------------
