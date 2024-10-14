@@ -4,7 +4,7 @@ compiled
 test.rkt
 tmp.rkt
 files/db
-*/#*#
+*\#
 .#*
 scripts/options-array.js
 *.swp
