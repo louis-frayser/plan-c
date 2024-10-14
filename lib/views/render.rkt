@@ -46,7 +46,8 @@
   (define def-dur ; Default duration for input form
     (time-elapsed-hmm-str sum))
   (define def-stime ; Default start-time for input form
-    (elapsed->start-time-str def-dur))
+    (get-max-ctime-string)
+    #;(elapsed->start-time-str def-dur))
 
   (define (summary-html)
     `(div (p ((id "ttotal")) "Daily total: " ,sum)))
