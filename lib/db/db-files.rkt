@@ -6,6 +6,7 @@
          put-assoc-to-db read-file write-file)
 
 (require db srfi/19 "../config.rkt"  "../lib.rkt" "plan-data.rkt")
+(require (only-in racket-hacks get-ymd-string))
 ;;; ---------------------------------------------------------------------
 
 (define (get-assocs #:since (beginning "2022-01-01"))

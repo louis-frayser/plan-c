@@ -8,6 +8,7 @@
 (require (except-in srfi/19 date->string)
          web-server/http/bindings
          db)
+(require (only-in racket-hacks  get-ymd-string))
 (require "../config.rkt"
          "db-common.rkt"
          "db-files.rkt"

@@ -5,7 +5,7 @@
 (require srfi/43
          "config.rkt" "db/db-api.rkt"
          "lib.rkt" "views/series-to-svg.rkt")
-(require (only-in racket-hacks a-month-ago-str integer fill-missing-dates))
+(require (only-in racket-hacks a-month-ago-str get-ymd-string integer fill-missing-dates))
 
 (provide render-svg-img render-svg-time/instrument)
 ;; -----------------------------------------------------------------------------------------------

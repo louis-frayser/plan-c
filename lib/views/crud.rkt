@@ -4,6 +4,7 @@
 
 (require (only-in srfi/13 string-take))
 (require web-server/servlet web-server/templates xml)
+(require (only-in racket-hacks get-ymd-string now-str))
 (require "../config.rkt"
          "../http-basic-auth.rkt"
          (only-in "../db/db.rkt" db-get-rows)
