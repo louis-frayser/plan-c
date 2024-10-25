@@ -1,9 +1,11 @@
-#lang racket
+#lang racket ;;; render.rkt
 
 (provide plan-report render-page)
 
+(require (only-in racket/list argmax))
+(require (only-in racket-hacks get-ymd-string string-max time-elapsed-hmm-str))
 (require web-server/servlet web-server/templates)
-(require xml (only-in seq/iso drop)
+(require xml #;(only-in seq/iso drop)
          "../analysis.rkt" "../config.rkt"
          "../db/db-api.rkt"
          "form-input.rkt"
@@ -45,9 +47,11 @@
 
   (define def-dur ; Default duration for input form
     (time-elapsed-hmm-str sum))
+  
   (define def-stime ; Default start-time for input form
-    (get-max-ctime-string)
-    #;(elapsed->start-time-str def-dur))
+    (string-max  (get-max-ctime-string)
+                 (string-append (get-ymd-string) "T00:00")
+                 #;(elapsed->start-time-str def-dur)))
 
   (define (summary-html)
     `(div (p ((id "ttotal")) "Daily total: " ,sum)))
@@ -128,3 +132,7 @@
 ;;; ...........................................................................
 ;;; ---------------------------------------------------------------------------
 ;;; ===========================================================================
+ (define def-stime ; Default start-time for input form
+    (string-max  (get-max-ctime-string) (string-append (get-ymd-string) "T00:00")))
+def-stime
+#;(elapsed->start-time-str)
