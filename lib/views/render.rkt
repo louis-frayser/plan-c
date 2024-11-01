@@ -50,7 +50,7 @@
   
   (define def-stime ; Default start-time for input form
     (string-max  (get-max-ctime-string)
-                 (string-append (get-ymd-string) "T00:00")
+                 (string-append (get-ymd-string) " 00:00")
                  #;(elapsed->start-time-str def-dur)))
 
   (define (summary-html)
