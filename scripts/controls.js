@@ -4,6 +4,7 @@ import { Categories, ActionsByCatIx } from "./options-array.js";
 // A for activities, C for categories
 export const c = document.getElementById("category");
 export const a = document.getElementById("activity");
+export const t = document.getElementById("stime");
 export const s = document.getElementById("change");
 
 export function getSelVal(sel){
@@ -19,6 +20,9 @@ export function getKey(){
 
 export function getDuration(){
     return document.getElementById('duration').value;
+}
+export function get(x){
+    return document.getElementById(x).value;
 }
 
 
