@@ -10,3 +10,6 @@
 
 ;; Defines where the 'target' indication is plotted
 (define %practice-target-mins% 150)
+
+; Experiment
+(define %external-db-dir% (and #f "/var/cache/plan-c/db"))

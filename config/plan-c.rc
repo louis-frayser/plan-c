@@ -16,6 +16,7 @@ pidfile="/run/plan-c.pid"
 procname="racket"
 depend() {
     need net postgresql
+    after local-mount
 }
 
 init_logs(){
