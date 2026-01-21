@@ -115,8 +115,8 @@
 (define (vertical-bar-graph series #:sma (sma-series #f))
   ;; if series is an alist then use car as an index (ix), else count 1,2,3...
   ;;; ix must be string.
-  ;;; NOTE: If series is > 30 elements the plot is truncated due to imgae size, so
-  ;;; we limit _series to 30.
+  ;;; NOTE: If series is > 30 elements the plot is truncated due to image size,
+  ;;;       so we limit _series to 30.
   (define _series
     (take-end
      30

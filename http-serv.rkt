@@ -21,6 +21,7 @@
   #R (request-post-data/raw req)
   #R bindings
   #R (request->user req)
+
   (cond [(and %auth-db-path% (not (authenticated? %auth-db-path% req)))
           (response
            401 #"Unauthorized"
@@ -38,6 +39,7 @@
         [(exists-binding? 'change bindings)
          (handle-input-form req render-page)]
         [else (send/back (render-page #:user (request->user req)))]))
+
 ;;; This starts the servelet with param "start respons/xepr" (above)
 (require (only-in web-server/servlet-env serve/servlet))
 (serve/servlet start

@@ -28,7 +28,8 @@
   (handle-input-form req render-page))
 
 (define (plan-report embed/url handle-input-form #:user user)
-  (report (get-current-assoc-groups #:for-user user) embed/url handle-input-form #:user user))
+  (report (get-current-assoc-groups #:for-user user) embed/url
+          handle-input-form #:user user))
 ;;; ...........................................................................
 
 (define (report assoc-groups embed/url handle-input-form #:user user)
